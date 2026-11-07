@@ -1,0 +1,132 @@
+{
+ "rule": "per construction: highest pooled dev accuracy over MATH + LiveCodeBench (128 + 128 prompts), loop rate as tie-break",
+ "selected": {
+  "md_mlp": {
+   "alpha": 1,
+   "arm": "vc_md_mlp_n32_a1",
+   "dev_pooled": {
+    "1": {
+     "acc": 0.49609375,
+     "loop": 0.16015625
+    },
+    "2": {
+     "acc": 0.34765625,
+     "loop": 0.43359375
+    },
+    "3": {
+     "acc": 0.1953125,
+     "loop": 0.6953125
+    },
+    "4": {
+     "acc": 0.08984375,
+     "loop": 0.80078125
+    }
+   }
+  },
+  "logreg": {
+   "alpha": 2,
+   "arm": "vc_logreg_n32_a2",
+   "dev_pooled": {
+    "1": {
+     "acc": 0.48828125,
+     "loop": 0.10546875
+    },
+    "2": {
+     "acc": 0.51171875,
+     "loop": 0.046875
+    },
+    "3": {
+     "acc": 0.48046875,
+     "loop": 0.015625
+    },
+    "4": {
+     "acc": 0.46875,
+     "loop": 0.0234375
+    }
+   }
+  },
+  "rfm": {
+   "alpha": 2,
+   "arm": "vc_rfm_n32_a2",
+   "dev_pooled": {
+    "1": {
+     "acc": 0.4921875,
+     "loop": 0.17578125
+    },
+    "2": {
+     "acc": 0.515625,
+     "loop": 0.15234375
+    },
+    "3": {
+     "acc": 0.51171875,
+     "loop": 0.0859375
+    },
+    "4": {
+     "acc": 0.5078125,
+     "loop": 0.08203125
+    }
+   }
+  },
+  "pc1": {
+   "alpha": 3,
+   "arm": "vc_pc1_n32_a3",
+   "dev_pooled": {
+    "1": {
+     "acc": 0.51171875,
+     "loop": 0.109375
+    },
+    "2": {
+     "acc": 0.4921875,
+     "loop": 0.06640625
+    },
+    "3": {
+     "acc": 0.546875,
+     "loop": 0.01171875
+    },
+    "4": {
+     "acc": 0.4296875,
+     "loop": 0.0234375
+    }
+   }
+  }
+ },
+ "md_resid": {
+  "arm": "sv_n32_a2",
+  "note": "experiment 1 selection; test run exists in lp/gen_test",
+  "dev_pooled": {
+   "1": {
+    "acc": 0.484375,
+    "loop": 0.11328125
+   },
+   "2": {
+    "acc": 0.5234375,
+    "loop": 0.03125
+   },
+   "3": {
+    "acc": 0.46484375,
+    "loop": 0.0234375
+   },
+   "4": {
+    "acc": 0.4296875,
+    "loop": 0.03515625
+   }
+  }
+ },
+ "control": {
+  "dev_pooled": {
+   "acc": 0.4765625,
+   "loop": 0.26171875
+  }
+ },
+ "random": {
+  "arm": "vc_random_n32_a2",
+  "note": "test-only control, alpha 2 fixed in the experiment-2 design"
+ },
+ "test_arms": [
+  "vc_md_mlp_n32_a1",
+  "vc_logreg_n32_a2",
+  "vc_rfm_n32_a2",
+  "vc_pc1_n32_a3",
+  "vc_random_n32_a2"
+ ]
+}

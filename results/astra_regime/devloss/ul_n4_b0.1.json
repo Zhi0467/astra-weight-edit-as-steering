@@ -1,0 +1,279 @@
+{
+ "arm": "ul_n4_b0.1",
+ "obj": "ul",
+ "beta": 0.1,
+ "chosen_step": 24,
+ "n_finished": 14,
+ "n_looping": 16,
+ "traces": [
+  {
+   "id": "gsm8k_train_1690",
+   "len": 4780,
+   "looping": false
+  },
+  {
+   "id": "gsm8k_train_6183",
+   "len": 3720,
+   "looping": false
+  },
+  {
+   "id": "gsm8k_train_1168",
+   "len": 6045,
+   "looping": false
+  },
+  {
+   "id": "gsm8k_train_1237",
+   "len": 9749,
+   "looping": false
+  },
+  {
+   "id": "gsm8k_train_7269",
+   "len": 1225,
+   "looping": false
+  },
+  {
+   "id": "gsm8k_train_1400",
+   "len": 1872,
+   "looping": false
+  },
+  {
+   "id": "gsm8k_train_6553",
+   "len": 5035,
+   "looping": false
+  },
+  {
+   "id": "gsm8k_train_5114",
+   "len": 4210,
+   "looping": false
+  },
+  {
+   "id": "gsm8k_train_3319",
+   "len": 1595,
+   "looping": false
+  },
+  {
+   "id": "gsm8k_train_2012",
+   "len": 1654,
+   "looping": false
+  },
+  {
+   "id": "gsm8k_train_897",
+   "len": 9594,
+   "looping": false
+  },
+  {
+   "id": "gsm8k_train_7159",
+   "len": 6478,
+   "looping": false
+  },
+  {
+   "id": "math_train_intermediate_algebra_1053",
+   "len": 11910,
+   "looping": false
+  },
+  {
+   "id": "math_train_prealgebra_259",
+   "len": 1744,
+   "looping": false
+  },
+  {
+   "id": "gsm8k_train_1462",
+   "len": 32896,
+   "looping": true
+  },
+  {
+   "id": "gsm8k_train_6656",
+   "len": 32863,
+   "looping": true
+  },
+  {
+   "id": "math_train_intermediate_algebra_107",
+   "len": 32852,
+   "looping": true
+  },
+  {
+   "id": "gsm8k_train_3993",
+   "len": 32878,
+   "looping": true
+  },
+  {
+   "id": "math_train_intermediate_algebra_901",
+   "len": 32846,
+   "looping": true
+  },
+  {
+   "id": "gsm8k_train_5506",
+   "len": 32850,
+   "looping": true
+  },
+  {
+   "id": "math_train_counting_and_probability_276",
+   "len": 32839,
+   "looping": true
+  },
+  {
+   "id": "math_train_prealgebra_279",
+   "len": 32825,
+   "looping": true
+  },
+  {
+   "id": "gsm8k_train_2926",
+   "len": 32836,
+   "looping": true
+  },
+  {
+   "id": "math_train_intermediate_algebra_1235",
+   "len": 32916,
+   "looping": true
+  },
+  {
+   "id": "gsm8k_train_1065",
+   "len": 32848,
+   "looping": true
+  },
+  {
+   "id": "gsm8k_train_4196",
+   "len": 32839,
+   "looping": true
+  },
+  {
+   "id": "gsm8k_train_2870",
+   "len": 32862,
+   "looping": true
+  },
+  {
+   "id": "gsm8k_train_3409",
+   "len": 32836,
+   "looping": true
+  },
+  {
+   "id": "math_train_counting_and_probability_691",
+   "len": 32862,
+   "looping": true
+  },
+  {
+   "id": "gsm8k_train_7081",
+   "len": 32847,
+   "looping": true
+  }
+ ],
+ "history": [
+  {
+   "ntp": 0.3535931476790338,
+   "kl": 0.0,
+   "ul": 12.656600296497345,
+   "close_lp": -2.034521515880312,
+   "close_top": 0.0,
+   "objective": 12.656600296497345,
+   "step": 0
+  },
+  {
+   "ntp": 0.3563570513937318,
+   "kl": 0.0008679897023513803,
+   "ul": 12.601559579372406,
+   "close_lp": -1.8719200108732497,
+   "close_top": 0.0,
+   "objective": 12.601646378342641,
+   "step": 2
+  },
+  {
+   "ntp": 0.3600840595019683,
+   "kl": 0.0024069268685494574,
+   "ul": 12.504327952861786,
+   "close_lp": -1.7522951534816198,
+   "close_top": 0.0,
+   "objective": 12.504568645548641,
+   "step": 4
+  },
+  {
+   "ntp": 0.3644830651910658,
+   "kl": 0.004884001767342054,
+   "ul": 12.349167585372925,
+   "close_lp": -1.6415179031235831,
+   "close_top": 0.07142857142857142,
+   "objective": 12.349655985549658,
+   "step": 6
+  },
+  {
+   "ntp": 0.3695604658217548,
+   "kl": 0.008263830413554546,
+   "ul": 12.11258578300476,
+   "close_lp": -1.5189339475972312,
+   "close_top": 0.07142857142857142,
+   "objective": 12.113412166046116,
+   "step": 8
+  },
+  {
+   "ntp": 0.37532510040484973,
+   "kl": 0.012439892039701228,
+   "ul": 11.788318693637848,
+   "close_lp": -1.407582870551518,
+   "close_top": 0.14285714285714285,
+   "objective": 11.789562682841819,
+   "step": 10
+  },
+  {
+   "ntp": 0.38155389733057987,
+   "kl": 0.01732532453259716,
+   "ul": 11.363894164562225,
+   "close_lp": -1.3372544263090407,
+   "close_top": 0.07142857142857142,
+   "objective": 11.365626697015484,
+   "step": 12
+  },
+  {
+   "ntp": 0.388524924109673,
+   "kl": 0.022836206102227523,
+   "ul": 10.853703498840332,
+   "close_lp": -1.243247621825763,
+   "close_top": 0.21428571428571427,
+   "objective": 10.855987119450555,
+   "step": 14
+  },
+  {
+   "ntp": 0.39554325825808595,
+   "kl": 0.02894645211230635,
+   "ul": 10.280633449554443,
+   "close_lp": -1.1844824807984489,
+   "close_top": 0.2857142857142857,
+   "objective": 10.283528094765675,
+   "step": 16
+  },
+  {
+   "ntp": 0.4030635987163329,
+   "kl": 0.035509949583404685,
+   "ul": 9.685657978057861,
+   "close_lp": -1.0962862351111002,
+   "close_top": 0.42857142857142855,
+   "objective": 9.689208973016202,
+   "step": 18
+  },
+  {
+   "ntp": 0.4109029583226208,
+   "kl": 0.042602507828957685,
+   "ul": 9.092119216918945,
+   "close_lp": -1.0527820310422353,
+   "close_top": 0.42857142857142855,
+   "objective": 9.09637946770184,
+   "step": 20
+  },
+  {
+   "ntp": 0.4189349000569745,
+   "kl": 0.04995876785054244,
+   "ul": 8.514068603515625,
+   "close_lp": -0.9840073926108224,
+   "close_top": 0.5,
+   "objective": 8.51906448030068,
+   "step": 22
+  },
+  {
+   "ntp": 0.4274752932247418,
+   "kl": 0.05780009953630038,
+   "ul": 7.956560373306274,
+   "close_lp": -0.9548477785927909,
+   "close_top": 0.5,
+   "objective": 7.962340383259905,
+   "step": 24
+  }
+ ]
+}
