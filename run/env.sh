@@ -19,6 +19,7 @@ ASTRA=$WORK/astra                 # Astra's materials (fetch_astra.py)
 SPLITS=$ROOT/data/qwen3/splits    # dev and test prompt splits (shipped; rebuilt by run/data.sh)
 
 export HF_HOME=${HF_HOME:-$WORK/hf} PYTHONPATH=$ROOT/src TOKENIZERS_PARALLELISM=false
+export PATH=$ROOT/.venv/bin:$PATH   # vLLM builds Qwen3.5 kernels with the locked ninja
 export HF_DATASETS_CACHE=${HF_DATASETS_CACHE:-$HF_HOME/datasets}   # LiveCodeBench loading requires it
 export VLLM_ENABLE_V1_MULTIPROCESSING=0 VLLM_BATCH_INVARIANT=0 VLLM_USE_FLASHINFER_SAMPLER=0 VLLM_SUPPRESS_SEM_UNLINK_ERRORS=1
 export PYTORCH_ALLOC_CONF=expandable_segments:True
