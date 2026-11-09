@@ -13,11 +13,22 @@ grading code, the dev/test splits, the selection rules, and the summary and figu
 
 | Post | Script | Our numbers |
 |---|---|---|
-| §2–3, Figures 1a/1b: Astra regime (Qwen3.5-0.8B, Astra's sampler, 1,152 problems) | `run/astra_exp1.sh` | `results/astra_regime/` |
-| §4 site and random-direction controls; write-vs-residual figure (`blog/figures/fig2_write_vs_residual.html`) | `run/astra_controls.sh` | `results/astra_regime/test_summary_{resid,random}.json` |
-| §5, Figures 2a/2b: Qwen3-1.7B, greedy, 1,000 prompts | `run/qwen3_exp1.sh` | `results/qwen3/exp1_*` |
-| §7: how `v` is built (five constructions, N = 32) | `run/qwen3_exp2.sh` | `results/qwen3/exp2_*` |
+| §2–3, Figures 1a/1b: Astra regime (Qwen3.5-0.8B, Astra's sampler, 1,152 problems); §7 sampler diagnostic; endnote cosine | `run/astra_exp1.sh` | `results/astra_regime/` |
+| §3–5 Qwen3-1.7B stopping updates; §5, Figures 2a/2b: Qwen3-1.7B, greedy, 1,000 prompts | `run/qwen3_exp1.sh` | `results/qwen3/exp1_*` |
 | All figures | `run/figures.sh` | `blog/figures/` |
+| Every number quoted in the post | `scripts/report/blog_numbers.py` | prints them from `results/` or from a rerun |
+
+Two more experiments, not reported in the post, are included with their code and results:
+
+| Experiment | Script | Our numbers |
+|---|---|---|
+| Astra regime: the same edits at the residual site (block output) instead of the MLP write; norm-matched random-direction edits (`blog/figures/fig2_write_vs_residual.html`) | `run/astra_controls.sh` | `results/astra_regime/test_summary_{resid,random}.json` |
+| Qwen3-1.7B: how `v` is built (five constructions, N = 32, s = αv) | `run/qwen3_exp2.sh` | `results/qwen3/exp2_*` |
+
+```bash
+python3 scripts/report/blog_numbers.py --qwen3 results/qwen3 --astra results/astra_regime          # ours
+python3 scripts/report/blog_numbers.py --qwen3 work/qwen3/exp1 --astra work/astra_regime          # your rerun
+```
 
 The two Qwen3-1.7B tables in §4 ("Where the sensor reads matters" and "Short synthetic pairs were especially
 effective") come from an earlier round. That round ran on an older software stack and built its natural-trace

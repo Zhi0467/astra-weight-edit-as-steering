@@ -5,7 +5,9 @@
 #  2. Unedited dev rollouts (validation_1, 128 problems); stopping update of each s: teacher-forced on those rollouts,
 #     the lowest loop score among updates whose </think> top-1 rate is no worse than the unedited model's.
 #  3. Dev rollouts of every candidate (s = alpha v, alpha 1-4; learned s at its stopping update; Astra's edit).
-#  4. Selection on dev per family and N (pooled dev accuracy, loop rate breaks ties).
+#  4. Selection on dev per family and N (pooled dev accuracy, loop rate breaks ties). Dev-only sampler diagnostic
+#     (post §7): the unedited model, Astra's edit and the chosen N = 32 arms again on validation_1 under greedy
+#     decoding and under Astra's sampler without the presence penalty.
 #  5. Test rollouts (validation_3, validation_4, final_1-3: 1,152 problems) of the chosen arms, Astra's edit, the
 #     unedited model with thinking on and off; paired summaries.
 # Outputs under $WORK/astra_regime.
@@ -15,8 +17,9 @@ SLOTS=${ASTRA_SLOTS:-3}
 W=$WORK/astra_regime; S=$W/s_run; G=$W/gen; mkdir -p "$S/logs" "$G"
 L="$PY scripts/steer/loop_s_learn.py"; A="--out $S --astra-dir $ASTRA --model $QWEN35 --blocks 15,19"
 TESTSPLITS="validation_4 validation_3 final_1 final_2 final_3"
-gen() {  # arm model split [extra args]: one job line
-  echo "mkdir -p $G/$3/$1 && [ -e $G/$3/$1/summary.json ] || CUDA_VISIBLE_DEVICES=\$GPU $PY scripts/steer/astra_regime.py gen --astra-src $ASTRA --model $2 --split $3 --out $G/$3/$1 --gpu-mem \$MEM ${4:-} > $G/$3/$1/run.log 2>&1"
+gen() {  # arm model split[__sampler] [extra args]: one job line (ASTRA_LIMIT=n: first n problems only, for a dry run)
+  local sp=${3%%__*} smp=astra; [[ $3 == *__* ]] && smp=${3#*__}
+  echo "mkdir -p $G/$3/$1 && [ -e $G/$3/$1/summary.json ] || CUDA_VISIBLE_DEVICES=\$GPU $PY scripts/steer/astra_regime.py gen --astra-src $ASTRA --model $2 --split $sp --sampler $smp --out $G/$3/$1 --gpu-mem \$MEM ${ASTRA_LIMIT:+--limit $ASTRA_LIMIT} ${4:-} > $G/$3/$1/run.log 2>&1"
 }
 ARMS12=(); for n in 4 32; do for obj in clas ul contrast; do for b in 0 0.1; do ARMS12+=(${obj}_n${n}_b$b); done; done; done
 
@@ -24,6 +27,9 @@ ARMS12=(); for n in 4 32; do for obj in clas ul contrast; do for b in 0 0.1; do 
 [ -e "$W/checkpoints/astra_top64_a6/config.json" ] || CUDA_VISIBLE_DEVICES=$FIRST_GPU $PY scripts/steer/astra_regime.py astra-ckpt \
   --astra-src "$ASTRA" --base "$QWEN35" --dest "$W/checkpoints/astra_top64_a6" > "$S/logs/astra_ckpt.log" 2>&1
 for n in 4 32; do [ -e "$S/v_n$n.pt" ] || CUDA_VISIBLE_DEVICES=$FIRST_GPU $L direction $A --n $n > "$S/logs/direction_n$n.log" 2>&1; done
+# our four-pair v against the direction of Astra's submitted edit (post endnote: |cos| > 0.9999)
+[ -e "$W/astra_check_n4.json" ] || $PY scripts/steer/astra_regime.py astra-check --astra-src "$ASTRA" --base "$QWEN35" --v "$S/v_n4.pt" \
+  --json "$W/astra_check_n4.json" > "$S/logs/astra_check.log" 2>&1
 : > "$W/jobs_train"
 for arm in "${ARMS12[@]}"; do obj=${arm%%_n*}; n=${arm#*_n}; n=${n%%_*}; b=${arm##*_b}
   [ -e "$S/s/$arm.pt" ] || echo "CUDA_VISIBLE_DEVICES=\$GPU $L train $A --n $n --obj $obj --beta $b > $S/logs/train_$arm.log 2>&1" >> "$W/jobs_train"; done
@@ -55,6 +61,13 @@ pool "$W/jobs_dev"
 # 4. selection
 $PY scripts/steer/astra_regime_summary.py dev --gen "$G" --out "$W/dev_selection.json" | tee "$W/dev_selection.txt"
 CHOSEN=$($PY -c "import json; print(' '.join(json.load(open('$W/dev_selection.json'))['chosen_per_family_and_n'].values()))")
+DIAG="control astra_top64_a6 $($PY -c "import json; c = json.load(open('$W/dev_selection.json'))['chosen_per_family_and_n']; print(' '.join(c[f + '_n32'] for f in ('sv', 'ul', 'contrast', 'clas')))")"
+for smp in greedy nopp; do for arm in $DIAG; do m=$S/checkpoints/$arm
+  [ $arm = control ] && m=$QWEN35; [ $arm = astra_top64_a6 ] && m=$W/checkpoints/astra_top64_a6
+  gen $arm "$m" validation_1__$smp; done; done > "$W/jobs_diag"
+pool "$W/jobs_diag"
+$PY scripts/steer/astra_regime_summary.py diag --gen "$G" --arms "$(echo $DIAG | tr ' ' ',')" --out "$W/diag_samplers_validation_1.json" \
+  | tee "$W/diag_samplers.txt"
 
 # 5. test rollouts and summaries
 : > "$W/jobs_test"

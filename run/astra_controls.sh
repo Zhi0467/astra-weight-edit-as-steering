@@ -16,7 +16,7 @@ cd "$ROOT"
   --v "$S/v_n32.pt" --kind full --match "$S/checkpoints/sv_n32_a4" --dest "$K/random_full_matched_sv_n32_a4"
 [ -e "$K/random_top64_matched_astra/config.json" ] || CUDA_VISIBLE_DEVICES=$FIRST_GPU $AR random-ckpt --astra-src "$ASTRA" --base "$QWEN35" \
   --v "$S/v_n32.pt" --kind top64 --match "$W/checkpoints/astra_top64_a6" --dest "$K/random_top64_matched_astra"
-job() { echo "mkdir -p $G/$3/$1 && [ -e $G/$3/$1/summary.json ] || CUDA_VISIBLE_DEVICES=\$GPU $AR gen --astra-src $ASTRA --model $2 --split $3 --out $G/$3/$1 --gpu-mem \$MEM ${4:-} > $G/$3/$1/run.log 2>&1"; }
+job() { echo "mkdir -p $G/$3/$1 && [ -e $G/$3/$1/summary.json ] || CUDA_VISIBLE_DEVICES=\$GPU $AR gen --astra-src $ASTRA --model $2 --split $3 --out $G/$3/$1 --gpu-mem \$MEM ${ASTRA_LIMIT:+--limit $ASTRA_LIMIT} ${4:-} > $G/$3/$1/run.log 2>&1"; }
 for sp in validation_4 validation_3 final_1 final_2 final_3; do
   job resid_sv_n32_a4 "$QWEN35" $sp "--resid $K/resid_sv_n32_a4.pt"
   job resid_ul_n32_b0.1 "$QWEN35" $sp "--resid $K/resid_ul_n32_b0.1.pt"
