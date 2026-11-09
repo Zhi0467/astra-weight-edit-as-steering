@@ -2,19 +2,23 @@
 
 *…and what we learned from searching the design space.*
 
+In [*Sparks of Weight-Space Programming*](https://rikiyat.github.io/blog/weight-space-programming/), GPT-6 Astra edits Qwen3.5-0.8B without any training: it writes a short program that changes parts of MLP output matrices, and the edited model’s MATH-500 accuracy rises from 7.9% to 48.1%. The authors interpret this as Weight-Space Programming: Astra “uses its reasoning to figure out what each part of a neural network computes, or should compute, and changes the weights accordingly.” The [tweet](https://x.com/rikiyatakehi/status/2117313742891327994) has been viewed nearly 10 million times. We provide an alternative interpretation: the edit is equivalent to an activation steering method already known in the literature. Viewed this way, the edit can also be improved, and in some settings we do better than Astra’s edit.
+
 ## TL;DR
 
-- **[Astra’s recent Qwen edit](https://rikiyat.github.io/blog/weight-space-programming/) has a simple activation-space interpretation:** push along a fixed direction, with a strength read from the current activations, called sensed steering in this paper. (Also equivalent to a rank-1 LoRA on only MLP output weights.)
-- **Learning the sensing vector can further reduce looping in some cases.** In the Astra setup, our learned sensors suppress exact repetition much more than sensing along the steering direction (which we will show is what "natively editing weights" does under the hood), without a resolved accuracy difference. 
-- **The design choices for sensed steering matter a lot.** Short synthetic contrast pairs were especially effective in our experiments, as used by the weight edit work. Sensing the MLP’s current write behaved very differently from sensing the accumulated residual stream. Among other things, we also discuss the loss choice and early stop criterion of sensing vector learning.
+- **[Astra’s Qwen edit](https://rikiyat.github.io/blog/weight-space-programming/) is equivalent to activation steering:** push along a fixed direction, with a strength read from the current activations. We call this sensed steering in this post.
+- **Learning the sensing vector can further reduce looping in some settings.** In the Astra setup, our learned sensors suppress exact repetition much more than sensing along the steering direction, without a resolved accuracy difference. On a second model, Qwen3-1.7B, they do not improve on it and are 2–3 points less accurate.
+- **Design choices matter.** What data builds the steering direction (short synthetic pairs worked best), where the sensor reads (the MLP write, not the residual stream), and which loss and early-stopping rule train the sensing vector.
 
 This is a post about that design space of sensed steering, building on [Contextual Linear Activation Steering (CLAS)](https://arxiv.org/html/2604.24693v2) and using loop reduction as an example.
 
 ## 1. From a weight edit to sensed steering
 
-[*Sparks of Weight-Space Programming*](https://rikiyat.github.io/blog/weight-space-programming/) reports an agent-generated edit to Qwen3.5-0.8B. Astra changes a small part of two MLP output matrices. The edited model escapes many long repetitive continuations, and its reported MATH-500 accuracy rises from 7.9% to 48.1%.
+In the authors’ words:
 
-The result is interesting in that Astra found an algorithm (not directly generating numbers as weights!) to remove the well-known pathological loopings from changing weights.
+>All of this is possible without allowing Astra to write training loops. It uses its reasoning to figure out what each part of a neural network computes, or should compute, and changes the weights accordingly. We call this Weight-Space Programming. Throughout the history of deep learning, we encoded our simplistic inductive biases into tiny symbolic optimizers like Adam or Muon. This is changing: our neural network weights will soon be natively optimized by LLMs that deliberately reason about their weights.
+
+For the Qwen3.5-0.8B edit, we show below that it is equivalent to a known form of activation steering, and that in some settings this view lets us improve on it.
 
 There is already a discussion of how to describe this work, including [Matthew Honnibal’s account of the tools and feedback](https://honnibal.dev/blog/astra-read-write-misleading), [Sean Goedecke’s commentary](https://seangoedecke.com/llms-are-not-superhuman-at-reading-and-writing-neural-network-weights/), and [crabbix’s LessWrong post](https://www.lesswrong.com/posts/uvKSq6eWkud997ie7/). We provide a formulation of this class of algorithms and some experiments decoupling sensing from steering.
 
@@ -38,13 +42,13 @@ W'=W-vs^\top W,
 \qquad W'h=Wh-v(s^\top Wh).
 $$
 
-It is both an activation intervention and a weight edit. Picking $s = \alpha v$ and adding an extra scalar $\alpha$ steering strength term reproduces one of Astra's weight edits on Qwen. In general, one has the freedom to design how to learn $s$ and $x$, we focuse on learning $s$ in this blog and show further looping reduction.
+It is both an activation intervention and a weight edit. Picking $s = \alpha v$ reproduces one of Astra's weight edits on Qwen. In general, one is free to design both $s$ and $v$; in this post we focus on learning $s$, which further reduces looping.
 
-We use **sensed steering** as an umbrella label for this separation of direction and input-dependent strength. The terminology is indebted to **Contextual Linear Activation Steering (CLAS)**, which explicitly learns a sensing vector. CLAS’s usual formulation reads the residual stream and includes a bias; ours reads the MLP write and uses no bias so it folds directly into the output projection. [Hsu et al., 2026](https://arxiv.org/html/2604.24693v2).
+We use **sensed steering** as an umbrella label for this separation of direction and input-dependent strength. The terminology is indebted to **Contextual Linear Activation Steering (CLAS)**, which explicitly learns a sensing vector. CLAS’s usual formulation reads the residual stream and includes a bias; ours reads the MLP write and uses no bias so it folds directly into the output projection ([Hsu et al., 2026](https://arxiv.org/html/2604.24693v2)).
 
-**Literature Attribution**: The connection to weight edits is not new. **Arditi et al.** derive weight orthogonalization and prove its equivalence to directional ablation; **LoReFT** provides a broader family of learned low-rank representation interventions. These are foundations for our formulation. [Arditi et al., 2024](https://arxiv.org/html/2406.11717v3); [Wu et al., 2024](https://arxiv.org/html/2404.03592v3). Other nearby precedents include **CAST**, which conditions whether steering is applied on the input context, and **ROME**, which makes rank-one edits to feed-forward weights for factual associations. [Lee et al., 2025](https://arxiv.org/abs/2409.05907); [Meng et al., 2022](https://arxiv.org/abs/2202.05262).
+**Literature Attribution**: The connection to weight edits is not new. **Arditi et al.** derive weight orthogonalization and prove its equivalence to directional ablation; **LoReFT** provides a broader family of learned low-rank representation interventions. These are foundations for our formulation ([Arditi et al., 2024](https://arxiv.org/html/2406.11717v3); [Wu et al., 2024](https://arxiv.org/html/2404.03592v3)). Other nearby precedents include **CAST**, which conditions whether steering is applied on the input context, and **ROME**, which makes rank-one edits to feed-forward weights for factual associations ([Lee et al., 2025](https://arxiv.org/abs/2409.05907); [Meng et al., 2022](https://arxiv.org/abs/2202.05262)).
 
-See the [endnote on Astra’s neuron selection](#note-neuron-selection-in-astra-s-final-edit) for the precise formulation and implementation details.
+Astra’s submitted edit is a masked variant of \(s=\alpha v\): it senses only 64 selected MLP neurons per layer, with \(\alpha=6\). The [endnote](#note-neuron-selection-in-astras-final-edit) gives the exact update.
 
 ## 2. First, baselines
 
@@ -58,7 +62,7 @@ Our evaluation uses 1,152 of the authors’ confirmation problems: 576 GSM8K tra
 | Unedited, thinking off | 53.0% | 4.5% | 5.5% |
 | Astra’s submitted top-64 edit | 59.3% | 29.9% | 19.2% |
 
- We are studying a pathological generation behavior, not demonstrating that the edit installs new mathematical capability. Our reproduced 59.3% edited accuracy is close to the authors’ 60.4% on their confirmation table.
+With thinking turned off, the unedited model already scores 53.0%, against 59.3% with Astra’s edit. With thinking on, it scores 12.1%: it loops on 87.2% of problems and hits the token cap on 88.6%, so most answers never finish. Of the edit’s 47-point gain over thinking-on, turning thinking off recovers 41 points; the edit adds about 6 points beyond that. We therefore read the edit as mainly fixing a pathological generation behavior, not installing new mathematical capability. Our reproduced 59.3% is close to the authors’ 60.4% on their confirmation table.
 
 Throughout this post, a **loop** means a 30-token sequence appearing at least 20 times in a completion. We also track hitting the cap and emitting `</think>`. Those measure different failures: a model can keep paraphrasing without crossing the repetition threshold, or close thinking and still produce a problematic final answer.
 
@@ -66,7 +70,7 @@ Throughout this post, a **loop** means a 30-token sequence appearing at least 20
 
 The simplest full-column baseline sets \(s=\alpha v\). It uses the same direction to recognize the relevant activity and to change it. Why should those be the same job? 
 
-We keep \(v\) fixed and learn \(s\), initialized at zeros, on a dataset that can consist of positive and/or negative traces, Here negative would simply a trace that loops. We compare three objectives:
+We keep \(v\) fixed and learn \(s\), initialized at zeros, on a dataset that can consist of positive and/or negative traces. Here a negative trace is simply one that loops. We compare three objectives:
 
 Let \(p_s\) be the model with learned sensing vectors and \(p_0\) the unedited model. With teacher-forced prefixes, define
 
@@ -88,7 +92,7 @@ Here \(\mathbb{E}_{+}\) averages over productive assistant tokens; \(\mathbb{E}_
 
 The retention weight is \(\beta\in\{0,0.1\}\). The label “clas” denotes our productive-text-only, no-bias, write-sensing adaptation of the original CLAS paper.
 
-We use either the four original pairs (copied from the weight edit work) or those four plus 28 additional hand-written pairs. The same pairs construct \(v\) and train \(s\); comparisons between sensing methods are within the same pair count. For scaled-direction sensing (Astra's method) we test \(\alpha\in\{1,2,3,4\}\). Sensing vector training use Adam, learning rate 0.003, and at most 24 full-batch updates. Development data select the settings; evaluation compares the selected member of each family. We discuss the stopping rule below.
+We use either the four original pairs (copied from the weight edit work) or those four plus 28 additional hand-written pairs. The same pairs construct \(v\) and train \(s\); comparisons between sensing methods are within the same pair count. For scaled-direction sensing (Astra's method) we test \(\alpha\in\{1,2,3,4\}\). Sensing vector training uses Adam, learning rate 0.003, and at most 24 full-batch updates. Development data select the settings; evaluation compares the selected member of each family. We discuss the stopping rule below.
 
 **The goal is to reduce looping without harming accuracy.** 
 
@@ -110,7 +114,7 @@ At four pairs, the same pattern appears: accuracy differences are small and unre
 
 Productive-text-only training (clas arm) is markedly worse in this regime: 42.5% accuracy at four pairs and 42.9% at 32. It does reduce repetition relative to the unedited model, but how we train $s$ matters a lot.
 
-### Learning sensing vector have dataset-specific side effects
+### Learning the sensing vector has dataset-specific side effects
 
 Pooled across datasets, the N=32 learned arms hit the cap more often than scaled-direction sensing: **22.0–22.7% versus 17.9%**. They also close thinking less often. But the pooled average hides where this happens:
 
@@ -125,7 +129,7 @@ On GSM8K, the completion metrics move in the favorable direction numerically. On
 
 Of 253 capped unlikelihood responses, **191 do not trigger our loop flag**. Suppressing exact repetition has not ensured that the model finishes. Can we steer and learn sensing to achieve multiple behaviors: less loop, more accurate, less cap hit all together? This is one future direction:)
 
-## 4. the design space of sensed steering: what we learned
+## 4. The design space of sensed steering: what we learned
 
 ### Where the sensor reads matters
 
@@ -141,14 +145,14 @@ $$
 
 sense different quantities. The second sensor sees the accumulated contributions, not just the current MLP’s write.
 
-In other earlier Qwen3-1.7B experiments, that distinction was striking. The following are changes from an unedited control, using the same steering direction:
+In earlier Qwen3-1.7B experiments, that distinction was striking. The following are changes from an unedited control, using the same steering direction:
 
 | Intervention | MATH loop / accuracy | LiveCodeBench loop / accuracy |
 |---|---:|---:|
 | Write sensing, α=2 | −14.5 / −1.3 pp | −29.0 / −1.7 pp |
 | Residual sensing, α=1 | −6.9 / −12.8 pp | +2.9 / −18.3 pp |
 
-The write intervention strongly suppresses repetition without a resolved accuracy loss at this setting. The residual intervention is much more damaging. Note, we do not claim sensing residuals won't work, it could just take a different set of hyperparameters for it to work, though we have not managed to found them. 
+The write intervention strongly suppresses repetition without a resolved accuracy loss at this setting. The residual intervention is much more damaging. Note, we do not claim sensing residuals won't work, it could just take a different set of hyperparameters for it to work, though we have not managed to find them. 
 
 ### Short synthetic pairs were especially effective
 We compared two ways of constructing the steering vector from difference of mean.
@@ -167,7 +171,7 @@ Our tentative explanation: long responses differ in content, position and reason
 
 We freeze the base model and steering direction \(v\), and optimize only the sensing vector \(s\) at each edited layer. Training uses four or 32 short synthetic productive/repetitive pairs, with the next-token, unlikelihood or combined objective above. Adam starts from \(s=0\) and takes up to 24 updates. As in ordinary ML training, we need a development criterion to choose when to stop, but what should it measure? We can cheaply score fixed development text by **teacher forcing** (feeding the saved tokens), or generate fresh answers on development prompts and measure accuracy, repetition and completion directly. The former is a proxy; the latter tests the behavior we actually want.
 
-We first used teacher-forced loss on six separate productive/repetitive synthetic pairs supplied by Astra as the dev set. This selected update 24. On Qwen3-1.7B, however, the learned unlikelihood and contrast edits at that update frequently stopped emitting `</think>`. Wrong dev set!
+We first used teacher-forced loss on six separate productive/repetitive synthetic pairs supplied by Astra as the dev set. This selected update 24. On Qwen3-1.7B, however, the learned unlikelihood and contrast edits at that update frequently stopped emitting `</think>`. This suggests the dev set was not well chosen.
 
 We then tried teacher-forced evaluation of each arm’s training objective on the unedited model’s saved responses to development prompts. That did not solve the problem: unlikelihood and contrast still favored the last update, while productive-text next-token loss favored update zero, no edit gives lowest NTP on base-generated traces for sure.
 
@@ -189,6 +193,7 @@ The learned sensors do not improve on $s = \alpha v$. At N=32, unlikelihood is *
 *Figure 2a. Qwen3-1.7B, MATH level 5. “Looping” and “non-loop” accuracy columns refer to selection labels from earlier runs, not to the edited response’s outcome.*
 
 Unlike the Astra setting, thinking here is worth a great deal: turning it off costs 26.4 accuracy points.
+
 ![Qwen3 LiveCodeBench: paired differences](figures/exp1_qwen3_lcb_delta_grid.svg)
 
 *Figure 2b. Qwen3-1.7B, LiveCodeBench. Four-pair UL/contrast suppress more repetition than scaled-v without a resolved accuracy difference on this dataset; the pooled accuracy result is less favorable.*
