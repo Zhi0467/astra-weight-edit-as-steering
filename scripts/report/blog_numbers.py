@@ -82,6 +82,17 @@ def main():
             print(f"  {x:20s} {pct(r['accuracy'])} / {pct(r['loop'])} / {pct(r['cap_hit'])}")
         d = R["paired"]["resid_ul_n32_b0.1 - ul_n32_b0.1"]["pooled"]
         print(f"  residual - write, learned ul: accuracy {ci(d['accuracy'])}, loop {pp(d['loop']['diff'])}")
+    RA, RD = A / "test_summary_resid_alpha.json", A / "resid_alpha_dev.json"  # run/astra_resid_alpha.sh
+    if RA.exists() and RD.exists():
+        RA, RD = json.loads(RA.read_text()), json.loads(RD.read_text())
+        x = RD["chosen"]
+        print("§4 residual s = alpha v, dev accuracy:", ", ".join(f"{k.split('_a')[-1]}: {pct(v['accuracy'])}" for k, v in RD["per_arm"].items()),
+              "-> chosen", x)
+        r = m(RA, x)
+        print(f"  {x} on test: {pct(r['accuracy'])} / {pct(r['loop'])} / {pct(r['cap_hit'])}")
+        for ref in ("sv_n32_a4", "ul_n32_b0.1"):
+            d = RA["paired"][f"{x} - {ref}"]["pooled"]
+            print(f"  {x} - {ref} (write): accuracy {ci(d['accuracy'])}, loop {ci(d['loop'])}")
 
     D = json.loads((A / "diag_samplers_validation_1.json").read_text())
     print("§7 dev sampler diagnostic (validation_1): accuracy under Astra's sampler -> greedy -> no presence penalty")

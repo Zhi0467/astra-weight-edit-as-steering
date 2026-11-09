@@ -18,17 +18,23 @@ job() { echo "mkdir -p $G/$2/$1 && [ -e $G/$2/$1/summary.json ] || CUDA_VISIBLE_
 # dev
 for al in $ALPHAS; do job resid_sv_n32_a$al validation_1; done > "$K/jobs_alpha_dev"
 pool "$K/jobs_alpha_dev"
-CHOSEN=$($PY - "$G" $ALPHAS <<'EOF'
+CHOSEN=$($PY - "$G" "$W/resid_alpha_dev.json" $ALPHAS <<'EOF'
 import json, sys
 from pathlib import Path
-g, alphas = Path(sys.argv[1]), sys.argv[2:]
-rows = []
+g, out, alphas = Path(sys.argv[1]), Path(sys.argv[2]), sys.argv[3:]
+rows, per_arm = [], {}
 for al in alphas:
-    r = [json.loads(l) for l in open(g / "validation_1" / f"resid_sv_n32_a{al}" / "results.jsonl")]
-    acc, loop = sum(x["correct"] for x in r) / len(r), sum(x["loop"] for x in r) / len(r)
-    rows.append((-acc, loop, f"resid_sv_n32_a{al}"))
-    print(f"resid_sv_n32_a{al}: dev accuracy {acc:.3f} loop {loop:.3f}", file=sys.stderr)
-print(min(rows)[2])
+    arm = f"resid_sv_n32_a{al}"
+    r = [json.loads(l) for l in open(g / "validation_1" / arm / "results.jsonl")]
+    per_arm[arm] = {k: sum(float(x[f]) for x in r) / len(r) for k, f in
+                    (("accuracy", "correct"), ("loop", "loop"), ("cap_hit", "cut"), ("think_closed", "think_closed"))}
+    per_arm[arm]["n"] = len(r)
+    rows.append((-per_arm[arm]["accuracy"], per_arm[arm]["loop"], arm))
+    print(f"{arm}: dev accuracy {per_arm[arm]['accuracy']:.3f} loop {per_arm[arm]['loop']:.3f}", file=sys.stderr)
+chosen = min(rows)[2]
+out.write_text(json.dumps({"split": "validation_1", "rule": "highest accuracy, then lower loop rate",
+                           "per_arm": per_arm, "chosen": chosen}, indent=1))
+print(chosen)
 EOF
 )
 echo "chosen on dev: $CHOSEN" | tee "$W/resid_alpha_selection.txt"

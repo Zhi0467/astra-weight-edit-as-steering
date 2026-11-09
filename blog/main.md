@@ -149,7 +149,7 @@ This changes what the same \(s\) does. Take \(s=\alpha v\) with unit \(v\). At t
 
 A scaled direction tuned at the write, \(s=4v\), is in the last regime: on the residual stream, older content along \(v\) is flipped twice and multiplied by \((1-4)^2=9\) if both layers share one \(v\); with the two layers' actual directions its norm grows 7.8 times. The learned N=32 unlikelihood sensor is mostly not along \(v\) (cosine 0.15). Its component along \(v\), \(s^\top v\), plays the role of \(\alpha\): 0.34 at layer 15 and 0.29 at layer 19, so on the residual stream older content along \(v\) is scaled to 0.57 of its size, with no sign flip.
 
-We moved these two N=32 edits from the MLP write to the residual stream in the Astra setup, keeping \(v\) and \(s\) unchanged (1,152 problems):
+We moved these two N=32 edits from the MLP write to the residual stream in the Astra setup, keeping \(v\) and \(s\) unchanged. We also recalibrated the scaled direction for the residual stream: \(s=\alpha v\) with \(\alpha\in\{0.2,0.5,1,1.5\}\), chosen on the development problems like every other setting. Development accuracy was 37.5%, 66.4%, 68.0% and 64.8%, so \(\alpha=1\) was chosen. On the 1,152 test problems:
 
 | Edit | Site | Accuracy | Loop | Cap hit |
 |---|---|---:|---:|---:|
@@ -157,8 +157,9 @@ We moved these two N=32 edits from the MLP write to the residual stream in the A
 | \(s=4v\) | Residual stream | 3.0% | 95.9% | 77.3% |
 | Learned unlikelihood \(s\) | MLP write | 62.3% | 6.8% | 22.0% |
 | Learned unlikelihood \(s\) | Residual stream | 61.5% | 4.1% | 22.5% |
+| \(s=v\) (recalibrated) | Residual stream | 62.5% | 4.3% | 20.1% |
 
-The learned sensor, trained at the write, transfers to the residual stream: accuracy changes by −0.8 points [−3.1, +1.6] and the loop rate by −2.7 points. The scaled direction at its write-tuned strength collapses.
+The learned sensor, trained at the write, transfers to the residual stream: accuracy changes by −0.8 points [−3.1, +1.6] and the loop rate by −2.7 points. The scaled direction at its write-tuned strength collapses. Recalibrated to \(\alpha=1\), which is directional ablation of \(v\), it shows no resolved accuracy difference from the write-site edits (+1.0 points [−1.4, +3.4] against \(s=4v\) at the write, +0.2 [−2.1, +2.4] against the learned sensor at the write) and loops less (−22.0 points [−24.7, −19.4] and −2.4 [−4.1, −0.9]).
 
 In earlier Qwen3-1.7B experiments, using the same short-pair steering direction at blocks 15–18, the two sites also differed. The following are changes from an unedited control:
 

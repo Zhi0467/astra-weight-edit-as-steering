@@ -15,6 +15,7 @@ grading code, the dev/test splits, the selection rules, and the summary and figu
 |---|---|---|
 | §2–3, Figures 1a/1b: Astra regime (Qwen3.5-0.8B, Astra's sampler, 1,152 problems); §7 sampler diagnostic; endnote cosine | `run/astra_exp1.sh` | `results/astra_regime/` |
 | §4 write-site vs residual-site table; the random-direction rows of Figures 1a/1b | `run/astra_controls.sh` | `results/astra_regime/test_summary_{resid,random}.json` |
+| §4 recalibrated residual-site s = αv (α chosen on dev from 0.2, 0.5, 1, 1.5) | `run/astra_resid_alpha.sh` | `results/astra_regime/{resid_alpha_dev,test_summary_resid_alpha}.json` |
 | §3–5 Qwen3-1.7B stopping updates; §5, Figures 2a/2b: Qwen3-1.7B, greedy, 1,000 prompts | `run/qwen3_exp1.sh` | `results/qwen3/exp1_*` |
 | Figures, all or one at a time (`run/figures.sh 1a 2b site`) | `run/figures.sh` | `blog/figures/` |
 | Every number quoted in the post | `scripts/report/blog_numbers.py` | prints them from `results/` or from a rerun |
@@ -63,7 +64,7 @@ FROM=results bash run/figures.sh          # our figures from our summaries, into
 Each script runs end to end and skips finished steps, so it can be restarted.
 
 ```bash
-GPUS=0,1,2,3,4,5,6,7 bash run/astra_exp1.sh     # then run/astra_controls.sh
+GPUS=0,1,2,3,4,5,6,7 bash run/astra_exp1.sh     # then run/astra_controls.sh, run/astra_resid_alpha.sh
 GPUS=0,1,2,3,4,5,6,7 bash run/qwen3_exp1.sh     # then run/qwen3_exp2.sh
 bash run/figures.sh
 ```
