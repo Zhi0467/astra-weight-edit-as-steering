@@ -11,7 +11,9 @@ pool() {
         line=$(sed -n "$((n + 1))p" "$jobs")
         [ -z "$line" ] && break
         echo "$(date -Is) gpu $g: $line"
-        GPU=$g MEM=$mem bash -c "$line" || { echo "$(date -Is) FAILED: $line"; echo "$line" >> "$fail"; }
+        # one retry: vLLM's start-up memory check can fail when another job on the same GPU frees memory meanwhile
+        GPU=$g MEM=$mem bash -c "$line" || { echo "$(date -Is) retrying: $line"; sleep 60; GPU=$g MEM=$mem bash -c "$line"; } \
+          || { echo "$(date -Is) FAILED: $line"; echo "$line" >> "$fail"; }
       done
     ) &
     sleep "${STAGGER:-20}"   # let each vLLM instance take its memory before the next one starts on the same GPU
