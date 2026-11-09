@@ -7,8 +7,8 @@ In [*Sparks of Weight-Space Programming*](https://rikiyat.github.io/blog/weight-
 ## TL;DR
 
 - **[Astra’s Qwen edit](https://rikiyat.github.io/blog/weight-space-programming/) is equivalent to activation steering:** push along a fixed direction, with a strength read from the current activations. We call this sensed steering in this post.
-- **Learning the sensing vector can further reduce looping in some settings.** In the Astra setup, our learned sensors suppress exact repetition much more than sensing along the steering direction, without a resolved accuracy difference. On a second model, Qwen3-1.7B, they do not improve on it and are 2–3 points less accurate.
-- **Design choices matter.** What data builds the steering direction (short synthetic pairs worked best), where the sensor reads (the MLP write, not the residual stream), and which loss and early-stopping rule train the sensing vector.
+- **Learning the sensing vector can further reduce looping in some settings.** In the Astra setup, our learned sensors suppress exact repetition much more than sensing along the steering direction, without a resolved accuracy difference. On a second model, Qwen3-1.7B, they do not improve on it and are less accurate.
+- **Design choices matter.** What data builds the steering direction (short synthetic pairs worked best), where the sensor reads (the same sensor behaves differently on the MLP write and on the residual stream), and which loss and early-stopping rule train the sensing vector.
 
 This is a post about that design space of sensed steering, building on [Contextual Linear Activation Steering (CLAS)](https://arxiv.org/html/2604.24693v2) and using loop reduction as an example.
 
@@ -92,7 +92,7 @@ Here \(\mathbb{E}_{+}\) averages over productive assistant tokens; \(\mathbb{E}_
 
 The retention weight is \(\beta\in\{0,0.1\}\). The label “clas” denotes our productive-text-only, no-bias, write-sensing adaptation of the original CLAS paper.
 
-We use either the four original pairs (copied from the weight edit work) or those four plus 28 additional hand-written pairs. The same pairs construct \(v\) and train \(s\); comparisons between sensing methods are within the same pair count. For scaled-direction sensing (Astra's method) we test \(\alpha\in\{1,2,3,4\}\). Sensing vector training uses Adam, learning rate 0.003, and at most 24 full-batch updates. Development data select the settings; evaluation compares the selected member of each family. We discuss the stopping rule below.
+We use either the four original pairs (copied from the weight edit work) or those four plus 28 additional hand-written pairs. The same pairs construct \(v\) and train \(s\). At each edited layer, \(v\) is the difference between the mean residual stream (the block output) over the last 36 tokens of the repetitive text and that of the productive text, averaged over pairs and normalized to unit length. Comparisons between sensing methods are within the same pair count. For scaled-direction sensing (Astra's method) we test \(\alpha\in\{1,2,3,4\}\). Sensing vector training uses Adam, learning rate 0.003, and at most 24 full-batch updates. Development data select the settings; evaluation compares the selected member of each family. We discuss the stopping rule below.
 
 **The goal is to reduce looping without harming accuracy.** 
 
@@ -143,16 +143,31 @@ x'=x-v(s^\top x)
 r'=r-v(s^\top r)
 $$
 
-sense different quantities. The second sensor sees the accumulated contributions, not just the current MLP’s write.
+sense different quantities. The second sensor sees the accumulated stream: the embedding, every earlier attention and MLP write, and the corrections made by earlier edits.
 
-In earlier Qwen3-1.7B experiments, that distinction was striking. The following are changes from an unedited control, using the same steering direction:
+This changes what the same \(s\) does. Let \(\gamma=s^\top v\) with unit \(v\); for \(s=\alpha v\), \(\gamma=\alpha\). At the write, each edit multiplies the sensed coordinate of its own MLP's write by \(1-\gamma\), once, and leaves the rest of the stream alone. On the residual stream, each edited layer acts on everything already in the stream, so content from before the first edited layer is multiplied by \(1-\gamma\) at every edited layer: by \((1-\gamma)^2\) over two layers. At \(\gamma=1\) this is directional ablation of \(v\) ([Arditi et al., 2024](https://arxiv.org/html/2406.11717v3)). For \(1<\gamma<2\) the coordinate flips sign and shrinks, and for \(\gamma>2\) it flips sign and grows. The derivation is in [write_vs_residual_math.html](write_vs_residual_math.html).
+
+A scaled direction tuned at the write, \(s=4v\), has \(\gamma=4\): on the residual stream, older content along \(v\) is flipped twice and multiplied by \((1-4)^2=9\) if both layers share one \(v\); with the two layers' actual directions its norm grows 7.8 times. The learned N=32 unlikelihood sensor is mostly not along \(v\) (cosine 0.15): \(\gamma\) is 0.34 at layer 15 and 0.29 at layer 19, so on the residual stream older content along \(v\) is scaled to 0.57 of its size, with no sign flip.
+
+We moved these two N=32 edits from the MLP write to the residual stream in the Astra setup, keeping \(v\) and \(s\) unchanged (1,152 problems):
+
+| Edit | Site | Accuracy | Loop | Cap hit |
+|---|---|---:|---:|---:|
+| \(s=4v\) | MLP write | 61.5% | 26.4% | 17.9% |
+| \(s=4v\) | Residual stream | 3.0% | 95.9% | 77.3% |
+| Learned unlikelihood \(s\) | MLP write | 62.3% | 6.8% | 22.0% |
+| Learned unlikelihood \(s\) | Residual stream | 61.5% | 4.1% | 22.5% |
+
+The learned sensor, trained at the write, transfers to the residual stream: accuracy changes by −0.8 points [−3.1, +1.6] and the loop rate by −2.7 points. The scaled direction at its write-tuned strength collapses.
+
+In earlier Qwen3-1.7B experiments, using the same short-pair steering direction at blocks 15–18, the two sites also differed. The following are changes from an unedited control:
 
 | Intervention | MATH loop / accuracy | LiveCodeBench loop / accuracy |
 |---|---:|---:|
 | Write sensing, α=2 | −14.5 / −1.3 pp | −29.0 / −1.7 pp |
 | Residual sensing, α=1 | −6.9 / −12.8 pp | +2.9 / −18.3 pp |
 
-The write intervention strongly suppresses repetition without a resolved accuracy loss at this setting. The residual intervention is much more damaging. Note, we do not claim sensing residuals won't work, it could just take a different set of hyperparameters for it to work, though we have not managed to find them. 
+Residual sensing at α=1 is directional ablation of each layer's \(v\) at four layers. It suppressed less repetition than write sensing at α=2 and cost 13–18 accuracy points.
 
 ### Short synthetic pairs were especially effective
 We compared two ways of constructing the steering vector from difference of mean.
@@ -184,7 +199,7 @@ So this is regular validation early stop with a constraint to proxy the behavior
 
 ## 5. A second model gives a less favorable answer
 
-We also test Qwen3-1.7B under greedy decoding, editing blocks 15–18. The test set contains 500 MATH level-5 and 500 LiveCodeBench prompts that we constructed to deliberately include prompts that looped in earlier rollouts.
+We also test Qwen3-1.7B under greedy decoding, editing blocks 15–18. The test set has 500 MATH level-5 and 500 LiveCodeBench prompts. The pool is every MATH level-5 problem (train, validation and test splits) and every LiveCodeBench problem (releases v1–v6), each labelled by four earlier greedy Qwen3-1.7B draws, minus the 256 development prompts. Per dataset, the test set takes every prompt that looped in at least one of the four draws (174 MATH, 217 LiveCodeBench), then a seeded uniform sample of the other prompts up to 500. Pooled numbers are plain means over these 1,000 prompts, so looping prompts carry more weight than in the full benchmarks.
 
 The learned sensors do not improve on $s = \alpha v$. At N=32, unlikelihood is **3.4 points less accurate** [−5.9, −0.9], and contrast **2.4 points less accurate** [−4.8, −0.1]. The loss is concentrated in MATH.
 
@@ -258,4 +273,4 @@ $$
 
 This makes the distinction concrete. Neuron-space sensing selects and weights neurons. Write-space sensing weights directions in their combined output. Both are linear sensors, but selecting neurons is not generally the same as masking coordinates of the total write.
 
-The direction comes from four short productive/repetitive text pairs: a mean residual-state difference, normalized per layer. Neurons are selected using their contributions to the contrast. The edit is applied at layers 15 and 19. Our independently constructed four-pair direction agrees with theirs at absolute cosine above 0.9999; for the reference runs we reconstruct their actual submitted tensors rather than substitute our reconstruction of the formula. The equations describe exact real-arithmetic identities, not promises of bitwise identity after bf16 rounding.
+The direction comes from four short productive/repetitive text pairs: a mean residual-state difference, normalized per layer. The edit is applied at layers 15 and 19. Our independently constructed four-pair direction agrees with theirs at absolute cosine above 0.9999; for the reference runs we reconstruct their actual submitted tensors rather than substitute our reconstruction of the formula. The equations describe exact real-arithmetic identities, not promises of bitwise identity after bf16 rounding.

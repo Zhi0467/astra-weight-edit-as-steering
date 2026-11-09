@@ -14,15 +14,15 @@ grading code, the dev/test splits, the selection rules, and the summary and figu
 | Post | Script | Our numbers |
 |---|---|---|
 | §2–3, Figures 1a/1b: Astra regime (Qwen3.5-0.8B, Astra's sampler, 1,152 problems); §7 sampler diagnostic; endnote cosine | `run/astra_exp1.sh` | `results/astra_regime/` |
+| §4 write-site vs residual-site table; the random-direction rows of Figures 1a/1b | `run/astra_controls.sh` | `results/astra_regime/test_summary_{resid,random}.json` |
 | §3–5 Qwen3-1.7B stopping updates; §5, Figures 2a/2b: Qwen3-1.7B, greedy, 1,000 prompts | `run/qwen3_exp1.sh` | `results/qwen3/exp1_*` |
-| All figures | `run/figures.sh` | `blog/figures/` |
+| Figures, all or one at a time (`run/figures.sh 1a 2b site`) | `run/figures.sh` | `blog/figures/` |
 | Every number quoted in the post | `scripts/report/blog_numbers.py` | prints them from `results/` or from a rerun |
 
-Two more experiments, not reported in the post, are included with their code and results:
+One more experiment, not reported in the post, is included with its code and results:
 
 | Experiment | Script | Our numbers |
 |---|---|---|
-| Astra regime: the same edits at the residual site (block output) instead of the MLP write; norm-matched random-direction edits (`blog/figures/fig2_write_vs_residual.html`) | `run/astra_controls.sh` | `results/astra_regime/test_summary_{resid,random}.json` |
 | Qwen3-1.7B: how `v` is built (five constructions, N = 32, s = αv) | `run/qwen3_exp2.sh` | `results/qwen3/exp2_*` |
 
 ```bash
@@ -43,7 +43,7 @@ disk for models, the environment and outputs.
 ```bash
 bash run/setup.sh      # uv environment, pinned models, LiveCodeBench at a pinned commit, MATH pools, Astra's files
 GPUS=0 bash run/smoke.sh                  # about 20 minutes on one GPU
-FROM=results bash run/figures.sh          # our figures from our summaries, into work/figures
+FROM=results bash run/figures.sh          # our figures from our summaries, into work/figures (or name some: 1a 1b 2a 2b site)
 ```
 
 `run/env.sh` holds every setting: `WORK` (all outputs, default `./work`), `GPUS` (e.g. `0,1,2,3`), `SLOTS`

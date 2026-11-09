@@ -146,31 +146,38 @@ def draw(out, title, subtitles, sections, metrics, groups, footer):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--qwen3", required=True)
-    ap.add_argument("--astra", required=True)
+    ap.add_argument("--qwen3", default="", help="Qwen3-1.7B test summary (Figures 2a, 2b)")
+    ap.add_argument("--astra", default="", help="Astra-regime test summary (Figures 1a, 1b)")
+    ap.add_argument("--only", default="1a,1b,2a,2b", help="figures to build, comma-separated: 1a 1b 2a 2b")
     ap.add_argument("--astra-nothink", default="", help="test summary of control_nothink vs control (Astra regime)")
     ap.add_argument("--astra-random", default="", help="test summary of the random-direction controls vs control "
                     "(astra_regime_summary.py test --arms random_... --refs control); added as reference rows")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     out = Path(a.out)
-    q = json.loads(Path(a.qwen3).read_text())
-    s = json.loads(Path(a.astra).read_text())
-    if a.astra_nothink:  # astra_regime_summary.py test --arms control_nothink --refs control
-        t = json.loads(Path(a.astra_nothink).read_text())
-        s["per_arm"][NOTHINK] = t["per_arm"][NOTHINK]
-        s["paired"][f"{NOTHINK} - control"] = t["paired"][f"{NOTHINK} - control"]
-    if a.astra_random:
-        t = json.loads(Path(a.astra_random).read_text())
-        for r in RANDOM:
-            s["per_arm"][r] = t["per_arm"][r]
-            s["paired"][f"{r} - control"] = t["paired"][f"{r} - control"]
-    paths = [out / "exp1_qwen3_math_delta_grid.svg", out / "exp1_qwen3_lcb_delta_grid.svg",
-             out / "exp1_astra_gsm8k_delta_grid.svg", out / "exp1_astra_math_delta_grid.svg"]
-    qwen3_figure(q, "math", paths[0])
-    qwen3_figure(q, "lcb", paths[1])
-    astra_figure(s, "gsm8k", paths[2])
-    astra_figure(s, "math", paths[3])
+    only = set(a.only.split(","))
+    paths = []
+    if only & {"2a", "2b"}:
+        q = json.loads(Path(a.qwen3).read_text())
+        for fig, ds in (("2a", "math"), ("2b", "lcb")):
+            if fig in only:
+                paths.append(out / f"exp1_qwen3_{ds}_delta_grid.svg")
+                qwen3_figure(q, ds, paths[-1])
+    if only & {"1a", "1b"}:
+        s = json.loads(Path(a.astra).read_text())
+        if a.astra_nothink:  # astra_regime_summary.py test --arms control_nothink --refs control
+            t = json.loads(Path(a.astra_nothink).read_text())
+            s["per_arm"][NOTHINK] = t["per_arm"][NOTHINK]
+            s["paired"][f"{NOTHINK} - control"] = t["paired"][f"{NOTHINK} - control"]
+        if a.astra_random:
+            t = json.loads(Path(a.astra_random).read_text())
+            for r in RANDOM:
+                s["per_arm"][r] = t["per_arm"][r]
+                s["paired"][f"{r} - control"] = t["paired"][f"{r} - control"]
+        for fig, ds in (("1a", "gsm8k"), ("1b", "math")):
+            if fig in only:
+                paths.append(out / f"exp1_astra_{ds}_delta_grid.svg")
+                astra_figure(s, ds, paths[-1])
     print(*paths, sep="\n")
 
 

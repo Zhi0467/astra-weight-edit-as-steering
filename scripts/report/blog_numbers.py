@@ -30,7 +30,8 @@ def ci(d):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--qwen3", required=True, help="folder with exp1_test_summary.json and exp1_selection.json")
-    ap.add_argument("--astra", required=True, help="folder with test_summary*.json, dev and diagnostic JSONs")
+    ap.add_argument("--astra", required=True, help="folder with test_summary*.json, dev and diagnostic JSONs "
+                    "(test_summary_resid.json from run/astra_controls.sh is optional)")
     a = ap.parse_args()
     Q, A = Path(a.qwen3), Path(a.astra)
     T = json.loads((A / "test_summary.json").read_text())
@@ -71,6 +72,16 @@ def main():
         capped = [r for r in rows if r["finish"] == "length"]
         n_free = sum(not r["loop"] for r in capped)
         print(f"  capped {arm('ul', 32)} responses: {len(capped)}, of which not loop-flagged: {n_free}")
+
+    R = A / "test_summary_resid.json"  # run/astra_controls.sh
+    if R.exists():
+        R = json.loads(R.read_text())
+        print("§4 MLP write vs residual stream, N = 32: accuracy / loop / cap hit")
+        for x in ("sv_n32_a4", "resid_sv_n32_a4", "ul_n32_b0.1", "resid_ul_n32_b0.1"):
+            r = m(R, x)
+            print(f"  {x:20s} {pct(r['accuracy'])} / {pct(r['loop'])} / {pct(r['cap_hit'])}")
+        d = R["paired"]["resid_ul_n32_b0.1 - ul_n32_b0.1"]["pooled"]
+        print(f"  residual - write, learned ul: accuracy {ci(d['accuracy'])}, loop {pp(d['loop']['diff'])}")
 
     D = json.loads((A / "diag_samplers_validation_1.json").read_text())
     print("§7 dev sampler diagnostic (validation_1): accuracy under Astra's sampler -> greedy -> no presence penalty")
