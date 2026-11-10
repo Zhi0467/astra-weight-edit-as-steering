@@ -6,7 +6,7 @@ Rules:
     worse than the unedited model's (loop_s_devloss.py; read here from the score JSONs via choose(..., tol=inf)).
   - alpha (s = alpha v) and beta (learned s at its stopping update): highest pooled dev accuracy over MATH + LiveCodeBench
     (64 looping + 64 non-looping prompts each), loop rate as tie-break; per family and N.
-  - N: 32 if the best N = 32 arm beats the best N = 4 arm on pooled dev accuracy, else 4 (fixes N for experiment 2).
+  - N: 32 if the best N = 32 arm beats the best N = 4 arm on pooled dev accuracy, else 4.
   - families are not chosen; each family's chosen arm at each N runs on test with the unedited control.
 Input: --rollouts JSON from rollout_table.py ({"arm@update": {dataset: {n, acc, loop, ...}}}), --scores devscore JSONs.
 

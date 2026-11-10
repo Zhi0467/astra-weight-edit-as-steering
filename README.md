@@ -20,12 +20,6 @@ grading code, the dev/test splits, the selection rules, and the summary and figu
 | Figures, all or one at a time (`run/figures.sh 1a 2b site`) | `run/figures.sh` | `blog/figures/` |
 | Every number quoted in the post | `scripts/report/blog_numbers.py` | prints them from `results/` or from a rerun |
 
-One more experiment, not reported in the post, is included with its code and results:
-
-| Experiment | Script | Our numbers |
-|---|---|---|
-| Qwen3-1.7B: how `v` is built (five constructions, N = 32, s = αv) | `run/qwen3_exp2.sh` | `results/qwen3/exp2_*` |
-
 ```bash
 python3 scripts/report/blog_numbers.py --qwen3 results/qwen3 --astra results/astra_regime          # ours
 python3 scripts/report/blog_numbers.py --qwen3 work/qwen3/exp1 --astra work/astra_regime          # your rerun
@@ -65,7 +59,7 @@ Each script runs end to end and skips finished steps, so it can be restarted.
 
 ```bash
 GPUS=0,1,2,3,4,5,6,7 bash run/astra_exp1.sh     # then run/astra_controls.sh, run/astra_resid_alpha.sh
-GPUS=0,1,2,3,4,5,6,7 bash run/qwen3_exp1.sh     # then run/qwen3_exp2.sh
+GPUS=0,1,2,3,4,5,6,7 bash run/qwen3_exp1.sh
 bash run/figures.sh
 ```
 
@@ -82,8 +76,8 @@ Every experiment uses four disjoint roles:
 |---|---|---|
 | `astra_exp1.sh` | Astra's edit; `v` (N = 4, 32); 12 learned `s` (clas / ul / contrast × β 0, 0.1 × N); unedited dev rollouts; stopping update per `s`; dev rollouts of 21 candidates; selection; test rollouts on 5 problem sets | 22 dev + 55 test |
 | `astra_controls.sh` | residual-site versions of s = 4v and learned ul; norm-matched random-direction edits | 20 test |
+| `astra_resid_alpha.sh` | s = αv at the residual site, α ∈ {0.2, 0.5, 1, 1.5} on dev; the chosen α on test | 4 dev + 5 test |
 | `qwen3_exp1.sh` | as above for Qwen3-1.7B at blocks 15–18 (MATH level 5 and LiveCodeBench, dev 128 + 128 prompts) | 42 dev + 40 test |
-| `qwen3_exp2.sh` | `v` by mean difference on the MLP output, logistic regression, recursive feature machine, first principal component; α 1–4 on dev; chosen α and a random direction on test | 32 dev + 20 test |
 
 A Qwen3-1.7B test run is one arm on one dataset and one source split, 250–300 prompts at up to 40,960 tokens.
 LiveCodeBench runs are graded on CPU right after generation.
@@ -113,8 +107,6 @@ prompts, for the reason given above.
   models is mediated by a single direction".
 - The learned sensing vector follows CLAS; our "clas" arm is its productive-text-only, no-bias variant at the MLP write.
 - Benchmarks: MATH (Hendrycks et al., 2021), GSM8K (Cobbe et al., 2021), LiveCodeBench (Jain et al., 2024).
-- `src/probe/rfm.py` (used by `run/qwen3_exp2.sh`) is adapted from the MIT-licensed reference implementation of
-  recursive feature machines (Radhakrishnan et al., [github.com/aradha/recursive_feature_machines](https://github.com/aradha/recursive_feature_machines)).
 
 ## License
 

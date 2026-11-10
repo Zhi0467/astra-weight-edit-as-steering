@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Experiment-1 test summary (Qwen3-1.7B greedy): paired per-prompt differences of the dev-selected arms against the
-unedited control and against s = alpha v at the same pair count, on the experiment-1/2 test split.
+unedited control and against s = alpha v at the same pair count, on the test split.
 
 Test split (loop_test_split.py): per dataset 500 prompts = every prompt that looped in any of 4 saved greedy draws, plus
 a seeded sample of non-looping prompts; train_source (official train) and heldout_source (official test) parts. The set

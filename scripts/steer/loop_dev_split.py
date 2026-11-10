@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Dev prompts for choosing alpha / beta (experiments 1 and 2): 64 looping + 64 non-looping prompts per dataset.
+"""Dev prompts for choosing alpha / beta: 64 looping + 64 non-looping prompts per dataset.
 
 Source: per-prompt loop labels of Qwen3-1.7B from 4 greedy draws per prompt, thinking on (data/qwen3/loop_labels.jsonl,
 written by scripts/data/loop_labels.py). train_source is

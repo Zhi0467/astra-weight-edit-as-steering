@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Shared test prompts for experiments 1 and 2 (learned s; ways to build v): 500 prompts per dataset.
+"""Test prompts for the Qwen3-1.7B experiment: 500 prompts per dataset.
 
 Pool: every prompt of both splits, labelled from 4 greedy Qwen3-1.7B draws per prompt, thinking on
 (data/qwen3/loop_labels.jsonl),
