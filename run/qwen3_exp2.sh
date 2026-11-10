@@ -5,7 +5,7 @@
 #     (logreg), recursive feature machine (rfm), first principal component (pc1); plus the random-direction control.
 #  2. Dev rollouts at alpha 1-4 per construction; per construction the alpha with the highest pooled dev accuracy.
 #  3. Test rollouts of the chosen arms and the random control at alpha 2; paired summary against the residual mean
-#     difference (experiment 1's sv_n32_a2) and the unedited model.
+#     difference (experiment 1's dev-chosen s = alpha v at N = 32; ours: sv_n32_a2) and the unedited model.
 set -euo pipefail
 source "$(dirname "$0")/env.sh"; source "$(dirname "$0")/lib.sh"
 Q=$WORK/qwen3; S=$Q/s_run; E=$Q/exp2; mkdir -p "$E"
@@ -32,5 +32,5 @@ for src in train_source heldout_source; do for ds in math_level5 livecodebench; 
 pool "$E/jobs_test"
 R=$Q/runs/test
 $PY scripts/steer/exp1_test_summary.py --gen "$R" --graded "$R" --split "$SPLITS/test12" \
-  --arms "control,sv_n32_a2,$(echo $TEST | tr ' ' ',')" --json "$E/exp2_test_summary.json" | tee "$E/exp2_test_summary.txt"
+  --arms "control,$($PY -c "import json; print(json.load(open('$E/exp2_selection.json'))['md_resid']['arm'])"),$(echo $TEST | tr ' ' ',')" --json "$E/exp2_test_summary.json" | tee "$E/exp2_test_summary.txt"
 echo "experiment 2 done: $E"

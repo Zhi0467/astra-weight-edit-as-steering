@@ -92,7 +92,7 @@
  },
  "md_resid": {
   "arm": "sv_n32_a2",
-  "note": "experiment 1 selection; test run exists in lp/gen_test",
+  "note": "experiment 1's dev-chosen s = alpha v at N = 32; its test run comes from run/qwen3_exp1.sh",
   "dev_pooled": {
    "1": {
     "acc": 0.484375,

@@ -36,8 +36,10 @@ def main():
         dev = {str(al): pooled(roll[f"vc_{c}_n32_a{al}@24"]) for al in (1, 2, 3, 4)}
         al = max(dev, key=lambda k: (dev[k]["acc"], -dev[k]["loop"]))
         out["selected"][c] = {"alpha": int(al), "arm": f"vc_{c}_n32_a{al}", "dev_pooled": dev}
-    out["md_resid"] = {"arm": "sv_n32_a2", "note": "experiment 1 selection; test run exists in lp/gen_test",
-                       "dev_pooled": {str(al): pooled(roll[f"sv_n32_a{al}@24"]) for al in (1, 2, 3, 4)}}
+    dev = {str(al): pooled(roll[f"sv_n32_a{al}@24"]) for al in (1, 2, 3, 4)}
+    al = max(dev, key=lambda k: (dev[k]["acc"], -dev[k]["loop"]))  # experiment 1's rule for s = alpha v at N = 32
+    out["md_resid"] = {"arm": f"sv_n32_a{al}", "note": "experiment 1's dev-chosen s = alpha v at N = 32; its test run "
+                       "comes from run/qwen3_exp1.sh", "dev_pooled": dev}
     out["control"] = {"dev_pooled": pooled(roll["control@0"])}
     out["random"] = {"arm": "vc_random_n32_a2", "note": "test-only control, alpha 2 fixed in the experiment-2 design"}
     out["test_arms"] = [out["selected"][c]["arm"] for c in CONSTRUCTIONS] + ["vc_random_n32_a2"]
