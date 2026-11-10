@@ -26,7 +26,7 @@ def groups(s):
     for fam in ("sv", "ul"):
         for ra in s["per_arm"]:
             wa = ra[len("resid_"):]
-            if ra.startswith(f"resid_{fam}_n32_") and wa in s["per_arm"]:
+            if ra.startswith(f"resid_{fam}_n32") and wa in s["per_arm"]:  # resid_ul_n32_b0.1 in one run, resid_ul_n32 in results/ (runs averaged)
                 lab = f"s = {wa.split('_a')[-1]}v" if fam == "sv" else "learned s (unlikelihood)"
                 out.append((lab, wa, ra, f"{ra}.pt"))
                 break

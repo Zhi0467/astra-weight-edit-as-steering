@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Print every number the blog post quotes, computed from the summaries, so a rerun can be checked line by line.
 
-  blog_numbers.py --qwen3 results/qwen3 --astra results/astra_regime            our numbers (shipped)
-  blog_numbers.py --qwen3 $WORK/qwen3/exp1 --astra $WORK/astra_regime           your rerun
+  blog_numbers.py --qwen3 results/qwen3 --astra results/astra_regime            ours (the post: two runs averaged)
+  blog_numbers.py --qwen3 results/qwen3/runs/1 --astra results/astra_regime/runs/1   one of our runs
+  blog_numbers.py --qwen3 $WORK/qwen3/exp1 --astra $WORK/astra_regime           your run
 
 The "capped but not loop-flagged" count needs per-problem outputs, so it is printed only when <astra>/gen exists
-(a rerun). The two §4 tables come from an earlier round that this repository does not reproduce.
+(a rerun), or from capped_ul_n32.json in results/. The two §4 tables come from an earlier round that this repository does not reproduce.
 """
 
 import argparse
@@ -67,7 +68,11 @@ def main():
             cells.append(" / ".join(pp(T["paired"][arm(f, 32) + " - " + arm("sv", 32)][g][key]["diff"]) for f in ("ul", "contrast")))
         print(f"  {name:17s} UL / contrast: {cells[0]} | {cells[1]}")
     gen = A / "gen"
-    if gen.exists():
+    if (A / "capped_ul_n32.json").exists():  # our two runs averaged
+        c = json.loads((A / "capped_ul_n32.json").read_text())
+        print(f"  capped ul N = 32 responses, all runs: {c['capped']} of {c['responses']}, of which not loop-flagged: "
+              f"{c['capped_not_loop']} ({pct(c['capped_not_loop'] / c['capped'])})")
+    elif gen.exists():
         rows = [json.loads(l) for s in SPLITS for l in open(gen / s / arm("ul", 32) / "results.jsonl")]
         capped = [r for r in rows if r["finish"] == "length"]
         n_free = sum(not r["loop"] for r in capped)
@@ -99,8 +104,10 @@ def main():
     print("§7 dev sampler diagnostic (validation_1): accuracy under Astra's sampler -> greedy -> no presence penalty")
     for x, r in D.items():
         print(f"  {x:18s} {pct(r['astra']['accuracy'])} -> {pct(r['greedy']['accuracy'])} -> {pct(r['nopp']['accuracy'])}")
-    C = json.loads((A / "astra_check_n4.json").read_text())
-    print("Endnote: |cos(our four-pair v, Astra's u)| per layer:", ", ".join(f"{l}: {c['abs_cos_v_u']:.6f}" for l, c in C.items()))
+    for f in [A / "astra_check_n4.json"] if (A / "astra_check_n4.json").exists() else sorted(A.glob("runs/*/astra_check_n4.json")):
+        C = json.loads(f.read_text())
+        print(f"Endnote: |cos(our four-pair v, Astra's u)| per layer ({f.parent.name}):",
+              ", ".join(f"{l}: {c['abs_cos_v_u']:.6f}" for l, c in C.items()))
 
     S = json.loads((Q / "exp1_test_summary.json").read_text())
     QS = json.loads((Q / "exp1_selection.json").read_text())

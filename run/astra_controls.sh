@@ -1,7 +1,7 @@
 #!/bin/bash
 # Controls in Astra's regime (needs run/astra_exp1.sh first): on the 1,152 test problems,
 #  - the same edits at the residual site: the dev-chosen s = alpha v and learned unlikelihood s at N = 32 (ours:
-#    s = 4v and ul beta 0.1), applied at run time to the block output of layers 15 and 19 instead of the MLP output;
+#    s = 4v, and ul with beta 0.1 or 0 depending on the run), applied at run time to the block output of layers 15 and 19 instead of the MLP output;
 #  - random-direction edits: a full-column edit norm-matched to that s = alpha v, and an edit on Astra's 64 columns
 #    norm-matched to Astra's edit.
 set -euo pipefail

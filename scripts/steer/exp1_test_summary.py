@@ -73,57 +73,54 @@ def load(f):
     return out
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--gen", required=True)
-    ap.add_argument("--graded", required=True)
-    ap.add_argument("--split", required=True)
-    ap.add_argument("--arms", default="control,sv_n4_a1,clas_n4_b0.1_s8,ul_n4_b0.1_s14,contrast_n4_b0.1_s12,"
-                                      "sv_n32_a2,clas_n32_b0_s14,ul_n32_b0_s14,contrast_n32_b0.1_s12")
-    ap.add_argument("--json", required=True)
-    ap.add_argument("--labels", default=str(LABELS), help="per-prompt loop labels (scripts/data/loop_labels.py)")
-    ap.add_argument("--subset-arms", default="control_nothink",
-                    help="arms whose runs hold more prompts than the test selection; extra prompts are dropped. "
-                         "control_nothink: the LiveCodeBench exclusion list matches rendered thinking-on prompt text, so "
-                         "its thinking-off LCB runs generated every prompt of the source split")
-    a = ap.parse_args()
-    arms = a.arms.split(",")
-    subset = set(a.subset_arms.split(",")) if a.subset_arms else set()
-
-    # loop label per prompt, keyed by question_id (LiveCodeBench test runs are re-indexed after the exclusion step)
+def read_labels(split, labels=LABELS):
+    """loop label per test prompt, keyed by (source, dataset, question_id); LiveCodeBench test runs are re-indexed
+    after the exclusion step, so prompts are matched by question_id."""
     label = {}
     for ds in DSS:
-        sel = json.loads((Path(a.split) / f"{ds}_test_selection.json").read_text())
+        sel = json.loads((Path(split) / f"{ds}_test_selection.json").read_text())
         for src in SRCS:
             qid = {}
-            for l in open(a.labels):
+            for l in open(labels):
                 r = json.loads(l)
                 if r["dataset"] == ds and r["split"] == src:
                     qid[r["sample_id"]] = key(r)
             for k, lab in (("loop_prompt_ids", True), ("nonloop_prompt_ids", False)):
                 for i in sel[src][k]:
                     label[(src, ds, qid[i])] = lab
+    return label
 
-    data, missing = {}, []  # arm -> {(src, ds, qid): metrics}
-    for arm in arms:
-        data[arm] = {}
-        for src in SRCS:
-            for ds in DSS:
-                root = a.gen if ds == "math_level5" else a.graded
-                f = bundle(f"{root}/{src}/{ds}/{arm}", "DONE" if ds == "math_level5" else "GRADED")
-                if f is None:
-                    missing.append(f"{src}/{ds}/{arm}")
+
+def read_arm(gen, graded, arm, label, subset=False, missing=None):
+    """per-prompt metrics of one arm's test runs: {(src, ds, qid): metrics}. subset: drop prompts outside the test
+    selection (see --subset-arms). Runs not yet finished or graded are appended to missing."""
+    out = {}
+    for src in SRCS:
+        for ds in DSS:
+            root = gen if ds == "math_level5" else graded
+            f = bundle(f"{root}/{src}/{ds}/{arm}", "DONE" if ds == "math_level5" else "GRADED")
+            if f is None:
+                if missing is None:
+                    raise SystemExit(f"missing {src}/{ds}/{arm} under {root}")
+                missing.append(f"{src}/{ds}/{arm}")
+                continue
+            for q, (_, m) in load(f).items():
+                if (src, ds, q) not in label and subset:
                     continue
-                for q, (_, m) in load(f).items():
-                    if (src, ds, q) not in label and arm in subset:
-                        continue
-                    if (src, ds, q) not in label:
-                        raise SystemExit(f"prompt {src}/{ds}/{q} of {arm} not in the test selection")
-                    data[arm][(src, ds, q)] = m
-                n = sum(1 for k in data[arm] if k[:2] == (src, ds))
-                want = sum(1 for k in label if k[:2] == (src, ds))
-                if n != want:
-                    raise SystemExit(f"{src}/{ds}/{arm}: {n} prompts, selection has {want}")
+                if (src, ds, q) not in label:
+                    raise SystemExit(f"prompt {src}/{ds}/{q} of {arm} not in the test selection")
+                out[(src, ds, q)] = m
+            n = sum(1 for k in out if k[:2] == (src, ds))
+            want = sum(1 for k in label if k[:2] == (src, ds))
+            if n != want:
+                raise SystemExit(f"{src}/{ds}/{arm}: {n} prompts, selection has {want}")
+    return out
+
+
+def summarize(data, label, missing=()):
+    """data: {arm: {(src, ds, qid): metrics}} in report order (control first, s = alpha v named sv_n<N>...).
+    Levels per arm, and paired differences against control and against s = alpha v at the same N."""
+    arms = list(data)
     keys = sorted(label)
     rng = np.random.default_rng(20261106)
     cells = {}
@@ -147,10 +144,10 @@ def main():
         return {"mean": float(x[ix].mean()), "lo": float(np.percentile(bs, 2.5)), "hi": float(np.percentile(bs, 97.5)),
                 "n": int(len(ix))}
 
-    out = {"n_prompts": len(keys), "missing": missing, "levels": {}, "vs_control": {}, "vs_sv": {}}
+    out = {"n_prompts": len(keys), "missing": list(missing), "levels": {}, "vs_control": {}, "vs_sv": {}}
     for arm in arms:
         out["levels"][arm] = {g: {m: stat(arr(arm, m), g) for m in METRICS} for g in GROUPS}
-    sv = {n: next((x for x in arms if x.startswith(f"sv_n{n}_")), None) for n in (4, 32)}
+    sv = {n: next((x for x in arms if x.startswith(f"sv_n{n}")), None) for n in (4, 32)}
     for arm in arms:
         if arm == "control":
             continue
@@ -160,18 +157,20 @@ def main():
         n = int(arm.split("_n")[1].split("_")[0])
         if not arm.startswith("sv_") and sv[n]:
             out["vs_sv"][arm] = {g: {m: stat(arr(arm, m) - arr(sv[n], m), g) for m in METRICS} for g in GROUPS}
-    Path(a.json).write_text(json.dumps(out, indent=1))
+    return out
 
+
+def report(out):
     def fmt(s, pct=True):
         if s is None:
             return "   (missing)    "
         f = 100 if pct else 1
         return f"{s['mean'] * f:+6.1f} [{s['lo'] * f:+5.1f},{s['hi'] * f:+5.1f}]"
 
-    print(f"{len(keys)} test prompts; missing runs: {missing}")
+    print(f"{out['n_prompts']} test prompts; missing runs: {out['missing']}")
     for g in ("all", "loop", "nonloop", "official_test"):
         print(f"\n== {g} ==   accuracy / loop rate / closed thinking (levels %, then differences in points, 95% CI)")
-        for arm in arms:
+        for arm in out["levels"]:
             L = out["levels"][arm][g]
             lv = " / ".join("  -  " if L[m] is None else f"{100 * L[m]['mean']:5.1f}" for m in ("correct", "loop", "closed"))
             line = f"{arm:22s} {lv}"
@@ -180,6 +179,29 @@ def main():
             if arm in out["vs_sv"]:
                 line += "  | vs sv acc " + fmt(out["vs_sv"][arm][g]["correct"])
             print(line)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--gen", required=True)
+    ap.add_argument("--graded", required=True)
+    ap.add_argument("--split", required=True)
+    ap.add_argument("--arms", default="control,sv_n4_a1,clas_n4_b0.1_s8,ul_n4_b0.1_s14,contrast_n4_b0.1_s12,"
+                                      "sv_n32_a2,clas_n32_b0_s14,ul_n32_b0_s14,contrast_n32_b0.1_s12")
+    ap.add_argument("--json", required=True)
+    ap.add_argument("--labels", default=str(LABELS), help="per-prompt loop labels (scripts/data/loop_labels.py)")
+    ap.add_argument("--subset-arms", default="control_nothink",
+                    help="arms whose runs hold more prompts than the test selection; extra prompts are dropped. "
+                         "control_nothink: the LiveCodeBench exclusion list matches rendered thinking-on prompt text, so "
+                         "its thinking-off LCB runs generated every prompt of the source split")
+    a = ap.parse_args()
+    subset = set(a.subset_arms.split(",")) if a.subset_arms else set()
+    label = read_labels(a.split, a.labels)
+    missing = []
+    data = {arm: read_arm(a.gen, a.graded, arm, label, arm in subset, missing) for arm in a.arms.split(",")}
+    out = summarize(data, label, missing)
+    Path(a.json).write_text(json.dumps(out, indent=1))
+    report(out)
 
 
 if __name__ == "__main__":
