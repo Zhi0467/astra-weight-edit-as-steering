@@ -7,7 +7,7 @@ We then ask whether learning `s` or building `v` differently does better.
 
 Everything needed to rerun the experiments is here: models and data at pinned versions, the exact generation and
 grading code, the dev/test splits, the selection rules, and the summary and figure scripts. Rollouts are not included.
-[`results/`](results/) holds our summaries for comparison.
+[`results/`](results/) holds our summaries for comparison. We ran the pipeline twice; the post's numbers average each problem's outcome over the two runs (each run's dev-chosen learned sensors; fixed arms chosen on both runs' dev results) and then apply the usual paired bootstraps. `results/*/runs/1` and `runs/2` hold the two runs' own summaries.
 
 ## What reproduces what
 

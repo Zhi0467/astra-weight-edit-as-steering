@@ -206,13 +206,16 @@ a fixed direction, with a strength read from the current activations. We
 call this sensed steering in this post.</li>
 <li><strong>Learning the sensing vector can further reduce looping in
 some settings.</strong> In the Astra setup, our learned sensors suppress
-exact repetition much more than sensing along the steering direction,
-without a resolved accuracy difference. On a second model, Qwen3-1.7B,
-they do not improve on it and are 2–3 points less accurate.</li>
+exact repetition much more than sensing along the steering direction; at
+32 pairs the 95% interval of the accuracy difference contains zero, and
+at four pairs they are less accurate. On a second model, Qwen3-1.7B,
+they do not improve on it, and the unlikelihood-trained sensor is less
+accurate.</li>
 <li><strong>Design choices matter.</strong> What data builds the
 steering direction (short synthetic pairs worked best), where the sensor
-reads (the MLP write, not the residual stream), and which loss and
-early-stopping rule train the sensing vector.</li>
+reads (the same sensor behaves differently on the MLP write and on the
+residual stream), and which loss and early-stopping rule train the
+sensing vector.</li>
 </ul>
 <p>This is a post about that design space of sensed steering, building
 on <a href="https://arxiv.org/html/2604.24693v2">Contextual Linear
@@ -250,7 +253,7 @@ its down-projection matrix be
 and its contribution to the residual stream be
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mi>W</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">x=Wh</annotation></semantics></math>.
 Consider</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mi>′</mi><mo>=</mo><mi>x</mi><mo>−</mo><mi>v</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mi>x</mi><mo>−</mo><mi>v</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
 x&#39; = x-v(s^\top x).
 </annotation></semantics></math></p>
 <p>There are two vectors here:</p>
@@ -263,7 +266,7 @@ at each token.</li>
 </ul>
 <p>Here the strength depends on what the MLP is writing. Because the
 sensor is linear, this intervention can be folded into the weights:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mi>′</mi><mo>=</mo><mi>W</mi><mo>−</mo><mi>v</mi><msup><mi>s</mi><mi>⊤</mi></msup><mi>W</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>W</mi><mi>′</mi><mi>h</mi><mo>=</mo><mi>W</mi><mi>h</mi><mo>−</mo><mi>v</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>W</mi><mi>h</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>W</mi><mo>′</mo></msup><mo>=</mo><mi>W</mi><mo>−</mo><mi>v</mi><msup><mi>s</mi><mi>⊤</mi></msup><mi>W</mi><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>W</mi><mo>′</mo></msup><mi>h</mi><mo>=</mo><mi>W</mi><mi>h</mi><mo>−</mo><mi>v</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>W</mi><mi>h</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
 W&#39;=W-vs^\top W,
 \qquad W&#39;h=Wh-v(s^\top Wh).
 </annotation></semantics></math></p>
@@ -322,32 +325,32 @@ GSM8K training problems and 576 MATH training problems.</p>
 <tbody>
 <tr>
 <td>Unedited, thinking on</td>
-<td style="text-align: right;">12.1%</td>
-<td style="text-align: right;">87.2%</td>
-<td style="text-align: right;">88.6%</td>
+<td style="text-align: right;">12.3%</td>
+<td style="text-align: right;">87.0%</td>
+<td style="text-align: right;">88.5%</td>
 </tr>
 <tr>
 <td>Unedited, thinking off</td>
-<td style="text-align: right;">53.0%</td>
+<td style="text-align: right;">53.3%</td>
 <td style="text-align: right;">4.5%</td>
-<td style="text-align: right;">5.5%</td>
+<td style="text-align: right;">5.3%</td>
 </tr>
 <tr>
 <td>Astra’s submitted top-64 edit</td>
-<td style="text-align: right;">59.3%</td>
-<td style="text-align: right;">29.9%</td>
-<td style="text-align: right;">19.2%</td>
+<td style="text-align: right;">60.2%</td>
+<td style="text-align: right;">29.6%</td>
+<td style="text-align: right;">18.2%</td>
 </tr>
 </tbody>
 </table>
-<p>With thinking turned off, the unedited model already scores 53.0%,
-against 59.3% with Astra’s edit. With thinking on, it scores 12.1%: it
-loops on 87.2% of problems and hits the token cap on 88.6%, so most
-answers never finish. Of the edit’s 47-point gain over thinking-on,
-turning thinking off recovers 41 points; the edit adds about 6 points
+<p>With thinking turned off, the unedited model already scores 53.3%,
+against 60.2% with Astra’s edit. With thinking on, it scores 12.3%: it
+loops on 87.0% of problems and hits the token cap on 88.5%, so most
+answers never finish. Of the edit’s 48-point gain over thinking-on,
+turning thinking off recovers 41 points; the edit adds about 7 points
 beyond that. We therefore read the edit as mainly fixing a pathological
 generation behavior, not installing new mathematical capability. Our
-reproduced 59.3% is close to the authors’ 60.4% on their confirmation
+reproduced 60.2% is close to the authors’ 60.4% on their confirmation
 table.</p>
 <p>Throughout this post, a <strong>loop</strong> means a 30-token
 sequence appearing at least 20 times in a completion. We also track
@@ -373,7 +376,7 @@ compare three objectives:</p>
 be the model with learned sensing vectors and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mn>0</mn></msub><annotation encoding="application/x-tex">p_0</annotation></semantics></math>
 the unedited model. With teacher-forced prefixes, define</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><msub><mi>L</mi><mrow><mi mathvariant="normal">N</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">P</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mi>−</mi><msub><mi>𝔼</mi><mo>+</mo></msub><mo>log</mo><msub><mi>p</mi><mi>s</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>y</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><mi>L</mi><mrow><mi mathvariant="normal">U</mi><mi mathvariant="normal">L</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mi>−</mi><msub><mi>𝔼</mi><mo>−</mo></msub><mo>log</mo><mo minsize="1.2" maxsize="1.2" stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>s</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>y</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo minsize="1.2" maxsize="1.2" stretchy="false" form="postfix">)</mo><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>K</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mi>𝔼</mi><mo>+</mo></msub><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>p</mi><mn>0</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>⋅</mi><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="0.167em"></mspace><mo stretchy="false" form="postfix">∥</mo><mspace width="0.167em"></mspace><msub><mi>p</mi><mi>s</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>⋅</mi><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><msub><mi>L</mi><mrow><mi mathvariant="normal">N</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">P</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><mi>s</mi><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mi>−</mi><msub><mi>𝔼</mi><mo>+</mo></msub><mi>log</mi><mo>&#8289;</mo><msub><mi>p</mi><mi>s</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><msub><mi>L</mi><mrow><mi mathvariant="normal">U</mi><mi mathvariant="normal">L</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><mi>s</mi><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mi>−</mi><msub><mi>𝔼</mi><mo>−</mo></msub><mi>log</mi><mo>&#8289;</mo><mo minsize="1.2" maxsize="1.2" stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>s</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo minsize="1.2" maxsize="1.2" stretchy="false" form="postfix">)</mo><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mi>K</mi><mo stretchy="false" form="prefix">(</mo><mi>s</mi><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><msub><mi>𝔼</mi><mo>+</mo></msub><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>p</mi><mn>0</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>⋅</mi><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><mo stretchy="false" form="postfix">∥</mo><mspace width="0.167em"></mspace><msub><mi>p</mi><mi>s</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>⋅</mi><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">
 \begin{aligned}
 L_{\mathrm{NTP}}(s)&amp;=-\mathbb{E}_{+}\log p_s(y_t\mid y_{&lt;t}),\\
 L_{\mathrm{UL}}(s)&amp;=-\mathbb{E}_{-}\log\bigl(1-p_s(y_t\mid y_{&lt;t})\bigr),\\
@@ -431,8 +434,13 @@ work) or those four plus 28 additional hand-written pairs. The same
 pairs construct
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
 and train
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>;
-comparisons between sensing methods are within the same pair count. For
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>.
+At each edited layer,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
+is the difference between the mean residual stream (the block output)
+over the last 36 tokens of the repetitive text and that of the
+productive text, averaged over pairs and normalized to unit length.
+Comparisons between sensing methods are within the same pair count. For
 scaled-direction sensing (Astra’s method) we test
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>4</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\alpha\in\{1,2,3,4\}</annotation></semantics></math>.
 Sensing vector training uses Adam, learning rate 0.003, and at most 24
@@ -441,8 +449,9 @@ compares the selected member of each family. We discuss the stopping
 rule below.</p>
 <p><strong>The goal is to reduce looping without harming
 accuracy.</strong></p>
-<h3 id="much-less-exact-repetition-similar-measured-accuracy">Much less
-exact repetition; similar measured accuracy</h3>
+<h3
+id="much-less-exact-repetition-similar-measured-accuracy-at-32-pairs">Much
+less exact repetition; similar measured accuracy at 32 pairs</h3>
 <figure>
 <img src="figures/exp1_astra_gsm8k_delta_grid.svg"
 alt="GSM8K: paired metric differences for the Astra regime" />
@@ -461,22 +470,23 @@ Astra regime</figcaption>
 </figure>
 <p><em>Figure 1b. MATH, 576 problems, with the same comparisons. The
 completion tradeoff differs substantially from GSM8K.</em></p>
-<p>At 32 pairs, scaled-direction sensing reaches <strong>61.5%
+<p>At 32 pairs, scaled-direction sensing reaches <strong>60.7%
 accuracy</strong>. Unlikelihood-trained sensing reaches
-<strong>62.3%</strong> and contrast-trained <strong>61.9%</strong>.</p>
+<strong>61.6%</strong> and contrast-trained <strong>61.5%</strong>; both
+differences have 95% intervals that contain zero.</p>
 <p>The repetition difference is much larger. The loop flag falls from
-<strong>26.4%</strong> with scaled-direction sensing to
-<strong>6.8%</strong> with unlikelihood and <strong>7.1%</strong> with
+<strong>27.2%</strong> with scaled-direction sensing to
+<strong>6.5%</strong> with unlikelihood and <strong>6.8%</strong> with
 contrast. Training
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
 can do the job better.</p>
-<p>At four pairs, the same pattern appears: accuracy differences are
-small and unresolved, while the loop flag falls from
-<strong>38.8%</strong> to roughly <strong>11%</strong>. Moving from four
-to 32 pairs adds about 6.5–7.7 accuracy points in these three
-families.</p>
+<p>At four pairs, the loop flag again falls, from <strong>29.5%</strong>
+to roughly <strong>11%</strong>, but the learned sensors are less
+accurate: 2.8 points for unlikelihood [−5.0, −0.6] and 2.5 for contrast
+[−4.7, −0.2]. Moving from four to 32 pairs adds 3.0 accuracy points to
+scaled-direction sensing and 6.2–6.7 to the two learned families.</p>
 <p>Productive-text-only training (clas arm) is markedly worse in this
-regime: 42.5% accuracy at four pairs and 42.9% at 32. It does reduce
+regime: 42.8% accuracy at four pairs and 44.2% at 32. It does reduce
 repetition relative to the unedited model, but how we train
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
 matters a lot.</p>
@@ -484,7 +494,7 @@ matters a lot.</p>
 id="learning-the-sensing-vector-has-dataset-specific-side-effects">Learning
 the sensing vector has dataset-specific side effects</h3>
 <p>Pooled across datasets, the N=32 learned arms hit the cap more often
-than scaled-direction sensing: <strong>22.0–22.7% versus 17.9%</strong>.
+than scaled-direction sensing: <strong>22.3–23.0% versus 18.3%</strong>.
 They also close thinking less often. But the pooled average hides where
 this happens:</p>
 <table>
@@ -503,30 +513,30 @@ this happens:</p>
 <tbody>
 <tr>
 <td>Accuracy</td>
-<td style="text-align: right;">+1.9 / +3.0 pp</td>
-<td style="text-align: right;">−0.3 / −2.3 pp</td>
+<td style="text-align: right;">+1.8 / +3.2 pp</td>
+<td style="text-align: right;">+0.1 / −1.6 pp</td>
 </tr>
 <tr>
 <td>Exact-loop flag</td>
-<td style="text-align: right;">−11.1 / −10.8 pp</td>
-<td style="text-align: right;">−28.1 / −27.8 pp</td>
+<td style="text-align: right;">−11.5 / −11.3 pp</td>
+<td style="text-align: right;">−29.9 / −29.5 pp</td>
 </tr>
 <tr>
 <td>Cap hits</td>
-<td style="text-align: right;">−0.5 / −1.2 pp</td>
-<td style="text-align: right;">+8.7 / +10.9 pp</td>
+<td style="text-align: right;">−0.6 / −1.0 pp</td>
+<td style="text-align: right;">+8.6 / +10.4 pp</td>
 </tr>
 <tr>
 <td>Thinking closure</td>
-<td style="text-align: right;">+1.6 / +1.0 pp</td>
-<td style="text-align: right;">−16.5 / −16.7 pp</td>
+<td style="text-align: right;">+2.1 / +1.6 pp</td>
+<td style="text-align: right;">−16.9 / −17.2 pp</td>
 </tr>
 </tbody>
 </table>
 <p>On GSM8K, the completion metrics move in the favorable direction
 numerically. On MATH, exact repetition falls dramatically, but more
 answers exhaust the budget and fewer close thinking.</p>
-<p>Of 253 capped unlikelihood responses, <strong>191 do not trigger our
+<p>Of the capped unlikelihood responses, <strong>78% do not trigger our
 loop flag</strong>. Suppressing exact repetition has not ensured that
 the model finishes. Can we steer and learn sensing to achieve multiple
 behaviors: less loop, more accurate, less cap hit all together? This is
@@ -545,16 +555,137 @@ and the accumulated residual stream
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>,</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mi>′</mi><mo>=</mo><mi>x</mi><mo>−</mo><mi>v</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="2.0em"></mspace><mtext mathvariant="normal">and</mtext><mspace width="2.0em"></mspace><mi>r</mi><mi>′</mi><mo>=</mo><mi>r</mi><mo>−</mo><mi>v</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mi>x</mi><mo>−</mo><mi>v</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mspace width="2.0em"></mspace><mtext mathvariant="normal">and</mtext><mspace width="2.0em"></mspace><msup><mi>r</mi><mo>′</mo></msup><mo>=</mo><mi>r</mi><mo>−</mo><mi>v</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>r</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
 x&#39;=x-v(s^\top x)
 \qquad\text{and}\qquad
 r&#39;=r-v(s^\top r)
 </annotation></semantics></math></p>
 <p>sense different quantities. The second sensor sees the accumulated
-contributions, not just the current MLP’s write.</p>
-<p>In earlier Qwen3-1.7B experiments, that distinction was striking. The
-following are changes from an unedited control, using the same steering
-direction:</p>
+stream: the embedding, every earlier attention and MLP write, and the
+corrections made by earlier edits.</p>
+<p>This changes what the same
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
+does. Take
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s=\alpha v</annotation></semantics></math>
+with unit
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>.
+At the write, each edit multiplies the sensed coordinate of its own
+MLP’s write by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">1-\alpha</annotation></semantics></math>,
+once, and leaves the rest of the stream alone. On the residual stream,
+each edited layer acts on everything already in the stream, so content
+from before the first edited layer is multiplied by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">1-\alpha</annotation></semantics></math>
+at every edited layer: by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">(1-\alpha)^2</annotation></semantics></math>
+over two layers. At
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha=1</annotation></semantics></math>
+this is directional ablation of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
+(<a href="https://arxiv.org/html/2406.11717v3">Arditi et al., 2024</a>).
+For
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>&lt;</mo><mi>α</mi><mo>&lt;</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">1&lt;\alpha&lt;2</annotation></semantics></math>
+the coordinate flips sign and shrinks, and for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>&gt;</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\alpha&gt;2</annotation></semantics></math>
+it flips sign and grows. The derivation is in <a
+href="write_vs_residual_math.html">write_vs_residual_math.html</a>.</p>
+<p>A scaled direction tuned at the write,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>4</mn><mi>v</mi></mrow><annotation encoding="application/x-tex">s=4v</annotation></semantics></math>,
+is in the last regime: on the residual stream, older content along
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
+is flipped twice and multiplied by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>4</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo>=</mo><mn>9</mn></mrow><annotation encoding="application/x-tex">(1-4)^2=9</annotation></semantics></math>
+if both layers share one
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>;
+with the two layers’ actual directions its norm grows 7.8 times. The
+learned N=32 unlikelihood sensor is mostly not along
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
+(cosine 0.15). Its component along
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>s</mi><mi>⊤</mi></msup><mi>v</mi></mrow><annotation encoding="application/x-tex">s^\top v</annotation></semantics></math>,
+plays the role of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>:
+0.34 at layer 15 and 0.29 at layer 19, so on the residual stream older
+content along
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
+is scaled to 0.57 of its size, with no sign flip.</p>
+<p>We moved these two N=32 edits from the MLP write to the residual
+stream in the Astra setup, keeping
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
+unchanged. We also recalibrated the scaled direction for the residual
+stream:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s=\alpha v</annotation></semantics></math>
+with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0.2</mn><mo>,</mo><mn>0.5</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>1.5</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\alpha\in\{0.2,0.5,1,1.5\}</annotation></semantics></math>,
+chosen on the development problems like every other setting. Development
+accuracy was 39.8%, 66.0%, 66.0% and 63.7%; of the two tied settings,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha=1</annotation></semantics></math>
+loops less (3.5% against 12.5%) and was chosen. On the 1,152 test
+problems:</p>
+<table>
+<thead>
+<tr>
+<th>Edit</th>
+<th>Site</th>
+<th style="text-align: right;">Accuracy</th>
+<th style="text-align: right;">Loop</th>
+<th style="text-align: right;">Cap hit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>4</mn><mi>v</mi></mrow><annotation encoding="application/x-tex">s=4v</annotation></semantics></math></td>
+<td>MLP write</td>
+<td style="text-align: right;">60.7%</td>
+<td style="text-align: right;">27.2%</td>
+<td style="text-align: right;">18.3%</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>4</mn><mi>v</mi></mrow><annotation encoding="application/x-tex">s=4v</annotation></semantics></math></td>
+<td>Residual stream</td>
+<td style="text-align: right;">2.9%</td>
+<td style="text-align: right;">96.4%</td>
+<td style="text-align: right;">77.6%</td>
+</tr>
+<tr>
+<td>Learned unlikelihood
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math></td>
+<td>MLP write</td>
+<td style="text-align: right;">61.6%</td>
+<td style="text-align: right;">6.5%</td>
+<td style="text-align: right;">22.3%</td>
+</tr>
+<tr>
+<td>Learned unlikelihood
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math></td>
+<td>Residual stream</td>
+<td style="text-align: right;">61.6%</td>
+<td style="text-align: right;">4.6%</td>
+<td style="text-align: right;">22.5%</td>
+</tr>
+<tr>
+<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>v</mi></mrow><annotation encoding="application/x-tex">s=v</annotation></semantics></math>
+(recalibrated)</td>
+<td>Residual stream</td>
+<td style="text-align: right;">62.7%</td>
+<td style="text-align: right;">3.9%</td>
+<td style="text-align: right;">19.9%</td>
+</tr>
+</tbody>
+</table>
+<p>The learned sensor, trained at the write, transfers to the residual
+stream with a similar benefit. The scaled direction at its write-tuned
+strength collapses. Recalibrated to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha=1</annotation></semantics></math>,
+which is directional ablation of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>,
+it gives a similar benefit to the write-site edits: about the same
+accuracy, with loop rates as low as the learned sensor’s.</p>
+<p>In earlier Qwen3-1.7B experiments, using the same short-pair steering
+direction at blocks 15–18, the two sites also differed. The following
+are changes from an unedited control:</p>
 <table>
 <thead>
 <tr>
@@ -576,11 +707,10 @@ direction:</p>
 </tr>
 </tbody>
 </table>
-<p>The write intervention strongly suppresses repetition without a
-resolved accuracy loss at this setting. The residual intervention is
-much more damaging. Note, we do not claim sensing residuals won’t work,
-it could just take a different set of hyperparameters for it to work,
-though we have not managed to find them.</p>
+<p>Residual sensing at α=1 is directional ablation of each layer’s
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
+at four layers. It suppressed less repetition than write sensing at α=2
+and cost 13–18 accuracy points.</p>
 <h3 id="short-synthetic-pairs-were-especially-effective">Short synthetic
 pairs were especially effective</h3>
 <p>We compared two ways of constructing the steering vector from
@@ -667,19 +797,26 @@ preserve the unedited model’s rate of ranking
 </blockquote>
 <p>So this is regular validation early stop with a constraint to proxy
 the behavior we want sensing vector to learn. On Qwen3 it selects
-earlier updates: 14 for the selected unlikelihood arms and 12 for
+earlier updates: 12–14 for the selected unlikelihood arms and 10–12 for
 contrast.</p>
 <h2 id="a-second-model-gives-a-less-favorable-answer">5. A second model
 gives a less favorable answer</h2>
 <p>We also test Qwen3-1.7B under greedy decoding, editing blocks 15–18.
-The test set contains 500 MATH level-5 and 500 LiveCodeBench prompts
-that we constructed to deliberately include prompts that looped in
-earlier rollouts.</p>
+The test set has 500 MATH level-5 and 500 LiveCodeBench prompts. The
+pool is every MATH level-5 problem (train, validation and test splits)
+and every LiveCodeBench problem (releases v1–v6), each labelled by four
+earlier greedy Qwen3-1.7B draws, minus the 256 development prompts. Per
+dataset, the test set takes every prompt that looped in at least one of
+the four draws (174 MATH, 217 LiveCodeBench), then a seeded uniform
+sample of the other prompts up to 500. Pooled numbers are plain means
+over these 1,000 prompts, so looping prompts carry more weight than in
+the full benchmarks.</p>
 <p>The learned sensors do not improve on
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s = \alpha v</annotation></semantics></math>.
-At N=32, unlikelihood is <strong>3.4 points less accurate</strong>
-[−5.9, −0.9], and contrast <strong>2.4 points less accurate</strong>
-[−4.8, −0.1]. The loss is concentrated in MATH.</p>
+At N=32, unlikelihood is <strong>2.3 points less accurate</strong>
+[−4.4, −0.2], and contrast <strong>1.4 points less accurate</strong>
+[−3.4, +0.6], an interval that contains zero. The unlikelihood loss is
+concentrated in MATH (−4.3 points, against −0.3 on LiveCodeBench).</p>
 <figure>
 <img src="figures/exp1_qwen3_math_delta_grid.svg"
 alt="Qwen3 MATH: paired differences" />
@@ -698,8 +835,8 @@ alt="Qwen3 LiveCodeBench: paired differences" />
 differences</figcaption>
 </figure>
 <p><em>Figure 2b. Qwen3-1.7B, LiveCodeBench. Four-pair UL/contrast
-suppress more repetition than scaled-v without a resolved accuracy
-difference on this dataset; the pooled accuracy result is less
+suppress more repetition than scaled-v, and their accuracy intervals on
+this dataset contain zero; the pooled accuracy result is less
 favorable.</em></p>
 <p>The pairs for learning
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
@@ -727,8 +864,8 @@ formulation so we have more principles in choosing designs.</p>
 <h2 id="limits-and-notes">7. Limits and notes</h2>
 <h3 id="decoding-settings-matter">Decoding settings matter</h3>
 <p>On 128 development problems, switching to greedy decoding without
-retuning sharply reduced accuracy: Astra’s edit fell from 60.9% to
-17.2%, and learned edits also lost most of their gains. Removing only
+retuning sharply reduced accuracy: Astra’s edit fell from 60.5% to
+15.6%, and learned edits also lost most of their gains. Removing only
 the presence penalty had a smaller effect, except for productive NTP.
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
 and
@@ -794,8 +931,7 @@ scaled-direction sensing.</p>
 <tr>
 <td>Runtime</td>
 <td>vLLM 0.22.1; transformers 5.22.1; H100</td>
-<td>Same stack; one test condition evaluated on a second H100
-machine</td>
+<td>Same stack; H100s on two machines</td>
 </tr>
 <tr>
 <td>Grading</td>
@@ -823,13 +959,13 @@ layer, it selects 64 MLP neurons. Let
 be their diagonal selection mask and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
 the unit steering direction. The idealized update is</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mi>′</mi><mo>=</mo><mi>W</mi><mo>−</mo><mn>6</mn><mi>u</mi><msup><mi>u</mi><mi>⊤</mi></msup><mi>W</mi><mi>M</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>W</mi><mo>′</mo></msup><mo>=</mo><mi>W</mi><mo>−</mo><mn>6</mn><mi>u</mi><msup><mi>u</mi><mi>⊤</mi></msup><mi>W</mi><mi>M</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
 W&#39;=W-6uu^\top WM.
 </annotation></semantics></math></p>
 <p>Writing
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>S</mi></msub><mo>=</mo><mi>W</mi><mi>M</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">x_S=WMh</annotation></semantics></math>
 for those neurons’ contribution gives</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mi>′</mi><mo>=</mo><mi>x</mi><mo>−</mo><mn>6</mn><mi>u</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mi>⊤</mi></msup><msub><mi>x</mi><mi>S</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mi>x</mi><mo>−</mo><mn>6</mn><mi>u</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>u</mi><mi>⊤</mi></msup><msub><mi>x</mi><mi>S</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
 x&#39;=x-6u(u^\top x_S).
 </annotation></semantics></math></p>
 <p><strong>The sensor asks how much the selected neurons are writing
@@ -840,7 +976,7 @@ and pushes back along
 with six times that strength.</strong> At this strength it is not simply
 an orthogonal projection.</p>
 <p>Equivalently, it senses the hidden neurons directly:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mi>′</mi><mo>=</mo><mi>x</mi><mo>−</mo><mi>u</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>q</mi><mi>⊤</mi></msup><mi>h</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>q</mi><mo>=</mo><mn>6</mn><mi>M</mi><msup><mi>W</mi><mi>⊤</mi></msup><mi>u</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mi>x</mi><mo>−</mo><mi>u</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>q</mi><mi>⊤</mi></msup><mi>h</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>q</mi><mo>=</mo><mn>6</mn><mi>M</mi><msup><mi>W</mi><mi>⊤</mi></msup><mi>u</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
 x&#39;=x-u(q^\top h),\qquad q=6MW^\top u.
 </annotation></semantics></math></p>
 <p>This makes the distinction concrete. Neuron-space sensing selects and
@@ -848,11 +984,10 @@ weights neurons. Write-space sensing weights directions in their
 combined output. Both are linear sensors, but selecting neurons is not
 generally the same as masking coordinates of the total write.</p>
 <p>The direction comes from four short productive/repetitive text pairs:
-a mean residual-state difference, normalized per layer. Neurons are
-selected using their contributions to the contrast. The edit is applied
-at layers 15 and 19. Our independently constructed four-pair direction
-agrees with theirs at absolute cosine above 0.9999; for the reference
-runs we reconstruct their actual submitted tensors rather than
+a mean residual-state difference, normalized per layer. The edit is
+applied at layers 15 and 19. Our independently constructed four-pair
+direction agrees with theirs at absolute cosine above 0.9999; for the
+reference runs we reconstruct their actual submitted tensors rather than
 substitute our reconstruction of the formula. The equations describe
 exact real-arithmetic identities, not promises of bitwise identity after
 bf16 rounding.</p>

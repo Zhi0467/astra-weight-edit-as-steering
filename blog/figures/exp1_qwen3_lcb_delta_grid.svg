@@ -31,14 +31,14 @@
 <rect x="28" y="148" width="1184" height="24" fill="#eef2f7" rx="4"/>
 <text x="42" y="167" class="label" font-weight="700">Reference</text>
 <text x="276" y="199.0" class="small" text-anchor="end">unedited, thinking off</text>
-<rect x="290" y="178" width="96" height="34" class="cell" fill="rgb(191,75,68)"><title>control_nothink · acc · all: -23.0 [-26.8, -19.2] (points, 95% CI)</title></rect>
+<rect x="290" y="178" width="96" height="34" class="cell" fill="rgb(191,75,68)"><title>control_nothink · acc · all: -23.0 [-26.8, -19.3] (points, 95% CI)</title></rect>
 <text x="338.0" y="199.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-23.0*</text>
 <rect x="386" y="178" width="96" height="34" class="cell" fill="rgb(191,75,68)"><title>control_nothink · acc · looping: -12.0 [-16.6, -7.8] (points, 95% CI)</title></rect>
 <text x="434.0" y="199.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-12.0*</text>
 <rect x="482" y="178" width="96" height="34" class="cell" fill="rgb(191,75,68)"><title>control_nothink · acc · non-loop: -31.4 [-37.1, -25.8] (points, 95% CI)</title></rect>
 <text x="530.0" y="199.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-31.4*</text>
-<rect x="578" y="178" width="96" height="34" class="cell" fill="rgb(115,166,145)"><title>control_nothink · loop rate: -26.4 [-30.8, -22.0] (points, 95% CI)</title></rect>
-<text x="626.0" y="199.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-26.4*</text>
+<rect x="578" y="178" width="96" height="34" class="cell" fill="rgb(118,169,147)"><title>control_nothink · loop rate: -25.7 [-30.0, -21.4] (points, 95% CI)</title></rect>
+<text x="626.0" y="199.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-25.7*</text>
 <rect x="674" y="178" width="96" height="34" class="cell" fill="rgb(246,247,249)"><title>control_nothink · closed think: not applicable (points, 95% CI)</title></rect>
 <text x="722.0" y="199.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">—</text>
 <rect x="770" y="178" width="96" height="34" class="cell" fill="rgb(246,247,249)"><title>control_nothink · acc · all: not applicable (points, 95% CI)</title></rect>
@@ -70,63 +70,63 @@
 <text x="1010.0" y="261.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">—</text>
 <rect x="1058" y="240" width="96" height="34" class="cell" fill="rgb(246,247,249)"><title>sv_n4_a1 · loop rate: not applicable (points, 95% CI)</title></rect>
 <text x="1106.0" y="261.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">—</text>
-<text x="276" y="295.0" class="small" text-anchor="end">clas (NTP)  (β=0.1, upd 8)</text>
-<rect x="290" y="274" width="96" height="34" class="cell" fill="rgb(246,247,249)"><title>clas_n4_b0.1_s8 · acc · all: +0.0 [-3.0, +3.0] (points, 95% CI)</title></rect>
-<text x="338.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.0</text>
-<rect x="386" y="274" width="96" height="34" class="cell" fill="rgb(235,240,240)"><title>clas_n4_b0.1_s8 · acc · looping: +0.5 [-4.1, +5.1] (points, 95% CI)</title></rect>
-<text x="434.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.5</text>
-<rect x="482" y="274" width="96" height="34" class="cell" fill="rgb(244,239,241)"><title>clas_n4_b0.1_s8 · acc · non-loop: -0.4 [-4.2, +3.5] (points, 95% CI)</title></rect>
-<text x="530.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.4</text>
-<rect x="578" y="274" width="96" height="34" class="cell" fill="rgb(186,210,202)"><title>clas_n4_b0.1_s8 · loop rate: -12.0 [-16.4, -7.8] (points, 95% CI)</title></rect>
-<text x="626.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-12.0*</text>
-<rect x="674" y="274" width="96" height="34" class="cell" fill="rgb(141,182,165)"><title>clas_n4_b0.1_s8 · closed think: +10.6 [+6.4, +14.8] (points, 95% CI)</title></rect>
-<text x="722.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+10.6*</text>
-<rect x="770" y="274" width="96" height="34" class="cell" fill="rgb(241,244,245)"><title>clas_n4_b0.1_s8 · acc · all: +0.2 [-2.8, +3.2] (points, 95% CI)</title></rect>
-<text x="818.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.2</text>
-<rect x="866" y="274" width="96" height="34" class="cell" fill="rgb(243,237,239)"><title>clas_n4_b0.1_s8 · acc · looping: -0.5 [-4.1, +3.7] (points, 95% CI)</title></rect>
-<text x="914.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.5</text>
-<rect x="962" y="274" width="96" height="34" class="cell" fill="rgb(228,236,235)"><title>clas_n4_b0.1_s8 · acc · non-loop: +0.7 [-3.5, +4.9] (points, 95% CI)</title></rect>
-<text x="1010.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.7</text>
-<rect x="1058" y="274" width="96" height="34" class="cell" fill="rgb(209,130,126)"><title>clas_n4_b0.1_s8 · loop rate: +13.6 [+9.8, +17.4] (points, 95% CI)</title></rect>
-<text x="1106.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+13.6*</text>
-<text x="276" y="329.0" class="small" text-anchor="end">ul (unlikelihood)  (β=0.1, upd 14)</text>
-<rect x="290" y="308" width="96" height="34" class="cell" fill="rgb(240,230,231)"><title>ul_n4_b0.1_s14 · acc · all: -0.8 [-3.8, +2.0] (points, 95% CI)</title></rect>
-<text x="338.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.8</text>
-<rect x="386" y="308" width="96" height="34" class="cell" fill="rgb(227,188,186)"><title>ul_n4_b0.1_s14 · acc · looping: -2.8 [-6.9, +0.9] (points, 95% CI)</title></rect>
-<text x="434.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-2.8</text>
-<rect x="482" y="308" width="96" height="34" class="cell" fill="rgb(228,236,235)"><title>ul_n4_b0.1_s14 · acc · non-loop: +0.7 [-3.2, +4.9] (points, 95% CI)</title></rect>
-<text x="530.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.7</text>
-<rect x="578" y="308" width="96" height="34" class="cell" fill="rgb(75,142,113)"><title>ul_n4_b0.1_s14 · loop rate: -34.4 [-38.2, -30.6] (points, 95% CI)</title></rect>
-<text x="626.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-34.4*</text>
-<rect x="674" y="308" width="96" height="34" class="cell" fill="rgb(47,125,91)"><title>ul_n4_b0.1_s14 · closed think: +28.0 [+24.2, +31.6] (points, 95% CI)</title></rect>
-<text x="722.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">+28.0*</text>
-<rect x="770" y="308" width="96" height="34" class="cell" fill="rgb(242,234,235)"><title>ul_n4_b0.1_s14 · acc · all: -0.6 [-3.4, +2.4] (points, 95% CI)</title></rect>
-<text x="818.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.6</text>
-<rect x="866" y="308" width="96" height="34" class="cell" fill="rgb(221,168,166)"><title>ul_n4_b0.1_s14 · acc · looping: -3.7 [-7.8, +0.5] (points, 95% CI)</title></rect>
-<text x="914.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-3.7</text>
-<rect x="962" y="308" width="96" height="34" class="cell" fill="rgb(202,220,214)"><title>ul_n4_b0.1_s14 · acc · non-loop: +1.8 [-2.5, +6.0] (points, 95% CI)</title></rect>
-<text x="1010.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+1.8</text>
-<rect x="1058" y="308" width="96" height="34" class="cell" fill="rgb(158,193,179)"><title>ul_n4_b0.1_s14 · loop rate: -8.8 [-11.6, -6.2] (points, 95% CI)</title></rect>
-<text x="1106.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-8.8*</text>
-<text x="276" y="363.0" class="small" text-anchor="end">contrast (NTP+UL)  (β=0.1, upd 12)</text>
-<rect x="290" y="342" width="96" height="34" class="cell" fill="rgb(238,221,222)"><title>contrast_n4_b0.1_s12 · acc · all: -1.2 [-4.2, +1.8] (points, 95% CI)</title></rect>
+<text x="276" y="295.0" class="small" text-anchor="end">clas (NTP)</text>
+<rect x="290" y="274" width="96" height="34" class="cell" fill="rgb(242,234,235)"><title>clas_n4 · acc · all: -0.6 [-3.4, +2.1] (points, 95% CI)</title></rect>
+<text x="338.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.6</text>
+<rect x="386" y="274" width="96" height="34" class="cell" fill="rgb(243,237,239)"><title>clas_n4 · acc · looping: -0.5 [-4.4, +3.5] (points, 95% CI)</title></rect>
+<text x="434.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.5</text>
+<rect x="482" y="274" width="96" height="34" class="cell" fill="rgb(241,232,233)"><title>clas_n4 · acc · non-loop: -0.7 [-4.4, +3.0] (points, 95% CI)</title></rect>
+<text x="530.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.7</text>
+<rect x="578" y="274" width="96" height="34" class="cell" fill="rgb(186,210,201)"><title>clas_n4 · loop rate: -12.1 [-15.9, -8.4] (points, 95% CI)</title></rect>
+<text x="626.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-12.1*</text>
+<rect x="674" y="274" width="96" height="34" class="cell" fill="rgb(138,181,163)"><title>clas_n4 · closed think: +10.9 [+7.2, +14.7] (points, 95% CI)</title></rect>
+<text x="722.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+10.9*</text>
+<rect x="770" y="274" width="96" height="34" class="cell" fill="rgb(243,238,240)"><title>clas_n4 · acc · all: -0.4 [-3.0, +2.3] (points, 95% CI)</title></rect>
+<text x="818.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.4</text>
+<rect x="866" y="274" width="96" height="34" class="cell" fill="rgb(236,217,218)"><title>clas_n4 · acc · looping: -1.4 [-4.6, +1.8] (points, 95% CI)</title></rect>
+<text x="914.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-1.4</text>
+<rect x="962" y="274" width="96" height="34" class="cell" fill="rgb(237,242,242)"><title>clas_n4 · acc · non-loop: +0.4 [-3.5, +4.4] (points, 95% CI)</title></rect>
+<text x="1010.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.4</text>
+<rect x="1058" y="274" width="96" height="34" class="cell" fill="rgb(209,131,127)"><title>clas_n4 · loop rate: +13.5 [+10.3, +16.7] (points, 95% CI)</title></rect>
+<text x="1106.0" y="295.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+13.5*</text>
+<text x="276" y="329.0" class="small" text-anchor="end">ul (unlikelihood)</text>
+<rect x="290" y="308" width="96" height="34" class="cell" fill="rgb(245,245,247)"><title>ul_n4 · acc · all: -0.1 [-3.0, +2.7] (points, 95% CI)</title></rect>
+<text x="338.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.1</text>
+<rect x="386" y="308" width="96" height="34" class="cell" fill="rgb(244,242,244)"><title>ul_n4 · acc · looping: -0.2 [-4.4, +3.9] (points, 95% CI)</title></rect>
+<text x="434.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.2</text>
+<rect x="482" y="308" width="96" height="34" class="cell" fill="rgb(246,247,249)"><title>ul_n4 · acc · non-loop: +0.0 [-3.7, +3.9] (points, 95% CI)</title></rect>
+<text x="530.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.0</text>
+<rect x="578" y="308" width="96" height="34" class="cell" fill="rgb(77,144,115)"><title>ul_n4 · loop rate: -33.9 [-37.7, -30.2] (points, 95% CI)</title></rect>
+<text x="626.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-33.9*</text>
+<rect x="674" y="308" width="96" height="34" class="cell" fill="rgb(47,125,91)"><title>ul_n4 · closed think: +27.4 [+23.7, +31.1] (points, 95% CI)</title></rect>
+<text x="722.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">+27.4*</text>
+<rect x="770" y="308" width="96" height="34" class="cell" fill="rgb(244,245,247)"><title>ul_n4 · acc · all: +0.1 [-2.6, +2.8] (points, 95% CI)</title></rect>
+<text x="818.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.1</text>
+<rect x="866" y="308" width="96" height="34" class="cell" fill="rgb(238,222,223)"><title>ul_n4 · acc · looping: -1.2 [-5.1, +2.8] (points, 95% CI)</title></rect>
+<text x="914.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-1.2</text>
+<rect x="962" y="308" width="96" height="34" class="cell" fill="rgb(220,231,228)"><title>ul_n4 · acc · non-loop: +1.1 [-2.7, +4.9] (points, 95% CI)</title></rect>
+<text x="1010.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+1.1</text>
+<rect x="1058" y="308" width="96" height="34" class="cell" fill="rgb(163,196,183)"><title>ul_n4 · loop rate: -8.3 [-11.0, -5.9] (points, 95% CI)</title></rect>
+<text x="1106.0" y="329.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-8.3*</text>
+<text x="276" y="363.0" class="small" text-anchor="end">contrast (NTP+UL)</text>
+<rect x="290" y="342" width="96" height="34" class="cell" fill="rgb(238,221,222)"><title>contrast_n4 · acc · all: -1.2 [-3.8, +1.4] (points, 95% CI)</title></rect>
 <text x="338.0" y="363.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-1.2</text>
-<rect x="386" y="342" width="96" height="34" class="cell" fill="rgb(243,237,239)"><title>contrast_n4_b0.1_s12 · acc · looping: -0.5 [-4.6, +4.1] (points, 95% CI)</title></rect>
+<rect x="386" y="342" width="96" height="34" class="cell" fill="rgb(243,237,239)"><title>contrast_n4 · acc · looping: -0.5 [-4.4, +3.5] (points, 95% CI)</title></rect>
 <text x="434.0" y="363.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.5</text>
-<rect x="482" y="342" width="96" height="34" class="cell" fill="rgb(234,209,209)"><title>contrast_n4_b0.1_s12 · acc · non-loop: -1.8 [-6.0, +2.5] (points, 95% CI)</title></rect>
+<rect x="482" y="342" width="96" height="34" class="cell" fill="rgb(234,209,209)"><title>contrast_n4 · acc · non-loop: -1.8 [-5.1, +1.6] (points, 95% CI)</title></rect>
 <text x="530.0" y="363.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-1.8</text>
-<rect x="578" y="342" width="96" height="34" class="cell" fill="rgb(78,144,115)"><title>contrast_n4_b0.1_s12 · loop rate: -33.8 [-37.6, -30.0] (points, 95% CI)</title></rect>
-<text x="626.0" y="363.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-33.8*</text>
-<rect x="674" y="342" width="96" height="34" class="cell" fill="rgb(47,125,91)"><title>contrast_n4_b0.1_s12 · closed think: +27.6 [+24.0, +31.2] (points, 95% CI)</title></rect>
-<text x="722.0" y="363.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">+27.6*</text>
-<rect x="770" y="342" width="96" height="34" class="cell" fill="rgb(239,226,226)"><title>contrast_n4_b0.1_s12 · acc · all: -1.0 [-4.0, +2.2] (points, 95% CI)</title></rect>
+<rect x="578" y="342" width="96" height="34" class="cell" fill="rgb(78,144,116)"><title>contrast_n4 · loop rate: -33.7 [-37.5, -30.0] (points, 95% CI)</title></rect>
+<text x="626.0" y="363.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-33.7*</text>
+<rect x="674" y="342" width="96" height="34" class="cell" fill="rgb(47,125,91)"><title>contrast_n4 · closed think: +27.7 [+24.0, +31.3] (points, 95% CI)</title></rect>
+<text x="722.0" y="363.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">+27.7*</text>
+<rect x="770" y="342" width="96" height="34" class="cell" fill="rgb(239,226,226)"><title>contrast_n4 · acc · all: -1.0 [-3.7, +1.7] (points, 95% CI)</title></rect>
 <text x="818.0" y="363.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-1.0</text>
-<rect x="866" y="342" width="96" height="34" class="cell" fill="rgb(236,217,218)"><title>contrast_n4_b0.1_s12 · acc · looping: -1.4 [-6.0, +3.2] (points, 95% CI)</title></rect>
+<rect x="866" y="342" width="96" height="34" class="cell" fill="rgb(236,217,218)"><title>contrast_n4 · acc · looping: -1.4 [-5.3, +2.3] (points, 95% CI)</title></rect>
 <text x="914.0" y="363.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-1.4</text>
-<rect x="962" y="342" width="96" height="34" class="cell" fill="rgb(241,232,233)"><title>contrast_n4_b0.1_s12 · acc · non-loop: -0.7 [-4.9, +3.5] (points, 95% CI)</title></rect>
+<rect x="962" y="342" width="96" height="34" class="cell" fill="rgb(241,232,233)"><title>contrast_n4 · acc · non-loop: -0.7 [-4.4, +3.2] (points, 95% CI)</title></rect>
 <text x="1010.0" y="363.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.7</text>
-<rect x="1058" y="342" width="96" height="34" class="cell" fill="rgb(164,197,184)"><title>contrast_n4_b0.1_s12 · loop rate: -8.2 [-11.0, -5.6] (points, 95% CI)</title></rect>
-<text x="1106.0" y="363.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-8.2*</text>
+<rect x="1058" y="342" width="96" height="34" class="cell" fill="rgb(165,198,185)"><title>contrast_n4 · loop rate: -8.1 [-10.7, -5.7] (points, 95% CI)</title></rect>
+<text x="1106.0" y="363.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-8.1*</text>
 <rect x="28" y="374" width="1184" height="24" fill="#eef2f7" rx="4"/>
 <text x="42" y="393" class="label" font-weight="700">N = 32 training pairs (chosen on dev)</text>
 <text x="276" y="425.0" class="small" text-anchor="end">s = αv  (α=2)</text>
@@ -148,63 +148,63 @@
 <text x="1010.0" y="425.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">—</text>
 <rect x="1058" y="404" width="96" height="34" class="cell" fill="rgb(246,247,249)"><title>sv_n32_a2 · loop rate: not applicable (points, 95% CI)</title></rect>
 <text x="1106.0" y="425.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">—</text>
-<text x="276" y="459.0" class="small" text-anchor="end">clas (NTP)  (β=0, upd 14)</text>
-<rect x="290" y="438" width="96" height="34" class="cell" fill="rgb(205,118,113)"><title>clas_n32_b0_s14 · acc · all: -6.0 [-9.4, -2.6] (points, 95% CI)</title></rect>
-<text x="338.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-6.0*</text>
-<rect x="386" y="438" width="96" height="34" class="cell" fill="rgb(224,178,176)"><title>clas_n32_b0_s14 · acc · looping: -3.2 [-7.8, +1.4] (points, 95% CI)</title></rect>
-<text x="434.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-3.2</text>
-<rect x="482" y="438" width="96" height="34" class="cell" fill="rgb(191,75,68)"><title>clas_n32_b0_s14 · acc · non-loop: -8.1 [-13.1, -3.2] (points, 95% CI)</title></rect>
-<text x="530.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-8.1*</text>
-<rect x="578" y="438" width="96" height="34" class="cell" fill="rgb(207,223,218)"><title>clas_n32_b0_s14 · loop rate: -7.8 [-12.4, -3.4] (points, 95% CI)</title></rect>
-<text x="626.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-7.8*</text>
-<rect x="674" y="438" width="96" height="34" class="cell" fill="rgb(224,234,232)"><title>clas_n32_b0_s14 · closed think: +2.2 [-2.6, +7.0] (points, 95% CI)</title></rect>
-<text x="722.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+2.2</text>
-<rect x="770" y="438" width="96" height="34" class="cell" fill="rgb(192,79,73)"><title>clas_n32_b0_s14 · acc · all: -7.8 [-11.4, -4.2] (points, 95% CI)</title></rect>
-<text x="818.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-7.8*</text>
-<rect x="866" y="438" width="96" height="34" class="cell" fill="rgb(211,138,134)"><title>clas_n32_b0_s14 · acc · looping: -5.1 [-10.6, +0.0] (points, 95% CI)</title></rect>
-<text x="914.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-5.1</text>
-<rect x="962" y="438" width="96" height="34" class="cell" fill="rgb(191,75,68)"><title>clas_n32_b0_s14 · acc · non-loop: -9.9 [-14.8, -4.9] (points, 95% CI)</title></rect>
-<text x="1010.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-9.9*</text>
-<rect x="1058" y="438" width="96" height="34" class="cell" fill="rgb(191,75,68)"><title>clas_n32_b0_s14 · loop rate: +23.4 [+19.6, +27.2] (points, 95% CI)</title></rect>
-<text x="1106.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">+23.4*</text>
-<text x="276" y="493.0" class="small" text-anchor="end">ul (unlikelihood)  (β=0, upd 14)</text>
-<rect x="290" y="472" width="96" height="34" class="cell" fill="rgb(226,235,233)"><title>ul_n32_b0_s14 · acc · all: +0.8 [-2.2, +4.0] (points, 95% CI)</title></rect>
-<text x="338.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.8</text>
-<rect x="386" y="472" width="96" height="34" class="cell" fill="rgb(177,205,194)"><title>ul_n32_b0_s14 · acc · looping: +2.8 [-1.8, +7.4] (points, 95% CI)</title></rect>
-<text x="434.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+2.8</text>
-<rect x="482" y="472" width="96" height="34" class="cell" fill="rgb(241,232,233)"><title>ul_n32_b0_s14 · acc · non-loop: -0.7 [-4.9, +3.5] (points, 95% CI)</title></rect>
-<text x="530.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.7</text>
-<rect x="578" y="472" width="96" height="34" class="cell" fill="rgb(75,142,113)"><title>ul_n32_b0_s14 · loop rate: -34.4 [-38.2, -30.6] (points, 95% CI)</title></rect>
-<text x="626.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-34.4*</text>
-<rect x="674" y="472" width="96" height="34" class="cell" fill="rgb(47,125,91)"><title>ul_n32_b0_s14 · closed think: +28.0 [+24.4, +31.6] (points, 95% CI)</title></rect>
-<text x="722.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">+28.0*</text>
-<rect x="770" y="472" width="96" height="34" class="cell" fill="rgb(239,226,226)"><title>ul_n32_b0_s14 · acc · all: -1.0 [-4.2, +2.4] (points, 95% CI)</title></rect>
-<text x="818.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-1.0</text>
-<rect x="866" y="472" width="96" height="34" class="cell" fill="rgb(223,233,231)"><title>ul_n32_b0_s14 · acc · looping: +0.9 [-4.6, +6.5] (points, 95% CI)</title></rect>
-<text x="914.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.9</text>
-<rect x="962" y="472" width="96" height="34" class="cell" fill="rgb(229,194,193)"><title>ul_n32_b0_s14 · acc · non-loop: -2.5 [-6.7, +1.8] (points, 95% CI)</title></rect>
-<text x="1010.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-2.5</text>
-<rect x="1058" y="472" width="96" height="34" class="cell" fill="rgb(214,227,224)"><title>ul_n32_b0_s14 · loop rate: -3.2 [-5.4, -1.0] (points, 95% CI)</title></rect>
-<text x="1106.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-3.2*</text>
-<text x="276" y="527.0" class="small" text-anchor="end">contrast (NTP+UL)  (β=0.1, upd 12)</text>
-<rect x="290" y="506" width="96" height="34" class="cell" fill="rgb(241,244,245)"><title>contrast_n32_b0.1_s12 · acc · all: +0.2 [-3.0, +3.4] (points, 95% CI)</title></rect>
-<text x="338.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.2</text>
-<rect x="386" y="506" width="96" height="34" class="cell" fill="rgb(212,226,222)"><title>contrast_n32_b0.1_s12 · acc · looping: +1.4 [-3.2, +6.0] (points, 95% CI)</title></rect>
-<text x="434.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+1.4</text>
-<rect x="482" y="506" width="96" height="34" class="cell" fill="rgb(241,232,233)"><title>contrast_n32_b0.1_s12 · acc · non-loop: -0.7 [-5.3, +3.9] (points, 95% CI)</title></rect>
-<text x="530.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.7</text>
-<rect x="578" y="506" width="96" height="34" class="cell" fill="rgb(85,148,121)"><title>contrast_n32_b0.1_s12 · loop rate: -32.4 [-36.2, -28.6] (points, 95% CI)</title></rect>
-<text x="626.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-32.4*</text>
-<rect x="674" y="506" width="96" height="34" class="cell" fill="rgb(47,125,91)"><title>contrast_n32_b0.1_s12 · closed think: +28.0 [+24.2, +31.8] (points, 95% CI)</title></rect>
-<text x="722.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">+28.0*</text>
-<rect x="770" y="506" width="96" height="34" class="cell" fill="rgb(235,213,213)"><title>contrast_n32_b0.1_s12 · acc · all: -1.6 [-4.4, +1.2] (points, 95% CI)</title></rect>
-<text x="818.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-1.6</text>
-<rect x="866" y="506" width="96" height="34" class="cell" fill="rgb(243,237,239)"><title>contrast_n32_b0.1_s12 · acc · looping: -0.5 [-4.6, +3.7] (points, 95% CI)</title></rect>
-<text x="914.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.5</text>
-<rect x="962" y="506" width="96" height="34" class="cell" fill="rgb(229,194,193)"><title>contrast_n32_b0.1_s12 · acc · non-loop: -2.5 [-6.4, +1.4] (points, 95% CI)</title></rect>
-<text x="1010.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-2.5</text>
-<rect x="1058" y="506" width="96" height="34" class="cell" fill="rgb(234,240,240)"><title>contrast_n32_b0.1_s12 · loop rate: -1.2 [-3.6, +1.2] (points, 95% CI)</title></rect>
-<text x="1106.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-1.2</text>
+<text x="276" y="459.0" class="small" text-anchor="end">clas (NTP)</text>
+<rect x="290" y="438" width="96" height="34" class="cell" fill="rgb(208,127,122)"><title>clas_n32 · acc · all: -5.6 [-8.6, -2.6] (points, 95% CI)</title></rect>
+<text x="338.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-5.6*</text>
+<rect x="386" y="438" width="96" height="34" class="cell" fill="rgb(222,173,171)"><title>clas_n32 · acc · looping: -3.5 [-7.6, +0.7] (points, 95% CI)</title></rect>
+<text x="434.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-3.5</text>
+<rect x="482" y="438" width="96" height="34" class="cell" fill="rgb(196,91,85)"><title>clas_n32 · acc · non-loop: -7.2 [-11.5, -3.0] (points, 95% CI)</title></rect>
+<text x="530.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-7.2*</text>
+<rect x="578" y="438" width="96" height="34" class="cell" fill="rgb(202,220,214)"><title>clas_n32 · loop rate: -8.8 [-12.7, -4.7] (points, 95% CI)</title></rect>
+<text x="626.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-8.8*</text>
+<rect x="674" y="438" width="96" height="34" class="cell" fill="rgb(208,224,219)"><title>clas_n32 · closed think: +3.8 [-0.5, +8.1] (points, 95% CI)</title></rect>
+<text x="722.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+3.8</text>
+<rect x="770" y="438" width="96" height="34" class="cell" fill="rgb(195,88,82)"><title>clas_n32 · acc · all: -7.4 [-10.6, -4.2] (points, 95% CI)</title></rect>
+<text x="818.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-7.4*</text>
+<rect x="866" y="438" width="96" height="34" class="cell" fill="rgb(210,133,129)"><title>clas_n32 · acc · looping: -5.3 [-10.1, -0.7] (points, 95% CI)</title></rect>
+<text x="914.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-5.3*</text>
+<rect x="962" y="438" width="96" height="34" class="cell" fill="rgb(191,75,68)"><title>clas_n32 · acc · non-loop: -9.0 [-13.4, -4.8] (points, 95% CI)</title></rect>
+<text x="1010.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-9.0*</text>
+<rect x="1058" y="438" width="96" height="34" class="cell" fill="rgb(191,75,68)"><title>clas_n32 · loop rate: +22.4 [+19.3, +25.5] (points, 95% CI)</title></rect>
+<text x="1106.0" y="459.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">+22.4*</text>
+<text x="276" y="493.0" class="small" text-anchor="end">ul (unlikelihood)</text>
+<rect x="290" y="472" width="96" height="34" class="cell" fill="rgb(209,224,219)"><title>ul_n32 · acc · all: +1.5 [-1.4, +4.3] (points, 95% CI)</title></rect>
+<text x="338.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+1.5</text>
+<rect x="386" y="472" width="96" height="34" class="cell" fill="rgb(183,208,199)"><title>ul_n32 · acc · looping: +2.5 [-1.6, +6.7] (points, 95% CI)</title></rect>
+<text x="434.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+2.5</text>
+<rect x="482" y="472" width="96" height="34" class="cell" fill="rgb(228,236,235)"><title>ul_n32 · acc · non-loop: +0.7 [-3.0, +4.6] (points, 95% CI)</title></rect>
+<text x="530.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.7</text>
+<rect x="578" y="472" width="96" height="34" class="cell" fill="rgb(77,144,115)"><title>ul_n32 · loop rate: -33.9 [-37.6, -30.2] (points, 95% CI)</title></rect>
+<text x="626.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-33.9*</text>
+<rect x="674" y="472" width="96" height="34" class="cell" fill="rgb(47,125,91)"><title>ul_n32 · closed think: +28.4 [+24.8, +32.0] (points, 95% CI)</title></rect>
+<text x="722.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">+28.4*</text>
+<rect x="770" y="472" width="96" height="34" class="cell" fill="rgb(244,241,242)"><title>ul_n32 · acc · all: -0.3 [-3.0, +2.4] (points, 95% CI)</title></rect>
+<text x="818.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.3</text>
+<rect x="866" y="472" width="96" height="34" class="cell" fill="rgb(229,236,235)"><title>ul_n32 · acc · looping: +0.7 [-3.7, +5.1] (points, 95% CI)</title></rect>
+<text x="914.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.7</text>
+<rect x="962" y="472" width="96" height="34" class="cell" fill="rgb(239,224,225)"><title>ul_n32 · acc · non-loop: -1.1 [-4.4, +2.3] (points, 95% CI)</title></rect>
+<text x="1010.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-1.1</text>
+<rect x="1058" y="472" width="96" height="34" class="cell" fill="rgb(219,231,228)"><title>ul_n32 · loop rate: -2.7 [-4.8, -0.8] (points, 95% CI)</title></rect>
+<text x="1106.0" y="493.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-2.7*</text>
+<text x="276" y="527.0" class="small" text-anchor="end">contrast (NTP+UL)</text>
+<rect x="290" y="506" width="96" height="34" class="cell" fill="rgb(239,242,243)"><title>contrast_n32 · acc · all: +0.3 [-2.5, +3.1] (points, 95% CI)</title></rect>
+<text x="338.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.3</text>
+<rect x="386" y="506" width="96" height="34" class="cell" fill="rgb(223,233,231)"><title>contrast_n32 · acc · looping: +0.9 [-3.2, +5.1] (points, 95% CI)</title></rect>
+<text x="434.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">+0.9</text>
+<rect x="482" y="506" width="96" height="34" class="cell" fill="rgb(245,243,245)"><title>contrast_n32 · acc · non-loop: -0.2 [-3.9, +3.5] (points, 95% CI)</title></rect>
+<text x="530.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.2</text>
+<rect x="578" y="506" width="96" height="34" class="cell" fill="rgb(86,149,122)"><title>contrast_n32 · loop rate: -32.2 [-35.9, -28.6] (points, 95% CI)</title></rect>
+<text x="626.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">-32.2*</text>
+<rect x="674" y="506" width="96" height="34" class="cell" fill="rgb(47,125,91)"><title>contrast_n32 · closed think: +27.9 [+24.2, +31.6] (points, 95% CI)</title></rect>
+<text x="722.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #ffffff">+27.9*</text>
+<rect x="770" y="506" width="96" height="34" class="cell" fill="rgb(236,215,215)"><title>contrast_n32 · acc · all: -1.5 [-4.0, +1.0] (points, 95% CI)</title></rect>
+<text x="818.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-1.5</text>
+<rect x="866" y="506" width="96" height="34" class="cell" fill="rgb(240,227,228)"><title>contrast_n32 · acc · looping: -0.9 [-4.8, +3.0] (points, 95% CI)</title></rect>
+<text x="914.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-0.9</text>
+<rect x="962" y="506" width="96" height="34" class="cell" fill="rgb(233,205,205)"><title>contrast_n32 · acc · non-loop: -1.9 [-5.3, +1.2] (points, 95% CI)</title></rect>
+<text x="1010.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-1.9</text>
+<rect x="1058" y="506" width="96" height="34" class="cell" fill="rgb(236,241,241)"><title>contrast_n32 · loop rate: -1.0 [-3.2, +1.1] (points, 95% CI)</title></rect>
+<text x="1106.0" y="527.0" font-size="11" font-weight="650" text-anchor="middle" style="fill: #111827">-1.0</text>
 <line x1="770.0" y1="98" x2="770.0" y2="540" class="group-separator"/>
 <text x="290" y="576" class="small">217 looping / 283 non-looping prompts (loop-enriched by design), one greedy draw each. s and v are trained / built from math-style hand-written pairs.</text>
 </svg>

@@ -1,0 +1,16 @@
+{
+ "15": {
+  "changed_columns": 64,
+  "sv_ratio_2_to_1": 0.0005645956967563433,
+  "abs_cos_v_u": 0.9999852180480957,
+  "rel_err_ours_vs_astra": 0.006363458000123501,
+  "frac_entries_bitwise_equal": 0.9895043969154358
+ },
+ "19": {
+  "changed_columns": 64,
+  "sv_ratio_2_to_1": 0.0006443273514992232,
+  "abs_cos_v_u": 0.9999772906303406,
+  "rel_err_ours_vs_astra": 0.009738301858305931,
+  "frac_entries_bitwise_equal": 0.9896240234375
+ }
+}

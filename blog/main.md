@@ -7,7 +7,7 @@ In [*Sparks of Weight-Space Programming*](https://rikiyat.github.io/blog/weight-
 ## TL;DR
 
 - **[Astra’s Qwen edit](https://rikiyat.github.io/blog/weight-space-programming/) is equivalent to activation steering:** push along a fixed direction, with a strength read from the current activations. We call this sensed steering in this post.
-- **Learning the sensing vector can further reduce looping in some settings.** In the Astra setup, our learned sensors suppress exact repetition much more than sensing along the steering direction, without a resolved accuracy difference. On a second model, Qwen3-1.7B, they do not improve on it and are less accurate.
+- **Learning the sensing vector can further reduce looping in some settings.** In the Astra setup, our learned sensors suppress exact repetition much more than sensing along the steering direction; at 32 pairs the 95% interval of the accuracy difference contains zero, and at four pairs they are less accurate. On a second model, Qwen3-1.7B, they do not improve on it, and the unlikelihood-trained sensor is less accurate.
 - **Design choices matter.** What data builds the steering direction (short synthetic pairs worked best), where the sensor reads (the same sensor behaves differently on the MLP write and on the residual stream), and which loss and early-stopping rule train the sensing vector.
 
 This is a post about that design space of sensed steering, building on [Contextual Linear Activation Steering (CLAS)](https://arxiv.org/html/2604.24693v2) and using loop reduction as an example.
@@ -58,11 +58,11 @@ Our evaluation uses 1,152 of the authors’ confirmation problems: 576 GSM8K tra
 
 | Reference | Accuracy | Loop | Cap hit |
 |---|---:|---:|---:|
-| Unedited, thinking on | 12.1% | 87.2% | 88.6% |
-| Unedited, thinking off | 53.0% | 4.5% | 5.5% |
-| Astra’s submitted top-64 edit | 59.3% | 29.9% | 19.2% |
+| Unedited, thinking on | 12.3% | 87.0% | 88.5% |
+| Unedited, thinking off | 53.3% | 4.5% | 5.3% |
+| Astra’s submitted top-64 edit | 60.2% | 29.6% | 18.2% |
 
-With thinking turned off, the unedited model already scores 53.0%, against 59.3% with Astra’s edit. With thinking on, it scores 12.1%: it loops on 87.2% of problems and hits the token cap on 88.6%, so most answers never finish. Of the edit’s 47-point gain over thinking-on, turning thinking off recovers 41 points; the edit adds about 6 points beyond that. We therefore read the edit as mainly fixing a pathological generation behavior, not installing new mathematical capability. Our reproduced 59.3% is close to the authors’ 60.4% on their confirmation table.
+With thinking turned off, the unedited model already scores 53.3%, against 60.2% with Astra’s edit. With thinking on, it scores 12.3%: it loops on 87.0% of problems and hits the token cap on 88.5%, so most answers never finish. Of the edit’s 48-point gain over thinking-on, turning thinking off recovers 41 points; the edit adds about 7 points beyond that. We therefore read the edit as mainly fixing a pathological generation behavior, not installing new mathematical capability. Our reproduced 60.2% is close to the authors’ 60.4% on their confirmation table.
 
 Throughout this post, a **loop** means a 30-token sequence appearing at least 20 times in a completion. We also track hitting the cap and emitting `</think>`. Those measure different failures: a model can keep paraphrasing without crossing the repetition threshold, or close thinking and still produce a problematic final answer.
 
@@ -96,7 +96,7 @@ We use either the four original pairs (copied from the weight edit work) or thos
 
 **The goal is to reduce looping without harming accuracy.** 
 
-### Much less exact repetition; similar measured accuracy
+### Much less exact repetition; similar measured accuracy at 32 pairs
 
 ![GSM8K: paired metric differences for the Astra regime](figures/exp1_astra_gsm8k_delta_grid.svg)
 
@@ -106,28 +106,28 @@ We use either the four original pairs (copied from the weight edit work) or thos
 
 *Figure 1b. MATH, 576 problems, with the same comparisons. The completion tradeoff differs substantially from GSM8K.*
 
-At 32 pairs, scaled-direction sensing reaches **61.5% accuracy**. Unlikelihood-trained sensing reaches **62.3%** and contrast-trained **61.9%**. 
+At 32 pairs, scaled-direction sensing reaches **60.7% accuracy**. Unlikelihood-trained sensing reaches **61.6%** and contrast-trained **61.5%**; both differences have 95% intervals that contain zero. 
 
-The repetition difference is much larger. The loop flag falls from **26.4%** with scaled-direction sensing to **6.8%** with unlikelihood and **7.1%** with contrast. Training $s$ can do the job better.
+The repetition difference is much larger. The loop flag falls from **27.2%** with scaled-direction sensing to **6.5%** with unlikelihood and **6.8%** with contrast. Training $s$ can do the job better.
 
-At four pairs, the same pattern appears: accuracy differences are small and unresolved, while the loop flag falls from **38.8%** to roughly **11%**. Moving from four to 32 pairs adds about 6.5–7.7 accuracy points in these three families.
+At four pairs, the loop flag again falls, from **29.5%** to roughly **11%**, but the learned sensors are less accurate: 2.8 points for unlikelihood [−5.0, −0.6] and 2.5 for contrast [−4.7, −0.2]. Moving from four to 32 pairs adds 3.0 accuracy points to scaled-direction sensing and 6.2–6.7 to the two learned families.
 
-Productive-text-only training (clas arm) is markedly worse in this regime: 42.5% accuracy at four pairs and 42.9% at 32. It does reduce repetition relative to the unedited model, but how we train $s$ matters a lot.
+Productive-text-only training (clas arm) is markedly worse in this regime: 42.8% accuracy at four pairs and 44.2% at 32. It does reduce repetition relative to the unedited model, but how we train $s$ matters a lot.
 
 ### Learning the sensing vector has dataset-specific side effects
 
-Pooled across datasets, the N=32 learned arms hit the cap more often than scaled-direction sensing: **22.0–22.7% versus 17.9%**. They also close thinking less often. But the pooled average hides where this happens:
+Pooled across datasets, the N=32 learned arms hit the cap more often than scaled-direction sensing: **22.3–23.0% versus 18.3%**. They also close thinking less often. But the pooled average hides where this happens:
 
 | N=32 change versus scaled-direction sensing | GSM8K: UL / contrast | MATH: UL / contrast |
 |---|---:|---:|
-| Accuracy | +1.9 / +3.0 pp | −0.3 / −2.3 pp |
-| Exact-loop flag | −11.1 / −10.8 pp | −28.1 / −27.8 pp |
-| Cap hits | −0.5 / −1.2 pp | +8.7 / +10.9 pp |
-| Thinking closure | +1.6 / +1.0 pp | −16.5 / −16.7 pp |
+| Accuracy | +1.8 / +3.2 pp | +0.1 / −1.6 pp |
+| Exact-loop flag | −11.5 / −11.3 pp | −29.9 / −29.5 pp |
+| Cap hits | −0.6 / −1.0 pp | +8.6 / +10.4 pp |
+| Thinking closure | +2.1 / +1.6 pp | −16.9 / −17.2 pp |
 
 On GSM8K, the completion metrics move in the favorable direction numerically. On MATH, exact repetition falls dramatically, but more answers exhaust the budget and fewer close thinking. 
 
-Of 253 capped unlikelihood responses, **191 do not trigger our loop flag**. Suppressing exact repetition has not ensured that the model finishes. Can we steer and learn sensing to achieve multiple behaviors: less loop, more accurate, less cap hit all together? This is one future direction:)
+Of the capped unlikelihood responses, **78% do not trigger our loop flag**. Suppressing exact repetition has not ensured that the model finishes. Can we steer and learn sensing to achieve multiple behaviors: less loop, more accurate, less cap hit all together? This is one future direction:)
 
 ## 4. The design space of sensed steering: what we learned
 
@@ -149,17 +149,17 @@ This changes what the same \(s\) does. Take \(s=\alpha v\) with unit \(v\). At t
 
 A scaled direction tuned at the write, \(s=4v\), is in the last regime: on the residual stream, older content along \(v\) is flipped twice and multiplied by \((1-4)^2=9\) if both layers share one \(v\); with the two layers' actual directions its norm grows 7.8 times. The learned N=32 unlikelihood sensor is mostly not along \(v\) (cosine 0.15). Its component along \(v\), \(s^\top v\), plays the role of \(\alpha\): 0.34 at layer 15 and 0.29 at layer 19, so on the residual stream older content along \(v\) is scaled to 0.57 of its size, with no sign flip.
 
-We moved these two N=32 edits from the MLP write to the residual stream in the Astra setup, keeping \(v\) and \(s\) unchanged. We also recalibrated the scaled direction for the residual stream: \(s=\alpha v\) with \(\alpha\in\{0.2,0.5,1,1.5\}\), chosen on the development problems like every other setting. Development accuracy was 37.5%, 66.4%, 68.0% and 64.8%, so \(\alpha=1\) was chosen. On the 1,152 test problems:
+We moved these two N=32 edits from the MLP write to the residual stream in the Astra setup, keeping \(v\) and \(s\) unchanged. We also recalibrated the scaled direction for the residual stream: \(s=\alpha v\) with \(\alpha\in\{0.2,0.5,1,1.5\}\), chosen on the development problems like every other setting. Development accuracy was 39.8%, 66.0%, 66.0% and 63.7%; of the two tied settings, \(\alpha=1\) loops less (3.5% against 12.5%) and was chosen. On the 1,152 test problems:
 
 | Edit | Site | Accuracy | Loop | Cap hit |
 |---|---|---:|---:|---:|
-| \(s=4v\) | MLP write | 61.5% | 26.4% | 17.9% |
-| \(s=4v\) | Residual stream | 3.0% | 95.9% | 77.3% |
-| Learned unlikelihood \(s\) | MLP write | 62.3% | 6.8% | 22.0% |
-| Learned unlikelihood \(s\) | Residual stream | 61.5% | 4.1% | 22.5% |
-| \(s=v\) (recalibrated) | Residual stream | 62.5% | 4.3% | 20.1% |
+| \(s=4v\) | MLP write | 60.7% | 27.2% | 18.3% |
+| \(s=4v\) | Residual stream | 2.9% | 96.4% | 77.6% |
+| Learned unlikelihood \(s\) | MLP write | 61.6% | 6.5% | 22.3% |
+| Learned unlikelihood \(s\) | Residual stream | 61.6% | 4.6% | 22.5% |
+| \(s=v\) (recalibrated) | Residual stream | 62.7% | 3.9% | 19.9% |
 
-The learned sensor, trained at the write, transfers to the residual stream: accuracy changes by −0.8 points [−3.1, +1.6] and the loop rate by −2.7 points. The scaled direction at its write-tuned strength collapses. Recalibrated to \(\alpha=1\), which is directional ablation of \(v\), it shows no resolved accuracy difference from the write-site edits (+1.0 points [−1.4, +3.4] against \(s=4v\) at the write, +0.2 [−2.1, +2.4] against the learned sensor at the write) and loops less (−22.0 points [−24.7, −19.4] and −2.4 [−4.1, −0.9]).
+The learned sensor, trained at the write, transfers to the residual stream with a similar benefit. The scaled direction at its write-tuned strength collapses. Recalibrated to \(\alpha=1\), which is directional ablation of \(v\), it gives a similar benefit to the write-site edits: about the same accuracy, with loop rates as low as the learned sensor's.
 
 In earlier Qwen3-1.7B experiments, using the same short-pair steering direction at blocks 15–18, the two sites also differed. The following are changes from an unedited control:
 
@@ -195,14 +195,14 @@ Actual rollouts exposed the mismatch between loss and behavior. We used those di
 
 > Choose the lowest teacher-forced loop score among updates that preserve the unedited model’s rate of ranking `</think>` first at its saved closing positions.
 
-So this is regular validation early stop with a constraint to proxy the behavior we want sensing vector to learn. On Qwen3 it selects earlier updates: 14 for the selected unlikelihood arms and 12 for contrast. 
+So this is regular validation early stop with a constraint to proxy the behavior we want sensing vector to learn. On Qwen3 it selects earlier updates: 12–14 for the selected unlikelihood arms and 10–12 for contrast. 
 
 
 ## 5. A second model gives a less favorable answer
 
 We also test Qwen3-1.7B under greedy decoding, editing blocks 15–18. The test set has 500 MATH level-5 and 500 LiveCodeBench prompts. The pool is every MATH level-5 problem (train, validation and test splits) and every LiveCodeBench problem (releases v1–v6), each labelled by four earlier greedy Qwen3-1.7B draws, minus the 256 development prompts. Per dataset, the test set takes every prompt that looped in at least one of the four draws (174 MATH, 217 LiveCodeBench), then a seeded uniform sample of the other prompts up to 500. Pooled numbers are plain means over these 1,000 prompts, so looping prompts carry more weight than in the full benchmarks.
 
-The learned sensors do not improve on $s = \alpha v$. At N=32, unlikelihood is **3.4 points less accurate** [−5.9, −0.9], and contrast **2.4 points less accurate** [−4.8, −0.1]. The loss is concentrated in MATH.
+The learned sensors do not improve on $s = \alpha v$. At N=32, unlikelihood is **2.3 points less accurate** [−4.4, −0.2], and contrast **1.4 points less accurate** [−3.4, +0.6], an interval that contains zero. The unlikelihood loss is concentrated in MATH (−4.3 points, against −0.3 on LiveCodeBench).
 
 ![Qwen3 MATH: paired differences](figures/exp1_qwen3_math_delta_grid.svg)
 
@@ -212,7 +212,7 @@ Unlike the Astra setting, thinking here is worth a great deal: turning it off co
 
 ![Qwen3 LiveCodeBench: paired differences](figures/exp1_qwen3_lcb_delta_grid.svg)
 
-*Figure 2b. Qwen3-1.7B, LiveCodeBench. Four-pair UL/contrast suppress more repetition than scaled-v without a resolved accuracy difference on this dataset; the pooled accuracy result is less favorable.*
+*Figure 2b. Qwen3-1.7B, LiveCodeBench. Four-pair UL/contrast suppress more repetition than scaled-v, and their accuracy intervals on this dataset contain zero; the pooled accuracy result is less favorable.*
 
 The pairs for learning $s$ and building $v$ are math-style text, yet the edit also helps suppress loops on code, loop suppression seems to transfer with these directions.
 
@@ -228,7 +228,7 @@ That also suggests a constructive role for agents. An agent can search this desi
 
 ### Decoding settings matter
 
-On 128 development problems, switching to greedy decoding without retuning sharply reduced accuracy: Astra’s edit fell from 60.9% to 17.2%, and learned edits also lost most of their gains. Removing only the presence penalty had a smaller effect, except for productive NTP. $s$ and $v$ that work under one sampler may need retuning under another.
+On 128 development problems, switching to greedy decoding without retuning sharply reduced accuracy: Astra’s edit fell from 60.5% to 15.6%, and learned edits also lost most of their gains. Removing only the presence penalty had a smaller effect, except for productive NTP. $s$ and $v$ that work under one sampler may need retuning under another.
 
 ### Another axis: how to construct the direction
 
@@ -244,7 +244,7 @@ We have focused on $s$, but $v$ is another choice. A natural next comparison is 
 | Evaluation prompts | 1,152: `validation_3/4`, `final_1–3` | 1,000: 500 per dataset, 391 previously looping |
 | Decoding | T=0.6, top-p=0.95, top-k=20, presence=1.5 | Greedy |
 | Limit | 32,768 new tokens | 40,960-token total context |
-| Runtime | vLLM 0.22.1; transformers 5.22.1; H100 | Same stack; one test condition evaluated on a second H100 machine |
+| Runtime | vLLM 0.22.1; transformers 5.22.1; H100 | Same stack; H100s on two machines |
 | Grading | Boxed-answer extraction and math-verify 0.9.0 | MATH answer verification; LiveCodeBench native tests |
 | Uncertainty | Paired problem bootstrap | Paired prompt bootstrap, stratified by source, dataset and saved loop label |
 
