@@ -90,6 +90,7 @@ LiveCodeBench runs are graded on CPU right after generation.
 | `data/qwen3/loop_labels.jsonl` | Per prompt, whether each of 4 greedy Qwen3-1.7B draws loops (4,683 prompts). The splits are stratified by it. |
 | `data/qwen3/splits/dev/` | 64 looping + 64 non-looping train-split prompts per dataset. |
 | `data/qwen3/splits/test12/` | 500 prompts per dataset: every looping prompt outside dev, then a seeded sample of non-looping prompts. |
+| `data/qwen3/stop_traces/` | The 48 unedited-model dev traces (12 finished, 12 looping per dataset) our stopping rule scored. `STOP_TRACES=ours bash run/qwen3_exp1.sh` uses them; by default the rule draws from your own dev rollouts, with the same seed. |
 | `data/qwen3/math_level5_train_validation_ids.json`, `SHA256SUMS` | Lets `prepare_datasets.py` write our MATH files byte-for-byte. |
 
 A **loop** is a 30-token sequence that occurs at least 20 times in a completion.

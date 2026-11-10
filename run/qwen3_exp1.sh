@@ -30,9 +30,17 @@ printf '%s\n' "bash run/gen_qwen3.sh $QWEN3 control math_level5 dev" "bash run/g
 pool "$E/jobs_dev0"
 
 # 3. stopping updates
+# The rule scores 12 finished and 12 looping traces per dataset, drawn with a fixed seed from the unedited model's dev
+# rollouts. By default those are your own rollouts from step 2 (greedy decoding in vLLM is not bit-reproducible, so
+# the draw can differ from ours). STOP_TRACES=ours scores the 48 traces our run used (data/qwen3/stop_traces/).
 D=$Q/runs/dev
+if [ "${STOP_TRACES:-own}" = ours ]; then
+  TR=("$ROOT/data/qwen3/stop_traces/math_level5_dev_control_traces.jsonl.gz" "$ROOT/data/qwen3/stop_traces/livecodebench_dev_control_traces.jsonl.gz")
+else
+  TR=("$(ls $D/math_level5/control/*.jsonl.gz)" "$(ls $D/livecodebench/control/*.jsonl.gz)")
+fi
 [ -e "$E/devscore.json" ] || CUDA_VISIBLE_DEVICES=$FIRST_GPU $PY scripts/steer/loop_s_devloss.py score --out "$S" --model "$QWEN3" \
-  --bundle "$(ls $D/math_level5/control/*.jsonl.gz)" --bundle "$(ls $D/livecodebench/control/*.jsonl.gz)" \
+  --bundle "${TR[0]}" --bundle "${TR[1]}" \
   --arms "$(IFS=,; echo "${ARMS12[*]}")" --json "$E/devscore.json" > "$E/devscore.log" 2>&1
 STOP=$($PY -c "
 import json, sys; sys.path.insert(0, 'scripts/steer')
