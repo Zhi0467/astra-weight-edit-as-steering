@@ -113,6 +113,8 @@ prompts, for the reason given above.
   models is mediated by a single direction".
 - The learned sensing vector follows CLAS; our "clas" arm is its productive-text-only, no-bias variant at the MLP write.
 - Benchmarks: MATH (Hendrycks et al., 2021), GSM8K (Cobbe et al., 2021), LiveCodeBench (Jain et al., 2024).
+- `src/probe/rfm.py` (used by `run/qwen3_exp2.sh`) is adapted from the MIT-licensed reference implementation of
+  recursive feature machines (Radhakrishnan et al., [github.com/aradha/recursive_feature_machines](https://github.com/aradha/recursive_feature_machines)).
 
 ## License
 
