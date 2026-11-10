@@ -139,15 +139,16 @@ def astra_figure(s, ds, out):
          [DeltaGridSection("Reference", ref), DeltaGridSection("N = 4 training pairs", rows[4]),
           DeltaGridSection("N = 32 training pairs", rows[32])],
          metrics, [DeltaMetricGroup("Δ vs unedited model (thinking on)", 0, 4), DeltaMetricGroup("Δ vs s = αv, same N", 4, 2)],
-         "T 0.6, presence 1.5, 32,768-token cap, one seeded draw per problem. ul/contrast keep update 24 (closure rule passes every update).")
+         "T 0.6, presence 1.5, 32,768-token cap, one seeded draw per problem. ul/contrast keep update 24 (closure rule passes every update).",
+         min_width=960)
 
 
-def draw(out, title, subtitles, sections, metrics, groups, footer):
+def draw(out, title, subtitles, sections, metrics, groups, footer, min_width=1240):
     write_delta_grid_svg(
         out_path=out, title=title, subtitles=subtitles, sections=sections, metrics=metrics, metric_groups=groups,
         row_label=lambda r: arm_label(r["arm"]), cell_text=lambda r, m: r["_text"][m.field],
         cell_title=lambda r, m, t: f"{r['arm']} · {m.label}: {r['_title'][m.field] or 'not applicable'} (points, 95% CI)",
-        footer=footer, left=290, top=150, cell_w=96, row_h=34, min_width=1240)
+        footer=footer, left=290, top=150, cell_w=96, row_h=34, min_width=min_width)
 
 
 def main():

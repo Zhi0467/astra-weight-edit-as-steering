@@ -6,10 +6,11 @@
 # Figures: 1a, 1b  Astra regime, GSM8K / MATH            (run/astra_exp1.sh; random-direction rows if run/astra_controls.sh ran)
 #          2a, 2b  Qwen3-1.7B, MATH / LiveCodeBench       (run/qwen3_exp1.sh)
 #          site    write-site vs residual-site figure     (run/astra_controls.sh)
+#          directions    redraw the reported earlier natural-vs-synthetic direction comparison
 # Output: $WORK/figures
 set -euo pipefail
 source "$(dirname "$0")/env.sh"
-FIGS=${*:-1a 1b 2a 2b site}
+FIGS=${*:-1a 1b 2a 2b site directions}
 if [ "${FROM:-work}" = results ]; then
   QS=$ROOT/results/qwen3/exp1_test_summary.json; A=$ROOT/results/astra_regime; SPECS=$A/resid_specs
 else
@@ -17,7 +18,14 @@ else
 fi
 OUT=$WORK/figures; mkdir -p "$OUT"
 cd scripts/report   # the builders import steering_delta_grid from here
-GRIDS=$(for f in $FIGS; do case $f in 1a|1b|2a|2b) echo -n "$f,";; site) ;; *) echo "unknown figure: $f" >&2; exit 1;; esac; done)
+GRIDS=
+for f in $FIGS; do
+  case $f in
+    1a|1b|2a|2b) GRIDS+="$f," ;;
+    site|directions) ;;
+    *) echo "unknown figure: $f" >&2; exit 1 ;;
+  esac
+done
 if [ -n "$GRIDS" ]; then
   opt=()
   [ -e "$A/test_summary_nothink.json" ] && opt+=(--astra-nothink "$A/test_summary_nothink.json")
@@ -26,5 +34,8 @@ if [ -n "$GRIDS" ]; then
 fi
 if [[ " $FIGS " == *" site "* ]]; then
   $PY build_blog_fig2_site.py --summary "$A/test_summary_resid.json" --specs "$SPECS" --out "$OUT/fig2_write_vs_residual.html"
+fi
+if [[ " $FIGS " == *" directions "* ]]; then
+  $PY build_direction_comparison.py --out "$OUT/qwen3_direction_comparison.svg"
 fi
 echo "figures in $OUT"

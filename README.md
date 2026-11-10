@@ -25,9 +25,10 @@ python3 scripts/report/blog_numbers.py --qwen3 results/qwen3 --astra results/ast
 python3 scripts/report/blog_numbers.py --qwen3 work/qwen3/exp1 --astra work/astra_regime          # your rerun
 ```
 
-The two Qwen3-1.7B tables in §4 ("Where the sensor reads matters" and "Short synthetic pairs were especially
+The two Qwen3-1.7B comparisons in §4 ("Where the sensor reads matters" and "Short synthetic pairs were especially
 effective") come from an earlier round. That round ran on an older software stack and built its natural-trace
 directions from earlier saved rollouts, so this repository does not reproduce it.
+`bash run/figures.sh directions` redraws the natural-vs-synthetic plot from its reported point estimates.
 
 
 ## Setup
