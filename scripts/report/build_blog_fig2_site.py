@@ -16,10 +16,21 @@ import html
 import json
 from pathlib import Path
 
-GROUPS = [  # (label, write arm, residual arm, spec file)
-    ("s = 4v", "sv_n32_a4", "resid_sv_n32_a4", "resid_sv_n32_a4.pt"),
-    ("learned s (unlikelihood)", "ul_n32_b0.1", "resid_ul_n32_b0.1", "resid_ul_n32_b0.1.pt"),
-]
+GROUPS = []  # (label, write arm, residual arm, spec file), filled from the summary by groups()
+
+
+def groups(s):
+    """The residual-site arms of run/astra_controls.sh (resid_<write arm>: the dev-chosen s = alpha v and learned ul at
+    N = 32), each with its write-site twin."""
+    out = []
+    for fam in ("sv", "ul"):
+        for ra in s["per_arm"]:
+            wa = ra[len("resid_"):]
+            if ra.startswith(f"resid_{fam}_n32_") and wa in s["per_arm"]:
+                lab = f"s = {wa.split('_a')[-1]}v" if fam == "sv" else "learned s (unlikelihood)"
+                out.append((lab, wa, ra, f"{ra}.pt"))
+                break
+    return out
 PANELS = [("accuracy", "Accuracy", "higher is better"), ("loop", "Loop rate", "lower is better")]
 
 
@@ -69,6 +80,7 @@ def main():
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     s = json.loads(Path(a.summary).read_text())
+    GROUPS[:] = groups(s)
     betas = [beta(Path(a.specs) / g[3]) for g in GROUPS]
     svg = (f'<svg viewBox="0 0 740 315" role="img" aria-label="Accuracy and loop rate, write vs residual site">'
            f'{panel(s, "accuracy", "Accuracy", "higher is better", betas, 0)}'

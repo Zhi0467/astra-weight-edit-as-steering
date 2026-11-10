@@ -76,11 +76,12 @@ def main():
     R = A / "test_summary_resid.json"  # run/astra_controls.sh
     if R.exists():
         R = json.loads(R.read_text())
+        sv, ul = arm("sv", 32), arm("ul", 32)
         print("§4 MLP write vs residual stream, N = 32: accuracy / loop / cap hit")
-        for x in ("sv_n32_a4", "resid_sv_n32_a4", "ul_n32_b0.1", "resid_ul_n32_b0.1"):
+        for x in (sv, "resid_" + sv, ul, "resid_" + ul):
             r = m(R, x)
             print(f"  {x:20s} {pct(r['accuracy'])} / {pct(r['loop'])} / {pct(r['cap_hit'])}")
-        d = R["paired"]["resid_ul_n32_b0.1 - ul_n32_b0.1"]["pooled"]
+        d = R["paired"][f"resid_{ul} - {ul}"]["pooled"]
         print(f"  residual - write, learned ul: accuracy {ci(d['accuracy'])}, loop {pp(d['loop']['diff'])}")
     RA, RD = A / "test_summary_resid_alpha.json", A / "resid_alpha_dev.json"  # run/astra_resid_alpha.sh
     if RA.exists() and RD.exists():
@@ -90,7 +91,7 @@ def main():
               "-> chosen", x)
         r = m(RA, x)
         print(f"  {x} on test: {pct(r['accuracy'])} / {pct(r['loop'])} / {pct(r['cap_hit'])}")
-        for ref in ("sv_n32_a4", "ul_n32_b0.1"):
+        for ref in (arm("sv", 32), arm("ul", 32)):
             d = RA["paired"][f"{x} - {ref}"]["pooled"]
             print(f"  {x} - {ref} (write): accuracy {ci(d['accuracy'])}, loop {ci(d['loop'])}")
 

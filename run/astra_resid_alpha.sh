@@ -42,6 +42,8 @@ echo "chosen on dev: $CHOSEN" | tee "$W/resid_alpha_selection.txt"
 # test
 for sp in validation_4 validation_3 final_1 final_2 final_3; do job $CHOSEN $sp; done > "$K/jobs_alpha_test"
 pool "$K/jobs_alpha_test"
-$PY scripts/steer/astra_regime_summary.py test --gen "$G" --arms $CHOSEN,resid_sv_n32_a4,resid_ul_n32_b0.1,sv_n32_a4,ul_n32_b0.1 \
-  --refs control,sv_n32_a4,ul_n32_b0.1 --out "$W/test_summary_resid_alpha.json"
+chosen() { $PY -c "import json; print(json.load(open('$W/dev_selection.json'))['chosen_per_family_and_n']['$1'])"; }
+SV=$(chosen sv_n32); UL=$(chosen ul_n32)   # the write-site edits of run/astra_exp1.sh and their residual versions
+$PY scripts/steer/astra_regime_summary.py test --gen "$G" --arms $CHOSEN,resid_$SV,resid_$UL,$SV,$UL \
+  --refs control,$SV,$UL --out "$W/test_summary_resid_alpha.json"
 echo "residual alpha sweep done: $W"

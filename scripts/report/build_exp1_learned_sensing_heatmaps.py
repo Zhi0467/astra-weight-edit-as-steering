@@ -25,14 +25,19 @@ from steering_delta_grid import DeltaGridSection, DeltaMetricGroup, DeltaMetricS
 LABEL = {"sv": "s = αv", "clas": "clas (NTP)", "ul": "ul (unlikelihood)", "contrast": "contrast (NTP+UL)"}
 REF_LABEL = {"control_nothink": "unedited, thinking off", "astra_top64_a6": "Astra top-64 edit (α=6)",
              "random_top64_matched_astra": "random dir., Astra's 64 cols (‖ΔW‖ matched)",
-             "random_full_matched_sv_n32_a4": "random dir., full cols (‖ΔW‖ = s=αv N32)"}
-RANDOM = ("random_top64_matched_astra", "random_full_matched_sv_n32_a4")
+             "random_full_matched": "random dir., full cols (‖ΔW‖ = s=αv N32)"}
 NOTHINK = "control_nothink"
+
+
+def is_random(arm):
+    return arm.startswith("random_")
 
 
 def arm_label(arm):
     if arm in REF_LABEL:
         return REF_LABEL[arm]
+    if arm.startswith("random_full_matched_"):  # matched to the dev-chosen s = alpha v at N = 32
+        return REF_LABEL["random_full_matched"]
     fam = arm.split("_n")[0]
     rest = arm.split("_n")[1].split("_", 1)[1] if "_" in arm.split("_n")[1] else ""
     knobs = rest.replace("a", "α=", 1) if fam == "sv" else rest.replace("b", "β=", 1).replace("_s", ", upd ")
@@ -102,12 +107,13 @@ def qwen3_figure(d, ds, out):
 
 def astra_figure(s, ds, out):
     P = s["paired"]
-    sv = {4: "sv_n4_a3", 32: "sv_n32_a4"}
+    sv = {n_of(a): a for a in s["per_arm"] if a.startswith("sv_n")}  # the dev-chosen s = alpha v per N
+    RANDOM = tuple(sorted((a for a in s["per_arm"] if is_random(a)), reverse=True))
     cols = [("c_acc", "control", "accuracy"), ("c_loop", "control", "loop"), ("c_closed", "control", "think_closed"),
             ("c_cap", "control", "cap_hit"), ("s_acc", "sv", "accuracy"), ("s_loop", "sv", "loop")]
 
     def get(arm, ref, m):
-        if ref == "sv" and (arm.startswith("sv") or arm in REF_LABEL):
+        if ref == "sv" and (arm.startswith("sv") or arm in REF_LABEL or is_random(arm)):
             return None
         if arm == NOTHINK and m == "think_closed":
             return None
@@ -171,7 +177,7 @@ def main():
             s["paired"][f"{NOTHINK} - control"] = t["paired"][f"{NOTHINK} - control"]
         if a.astra_random:
             t = json.loads(Path(a.astra_random).read_text())
-            for r in RANDOM:
+            for r in (x for x in t["per_arm"] if is_random(x)):
                 s["per_arm"][r] = t["per_arm"][r]
                 s["paired"][f"{r} - control"] = t["paired"][f"{r} - control"]
         for fig, ds in (("1a", "gsm8k"), ("1b", "math")):
