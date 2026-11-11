@@ -1,13 +1,8 @@
-# Sensed steering: code and data for "Astra's weight-space edit of Qwen is a special case of sensed steering"
+# Astra’s improvement of Qwen’s math is not “native weight editing” but context-dependent activation steering with clever use of synthetic data
 
 This repository holds the code, data construction and small datasets behind the blog post in [`blog/main.md`](blog/main.md).
-The post shows that Astra's loop-reducing weight edit of Qwen is activation steering written into the weights:
-a rank-one edit `x ← x − v (sᵀx)` on an MLP's output, with a steering vector `v` and a sensing vector `s`.
-We then ask whether learning `s` or building `v` differently does better.
 
-Everything needed to rerun the experiments is here: models and data at pinned versions, the exact generation and
-grading code, the dev/test splits, the selection rules, and the summary and figure scripts. Rollouts are not included.
-[`results/`](results/) holds our summaries for comparison. We ran the pipeline twice; the post's numbers average each problem's outcome over the two runs (each run's dev-chosen learned sensors; fixed arms chosen on both runs' dev results) and then apply the usual paired bootstraps. `results/*/runs/1` and `runs/2` hold the two runs' own summaries.
+The post's numbers average each problem's outcome over the two runs (each run's dev-chosen learned sensors; fixed arms chosen on both runs' dev results) and then apply the usual paired bootstraps. `results/*/runs/1` and `runs/2` hold the two runs' own summaries.
 
 ## What reproduces what
 

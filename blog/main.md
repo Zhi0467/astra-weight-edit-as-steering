@@ -123,15 +123,6 @@ We compare two ways of constructing the steering vector from difference of means
 
 ![Loop-rate and accuracy changes with short synthetic pairs and natural traces as steering data](figures/qwen3_natural_vs_short.svg)
 
-**Loop rate.** Natural traces suppress loops much less, and every short-minus-natural difference has a 95% interval that excludes zero.
-
-- Over all 1,000 test prompts, natural \(s = v\) lowers the loop rate by 4.2 points [−6.9, −1.5]; short \(s = 2v\) lowers it by 20.8 [−23.3, −18.3].
-- With learned \(s\), natural traces lower it by 11.0 [−13.8, −8.2]; short pairs by 22.9 [−25.3, −20.6].
-- The gap is largest on LiveCodeBench, even though the natural looping examples are mostly code.
-- The choice of \(\alpha\) doesn't explain it: the strongest natural setting, \(s = 4v\), still looped on 9.9% of development prompts, against 1.6–3.6% for short pairs with \(\alpha \ge 2\) or a learned \(s\).
-
-**Accuracy.** The natural-minus-short differences have 95% intervals that contain zero: 0.0 [−2.3, +2.3] for \(s = \alpha v\) and +1.4 [−0.7, +3.5] for learned \(s\).
-
 Overall, short synthetic pairs give much stronger loop reduction without compromising accuracy. Our tentative explanation: long responses differ in content, position and reasoning path as well as looping, adding unrelated variation to the activation contrast. Short synthetic pairs may isolate repetition more cleanly.
 
 ### Where to sense matters
