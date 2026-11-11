@@ -6,7 +6,8 @@
   blog_numbers.py --qwen3 $WORK/qwen3/exp1 --astra $WORK/astra_regime           your run
 
 The "capped but not loop-flagged" count needs per-problem outputs, so it is printed only when <astra>/gen exists
-(a rerun), or from capped_ul_n32.json in results/. The two §4 tables come from an earlier round that this repository does not reproduce.
+(a rerun), or from capped_ul_n32.json in results/. The §4 short-pairs-vs-natural-traces numbers are read from
+<qwen3>/natural_vs_short/ (ours) or <qwen3>/../natural/ (a rerun of run/qwen3_natural.sh), if present.
 """
 
 import argparse
@@ -118,6 +119,18 @@ def main():
         print(f"  {x:22s} {pp(c['mean'])} [{pp(c['lo'])}, {pp(c['hi'])}] | {pp(v['math']['correct']['mean'])} | {pp(v['lcb']['correct']['mean'])}")
     c = S["vs_control"]["control_nothink"]["all"]["correct"]
     print(f"  thinking off - on, accuracy: {pp(c['mean'])} [{pp(c['lo'])}, {pp(c['hi'])}]")
+
+    N = next((d for d in (Q / "natural_vs_short", Q.parent / "natural") if (d / "test_summary.json").exists()), None)
+    if N:
+        NS = json.loads((N / "test_summary.json").read_text())
+        print(f"§4 steering data, short pairs vs natural traces ({NS['n_prompts']} prompts; arms {json.dumps(NS['arms'])}):")
+        for k, v in NS["diffs"].items():
+            c, lp = v["all"]["correct"], v["all"]["loop"]
+            print(f"  {k:24s} accuracy {pp(c['mean'])} [{pp(c['lo'])}, {pp(c['hi'])}]  loop {pp(lp['mean'])} [{pp(lp['lo'])}, {pp(lp['hi'])}]")
+        for f in sorted(N.glob("dev_selection_*.json")):
+            d = json.loads(f.read_text())
+            print(f"  reduced-dev loop rate, {f.stem[len('dev_selection_'):]}:",
+                  ", ".join(f"{x}: {pct(r['reduced']['loop'])}" for x, r in d["arms"].items()), "| chosen", d["chosen"])
 
 
 if __name__ == "__main__":

@@ -119,12 +119,20 @@ At 32 pairs, \(s = \alpha v\) reaches **60.7% accuracy**. Unlikelihood-trained s
 ## 4. The design space of activation steering: what we learned
 
 ### Short synthetic pairs are especially effective
-We compare two ways of constructing the steering vector from difference of mean. Setup: **Qwen3-1.7B, greedy decoding, MLP-output edits at blocks 15–18 with \(s=\alpha v\)**. We compare directions from model-generated loop/non-loop responses against Astra’s four short synthetic pairs. Evaluation used 304 MATH level-5 and 420 LiveCodeBench prompts, distinct from the test set in next section. Natural directions averaged the first or last 4,096 loop-token position residuals against non-loop thinking token residuals to compute the mean-of-difference vectors.
+We compare two ways of constructing the steering vector from difference of means. Setup: **Qwen3-1.7B, greedy decoding, MLP-output edits at blocks 15–18**, with the test prompts and the selection and stopping rules of Section 5. We compare directions from model-generated loop/non-loop responses against the 32 short synthetic pairs used in Section 5. The natural traces are the unedited model's own responses, 32 looping and 32 non-looping across both benchmarks, and \(v\) is built from the mean of differences of 36-token windows, just like the short synthetic case. We test both \(s=\alpha v\) and a learned unlikelihood \(s\) ([details](#reproduction-details)).
 
-![Loop-rate and accuracy changes for natural and short synthetic steering directions](figures/qwen3_direction_comparison.svg)
+![Loop-rate and accuracy changes with short synthetic pairs and natural traces as steering data](figures/qwen3_natural_vs_short.svg)
 
+**Loop rate.** Natural traces suppress loops much less, and every short-minus-natural difference has a 95% interval that excludes zero.
 
-Short pairs gave much stronger loop suppression at α=2. Our tentative explanation: long responses differ in content, position and reasoning path as well as looping, adding unrelated variation to the activation contrast. Short synthetic pairs may isolate repetition more cleanly.
+- Over all 1,000 test prompts, natural \(s = v\) lowers the loop rate by 4.2 points [−6.9, −1.5]; short \(s = 2v\) lowers it by 20.8 [−23.3, −18.3].
+- With learned \(s\), natural traces lower it by 11.0 [−13.8, −8.2]; short pairs by 22.9 [−25.3, −20.6].
+- The gap is largest on LiveCodeBench, even though the natural looping examples are mostly code.
+- The choice of \(\alpha\) doesn't explain it: the strongest natural setting, \(s = 4v\), still looped on 9.9% of development prompts, against 1.6–3.6% for short pairs with \(\alpha \ge 2\) or a learned \(s\).
+
+**Accuracy.** The natural-minus-short differences have 95% intervals that contain zero: 0.0 [−2.3, +2.3] for \(s = \alpha v\) and +1.4 [−0.7, +3.5] for learned \(s\).
+
+Overall, short synthetic pairs give much stronger loop reduction without compromising accuracy. Our tentative explanation: long responses differ in content, position and reasoning path as well as looping, adding unrelated variation to the activation contrast. Short synthetic pairs may isolate repetition more cleanly.
 
 ### Where to sense matters
 
@@ -225,7 +233,7 @@ You can find code at this [repo](https://github.com/Zhi0467/qwen-loop-steering-e
 
 **Qwen3 test sampling.** From all MATH level-5 splits and LiveCodeBench v1–v6, excluding 256 development prompts, we retained every prompt that looped in any of four earlier greedy Qwen3-1.7B draws (174 MATH, 217 LiveCodeBench) and filled each dataset to 500 by seeded uniform sampling of the rest. Pooled metrics are plain means over these 1,000 prompts.
 
-Note: the two Qwen3-1.7B comparisons in §4 come from an earlier round on a different prompt set (304 MATH level-5 and 420 LiveCodeBench prompts), run with vLLM 0.15.0 and transformers 4.57.3. Its natural-response directions were built from earlier saved rollouts. The accompanying code reproduces everything else in this post, but not that specific experiment. 
+**Natural traces (§4).** The looping examples are the last 36 loop tokens of 32 looping traces from the unedited model's greedy development rollouts (9 MATH, 23 LiveCodeBench; few MATH development traces loop). The non-looping examples are the last 36 thinking tokens before `</think>` of 32 traces that finish (16 per dataset). Prompts whose traces the stopping rule scores are excluded. As with the short pairs, \(v\) is the per-layer difference of mean activations, and the learned \(s\) uses unlikelihood on the loop tokens plus \(\beta\) times the KL divergence on the non-looping tokens. The 64 prompts behind these traces are removed from development, so both data sources are selected on the remaining 192 development prompts, over \(\alpha \in \{1,2,3,4\}\) and \(\beta \in \{0, 0.1\}\). Short pairs choose \(s = 2v\), natural traces \(s = v\), and both choose \(\beta = 0\). The natural \(v\) has cosine 0.54–0.59 with the short-pair \(v\).
 
 #### neuron selection in Astra’s final edit
 

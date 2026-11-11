@@ -199,7 +199,7 @@ href="https://x.com/rikiyatakehi/status/2117313742891327994">tweet</a>
 has been viewed nearly 10 million times. This is indeed a remarkable
 algorithmic performance by Astra, however we provide an alternative
 interpretation on how it is achieved. While the authors and many
-commentators interpret this as an “native” weight edit, we show that
+commentators interpret this as an”native” weight edit, we show that
 Astra implemented an algorithm similar to activation steering methods
 already commonly known in the literature, using, furthermore, cleverly
 generated synthetic data. Viewed this way, we can also improve the
@@ -256,7 +256,7 @@ its output weight matrix be
 and its contribution to the residual stream be
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mi>W</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">x=Wh</annotation></semantics></math>.
 Consider the steered activation vector</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mi>′</mi><mo>=</mo><mi>x</mi><mo>−</mo><mi>v</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mi>x</mi><mo>−</mo><mi>v</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
 x&#39; = x-v(s^\top x).
 </annotation></semantics></math></p>
 <p>There are two vectors here:</p>
@@ -271,7 +271,7 @@ determines the strength of the push given an input/context.</li>
 <p>Here the strength depends on the output of the MLP. Because the
 strength is linear, this intervention is the same as a weight edit to
 the MLP output weight matrix:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mi>′</mi><mo>=</mo><mi>W</mi><mo>−</mo><mi>v</mi><msup><mi>s</mi><mi>⊤</mi></msup><mi>W</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>W</mi><mi>′</mi><mi>h</mi><mo>=</mo><mi>W</mi><mi>h</mi><mo>−</mo><mi>v</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>W</mi><mi>h</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>x</mi><mi>′</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>W</mi><mo>′</mo></msup><mo>=</mo><mi>W</mi><mo>−</mo><mi>v</mi><msup><mi>s</mi><mi>⊤</mi></msup><mi>W</mi><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>W</mi><mo>′</mo></msup><mi>h</mi><mo>=</mo><mi>W</mi><mi>h</mi><mo>−</mo><mi>v</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>W</mi><mi>h</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi>x</mi><mo>′</mo></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
 W&#39;=W-vs^\top W,
 \qquad W&#39;h=Wh-v(s^\top Wh) = x&#39;.
 </annotation></semantics></math></p>
@@ -365,7 +365,7 @@ learning
 be the steered model and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mn>0</mn></msub><annotation encoding="application/x-tex">p_0</annotation></semantics></math>
 the unedited model. With teacher-forced prefixes, define</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><msub><mi>L</mi><mrow><mi mathvariant="normal">N</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">P</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mi>−</mi><msub><mi>𝔼</mi><mo>+</mo></msub><mo>log</mo><msub><mi>p</mi><mi>s</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>y</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><msub><mi>L</mi><mrow><mi mathvariant="normal">U</mi><mi mathvariant="normal">L</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mi>−</mi><msub><mi>𝔼</mi><mo>−</mo></msub><mo>log</mo><mo minsize="1.2" maxsize="1.2" stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>s</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>y</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo minsize="1.2" maxsize="1.2" stretchy="false" form="postfix">)</mo><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mi>K</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mi>𝔼</mi><mo>+</mo></msub><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>p</mi><mn>0</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>⋅</mi><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="0.167em"></mspace><mo stretchy="false" form="postfix">∥</mo><mspace width="0.167em"></mspace><msub><mi>p</mi><mi>s</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>⋅</mi><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><msub><mi>L</mi><mrow><mi mathvariant="normal">N</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">P</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><mi>s</mi><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mi>−</mi><msub><mi>𝔼</mi><mo>+</mo></msub><mi>log</mi><mo>&#8289;</mo><msub><mi>p</mi><mi>s</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><msub><mi>L</mi><mrow><mi mathvariant="normal">U</mi><mi mathvariant="normal">L</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><mi>s</mi><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mi>−</mi><msub><mi>𝔼</mi><mo>−</mo></msub><mi>log</mi><mo>&#8289;</mo><mo minsize="1.2" maxsize="1.2" stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>s</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo minsize="1.2" maxsize="1.2" stretchy="false" form="postfix">)</mo><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mi>K</mi><mo stretchy="false" form="prefix">(</mo><mi>s</mi><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><msub><mi>𝔼</mi><mo>+</mo></msub><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>p</mi><mn>0</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>⋅</mi><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><mo stretchy="false" form="postfix">∥</mo><mspace width="0.167em"></mspace><msub><mi>p</mi><mi>s</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>⋅</mi><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">
 \begin{aligned}
 L_{\mathrm{NTP}}(s)&amp;=-\mathbb{E}_{+}\log p_s(y_t\mid y_{&lt;t}),\\
 L_{\mathrm{UL}}(s)&amp;=-\mathbb{E}_{-}\log\bigl(1-p_s(y_t\mid y_{&lt;t})\bigr),\\
@@ -480,21 +480,60 @@ design space of activation steering: what we learned</h2>
 <h3 id="short-synthetic-pairs-are-especially-effective">Short synthetic
 pairs are especially effective</h3>
 <p>We compare two ways of constructing the steering vector from
-difference of mean. Setup: <strong>Qwen3-1.7B, greedy decoding,
-MLP-output edits at blocks 15–18 with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s=\alpha v</annotation></semantics></math></strong>.
-We compare directions from model-generated loop/non-loop responses
-against Astra’s four short synthetic pairs. Evaluation used 304 MATH
-level-5 and 420 LiveCodeBench prompts, distinct from the test set in
-next section. Natural directions averaged the first or last 4,096
-loop-token position residuals against non-loop thinking token residuals
-to compute the mean-of-difference vectors.</p>
-<p><img src="figures/qwen3_direction_comparison.svg"
-alt="Loop-rate and accuracy changes for natural and short synthetic steering directions" /></p>
-<p>Short pairs gave much stronger loop suppression at α=2. Our tentative
-explanation: long responses differ in content, position and reasoning
-path as well as looping, adding unrelated variation to the activation
-contrast. Short synthetic pairs may isolate repetition more cleanly.</p>
+difference of means. Setup: <strong>Qwen3-1.7B, greedy decoding,
+MLP-output edits at blocks 15–18</strong>, with the test prompts and the
+selection and stopping rules of Section 5. We compare directions from
+model-generated loop/non-loop responses against the 32 short synthetic
+pairs used in Section 5. The natural traces are the unedited model’s own
+responses, 32 looping and 32 non-looping across both benchmarks, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
+is built from the mean of differences of 36-token windows, just like the
+short synthetic case. We test both
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s=\alpha v</annotation></semantics></math>
+and a learned unlikelihood
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
+(<a href="#reproduction-details">details</a>).</p>
+<figure>
+<img src="figures/qwen3_natural_vs_short.svg"
+alt="Loop-rate and accuracy changes with short synthetic pairs and natural traces as steering data" />
+<figcaption aria-hidden="true">Loop-rate and accuracy changes with short
+synthetic pairs and natural traces as steering data</figcaption>
+</figure>
+<p><strong>Loop rate.</strong> Natural traces suppress loops much less,
+and every short-minus-natural difference has a 95% interval that
+excludes zero.</p>
+<ul>
+<li>Over all 1,000 test prompts, natural
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>v</mi></mrow><annotation encoding="application/x-tex">s = v</annotation></semantics></math>
+lowers the loop rate by 4.2 points [−6.9, −1.5]; short
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>2</mn><mi>v</mi></mrow><annotation encoding="application/x-tex">s = 2v</annotation></semantics></math>
+lowers it by 20.8 [−23.3, −18.3].</li>
+<li>With learned
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>,
+natural traces lower it by 11.0 [−13.8, −8.2]; short pairs by 22.9
+[−25.3, −20.6].</li>
+<li>The gap is largest on LiveCodeBench, even though the natural looping
+examples are mostly code.</li>
+<li>The choice of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+doesn’t explain it: the strongest natural setting,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>4</mn><mi>v</mi></mrow><annotation encoding="application/x-tex">s = 4v</annotation></semantics></math>,
+still looped on 9.9% of development prompts, against 1.6–3.6% for short
+pairs with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>≥</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\alpha \ge 2</annotation></semantics></math>
+or a learned
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>.</li>
+</ul>
+<p><strong>Accuracy.</strong> The natural-minus-short differences have
+95% intervals that contain zero: 0.0 [−2.3, +2.3] for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s = \alpha v</annotation></semantics></math>
+and +1.4 [−0.7, +3.5] for learned
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>.</p>
+<p>Overall, short synthetic pairs give much stronger loop reduction
+without compromising accuracy. Our tentative explanation: long responses
+differ in content, position and reasoning path as well as looping,
+adding unrelated variation to the activation contrast. Short synthetic
+pairs may isolate repetition more cleanly.</p>
 <h3 id="where-to-sense-matters">Where to sense matters</h3>
 <p>There are three sites worth distinguishing: hidden neurons
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>,
@@ -506,7 +545,7 @@ when two interventions use the same
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>,</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mi>′</mi><mo>=</mo><mi>x</mi><mo>−</mo><mi>v</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="2.0em"></mspace><mtext mathvariant="normal">and</mtext><mspace width="2.0em"></mspace><mi>r</mi><mi>′</mi><mo>=</mo><mi>r</mi><mo>−</mo><mi>v</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mi>x</mi><mo>−</mo><mi>v</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mspace width="2.0em"></mspace><mtext mathvariant="normal">and</mtext><mspace width="2.0em"></mspace><msup><mi>r</mi><mo>′</mo></msup><mo>=</mo><mi>r</mi><mo>−</mo><mi>v</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>r</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
 x&#39;=x-v(s^\top x)
 \qquad\text{and}\qquad
 r&#39;=r-v(s^\top r)
@@ -528,7 +567,7 @@ each edited layer acts on everything already in the stream, so content
 from before the first edited layer is multiplied by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">1-\alpha</annotation></semantics></math>
 at every edited layer: by
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><annotation encoding="application/x-tex">(1-\alpha)^2</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">(1-\alpha)^2</annotation></semantics></math>
 over two layers. At
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha=1</annotation></semantics></math>
 this is directional ablation of
@@ -683,10 +722,18 @@ development-selected settings have not found a learned sensing vector
 accuracy advantage here, but it still tends to reduce looping more than
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s = \alpha v</annotation></semantics></math>
 which is the intended effect.</p>
-<p><img src="figures/exp1_qwen3_math_delta_grid.svg"
-alt="Qwen3 MATH: paired differences" /></p>
-<p><img src="figures/exp1_qwen3_lcb_delta_grid.svg"
-alt="Qwen3 LiveCodeBench: paired differences" /></p>
+<figure>
+<img src="figures/exp1_qwen3_math_delta_grid.svg"
+alt="Qwen3 MATH: paired differences" />
+<figcaption aria-hidden="true">Qwen3 MATH: paired
+differences</figcaption>
+</figure>
+<figure>
+<img src="figures/exp1_qwen3_lcb_delta_grid.svg"
+alt="Qwen3 LiveCodeBench: paired differences" />
+<figcaption aria-hidden="true">Qwen3 LiveCodeBench: paired
+differences</figcaption>
+</figure>
 <h2 id="notes">6. Notes</h2>
 <h4 id="using-short-synthetic-pairs-is-a-clever-choice">Using short
 synthetic pairs is a clever choice</h4>
@@ -842,12 +889,34 @@ every prompt that looped in any of four earlier greedy Qwen3-1.7B draws
 (174 MATH, 217 LiveCodeBench) and filled each dataset to 500 by seeded
 uniform sampling of the rest. Pooled metrics are plain means over these
 1,000 prompts.</p>
-<p>Note: the two Qwen3-1.7B comparisons in §4 come from an earlier round
-on a different prompt set (304 MATH level-5 and 420 LiveCodeBench
-prompts), run with vLLM 0.15.0 and transformers 4.57.3. Its
-natural-response directions were built from earlier saved rollouts. The
-accompanying code reproduces everything else in this post, but not that
-specific experiment.</p>
+<p><strong>Natural traces (§4).</strong> The looping examples are the
+last 36 loop tokens of 32 looping traces from the unedited model’s
+greedy development rollouts (9 MATH, 23 LiveCodeBench; few MATH
+development traces loop). The non-looping examples are the last 36
+thinking tokens before <code>&lt;/think&gt;</code> of 32 traces that
+finish (16 per dataset). Prompts whose traces the stopping rule scores
+are excluded. As with the short pairs,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
+is the per-layer difference of mean activations, and the learned
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
+uses unlikelihood on the loop tokens plus
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>
+times the KL divergence on the non-looping tokens. The 64 prompts behind
+these traces are removed from development, so both data sources are
+selected on the remaining 192 development prompts, over
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>4</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\alpha \in \{1,2,3,4\}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>0.1</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\beta \in \{0, 0.1\}</annotation></semantics></math>.
+Short pairs choose
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>2</mn><mi>v</mi></mrow><annotation encoding="application/x-tex">s = 2v</annotation></semantics></math>,
+natural traces
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>v</mi></mrow><annotation encoding="application/x-tex">s = v</annotation></semantics></math>,
+and both choose
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\beta = 0</annotation></semantics></math>.
+The natural
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
+has cosine 0.54–0.59 with the short-pair
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>.</p>
 <h4 id="neuron-selection-in-astras-final-edit">neuron selection in
 Astra’s final edit</h4>
 <p>The final Astra edit is not the MLP output sensing above. At each
@@ -856,17 +925,17 @@ edited layer, it selects 64 MLP neurons. Let
 be their diagonal selection mask and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
 the unit steering direction. The idealized update is</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mi>′</mi><mo>=</mo><mi>W</mi><mo>−</mo><mn>6</mn><mi>u</mi><msup><mi>u</mi><mi>⊤</mi></msup><mi>W</mi><mi>M</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>W</mi><mo>′</mo></msup><mo>=</mo><mi>W</mi><mo>−</mo><mn>6</mn><mi>u</mi><msup><mi>u</mi><mi>⊤</mi></msup><mi>W</mi><mi>M</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
 W&#39;=W-6uu^\top WM.
 </annotation></semantics></math></p>
 <p>Writing
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>S</mi></msub><mo>=</mo><mi>W</mi><mi>M</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">x_S=WMh</annotation></semantics></math>
 for those neurons’ contribution gives</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mi>′</mi><mo>=</mo><mi>x</mi><mo>−</mo><mn>6</mn><mi>u</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>u</mi><mi>⊤</mi></msup><msub><mi>x</mi><mi>S</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mi>x</mi><mo>−</mo><mn>6</mn><mi>u</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>u</mi><mi>⊤</mi></msup><msub><mi>x</mi><mi>S</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
 x&#39;=x-6u(u^\top x_S).
 </annotation></semantics></math></p>
 <p>Equivalently, it senses the hidden neurons directly:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mi>′</mi><mo>=</mo><mi>x</mi><mo>−</mo><mi>u</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>q</mi><mi>⊤</mi></msup><mi>h</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>q</mi><mo>=</mo><mn>6</mn><mi>M</mi><msup><mi>W</mi><mi>⊤</mi></msup><mi>u</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mi>x</mi><mo>−</mo><mi>u</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>q</mi><mi>⊤</mi></msup><mi>h</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>q</mi><mo>=</mo><mn>6</mn><mi>M</mi><msup><mi>W</mi><mi>⊤</mi></msup><mi>u</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
 x&#39;=x-u(q^\top h),\qquad q=6MW^\top u.
 </annotation></semantics></math></p>
 <p>Neuron-space sensing selects and weights neurons. Output-space

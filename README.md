@@ -17,6 +17,7 @@ grading code, the dev/test splits, the selection rules, and the summary and figu
 | §4 write-site vs residual-site table; the random-direction rows of Figures 1a/1b | `run/astra_controls.sh` | `results/astra_regime/test_summary_{resid,random}.json` |
 | §4 recalibrated residual-site s = αv (α chosen on dev from 0.2, 0.5, 1, 1.5) | `run/astra_resid_alpha.sh` | `results/astra_regime/{resid_alpha_dev,test_summary_resid_alpha}.json` |
 | §3–5 Qwen3-1.7B stopping updates; §5, Figures 2a/2b: Qwen3-1.7B, greedy, 1,000 prompts | `run/qwen3_exp1.sh` | `results/qwen3/exp1_*` |
+| §4 short synthetic pairs vs natural traces as steering data (figure and numbers) | `run/qwen3_natural.sh` | `results/qwen3/natural_vs_short/` |
 | Figures, all or one at a time (`run/figures.sh 1a 2b site`) | `run/figures.sh` | `blog/figures/` |
 | Every number quoted in the post | `scripts/report/blog_numbers.py` | prints them from `results/` or from a rerun |
 
@@ -25,10 +26,9 @@ python3 scripts/report/blog_numbers.py --qwen3 results/qwen3 --astra results/ast
 python3 scripts/report/blog_numbers.py --qwen3 work/qwen3/exp1 --astra work/astra_regime          # your rerun
 ```
 
-The two Qwen3-1.7B comparisons in §4 ("Where the sensor reads matters" and "Short synthetic pairs were especially
-effective") come from an earlier round. That round ran on an older software stack and built its natural-trace
-directions from earlier saved rollouts, so this repository does not reproduce it.
-`bash run/figures.sh directions` redraws the natural-vs-synthetic plot from its reported point estimates.
+The §4 natural-trace arms are one run. Their short-pair counterparts and the unedited model are the two runs of
+`run/qwen3_exp1.sh`, with each run's short-pair arms re-chosen on the same reduced dev set
+(`results/qwen3/natural_vs_short/dev_selection_*.json`).
 
 
 ## Setup
@@ -39,7 +39,7 @@ disk for models, the environment and outputs.
 ```bash
 bash run/setup.sh      # uv environment, pinned models, LiveCodeBench at a pinned commit, MATH pools, Astra's files
 GPUS=0 bash run/smoke.sh                  # about 20 minutes on one GPU
-FROM=results bash run/figures.sh          # our figures from our summaries, into work/figures (or name some: 1a 1b 2a 2b site)
+FROM=results bash run/figures.sh          # our figures from our summaries, into work/figures (or name some: 1a 1b 2a 2b site directions)
 ```
 
 `run/env.sh` holds every setting: `WORK` (all outputs, default `./work`), `GPUS` (e.g. `0,1,2,3`), `SLOTS`
@@ -60,14 +60,15 @@ Each script runs end to end and skips finished steps, so it can be restarted.
 
 ```bash
 GPUS=0,1,2,3,4,5,6,7 bash run/astra_exp1.sh     # then run/astra_controls.sh, run/astra_resid_alpha.sh
-GPUS=0,1,2,3,4,5,6,7 bash run/qwen3_exp1.sh
+GPUS=0,1,2,3,4,5,6,7 bash run/qwen3_exp1.sh     # then run/qwen3_natural.sh
 bash run/figures.sh
 ```
 
 Every experiment uses four disjoint roles:
 
 - **Pairs** build `v` and train `s`: `scripts/steer/loop_short_pairs.json`. N = 4 uses Astra's four pairs; N = 32
-  adds 28 written in the same format.
+  adds 28 written in the same format. In `qwen3_natural.sh` they are replaced by 32 looping and 32 finishing traces
+  of the unedited model on dev prompts, and those 64 prompts leave the dev set.
 - **Dev** prompts pick every hyperparameter: α, β, the training update and the pair count.
 - **Test** prompts are run once, on the chosen arms.
 - **Teacher-forced scores** pick the training update: the lowest loop score among updates that keep the unedited
@@ -79,6 +80,7 @@ Every experiment uses four disjoint roles:
 | `astra_controls.sh` | residual-site versions of s = 4v and learned ul; norm-matched random-direction edits | 20 test |
 | `astra_resid_alpha.sh` | s = αv at the residual site, α ∈ {0.2, 0.5, 1, 1.5} on dev; the chosen α on test | 4 dev + 5 test |
 | `qwen3_exp1.sh` | as above for Qwen3-1.7B at blocks 15–18 (MATH level 5 and LiveCodeBench, dev 128 + 128 prompts) | 42 dev + 40 test |
+| `qwen3_natural.sh` | after `qwen3_exp1.sh`: natural traces (36-token windows); `v` and learned ul `s` (β 0, 0.1) from them; stopping update per `s`; dev rollouts of s = αv (α 1–4) and both `s`; selection of these and of the short-pair N = 32 arms on the reduced dev (192 prompts); test rollouts of the chosen arms. Training holds traces of up to 40,960 tokens, about 14 GB per GPU with gradient checkpointing | 12 dev + 8 test (+4 if a short-pair arm is re-chosen) |
 
 A Qwen3-1.7B test run is one arm on one dataset and one source split, 250–300 prompts at up to 40,960 tokens.
 LiveCodeBench runs are graded on CPU right after generation.
