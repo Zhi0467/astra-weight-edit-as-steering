@@ -5,7 +5,7 @@ Four figures, one per regime x dataset (the pairs that train s and build v are m
 training distribution and LiveCodeBench / GSM8K show transfer differently):
   Qwen3-1.7B greedy: MATH level 5, LiveCodeBench.   Qwen3.5-0.8B Astra sampler: GSM8K, MATH.
 Rows are the dev-selected arms grouped by pair count N, plus a reference section (the unedited model with thinking off
-when its runs exist; in the Astra regime also Astra's top-64 edit). Column groups: paired differences against the
+when its runs exist; in the Astra regime also Astra's edit (s=4v, N=4)). Column groups: paired differences against the
 unedited model (thinking on), and against s = alpha v at the same N. Cell text is the difference in points; '*' marks a
 95% bootstrap interval that excludes zero (the interval is in each cell's hover title). Green = better (higher accuracy
 / thinking closed, lower loop / cap rate), red = worse.
@@ -23,9 +23,9 @@ from pathlib import Path
 from steering_delta_grid import DeltaGridSection, DeltaMetricGroup, DeltaMetricSpec, write_delta_grid_svg
 
 LABEL = {"sv": "s = αv", "clas": "clas (NTP)", "ul": "ul (unlikelihood)", "contrast": "contrast (NTP+UL)"}
-REF_LABEL = {"control_nothink": "unedited, thinking off", "astra_top64_a6": "Astra top-64 edit (α=6)",
-             "random_top64_matched_astra": "random dir., Astra's 64 cols (‖ΔW‖ matched)",
-             "random_full_matched": "random dir., full cols (‖ΔW‖ = s=αv N32)"}
+REF_LABEL = {"control_nothink": "unedited, thinking off", "sv_n4_a4": "Astra’s edit",
+             
+             "random_full_matched": "random dir. (‖ΔW‖ = s=αv N32)"}
 NOTHINK = "control_nothink"
 
 
@@ -108,7 +108,7 @@ def qwen3_figure(d, ds, out):
 def astra_figure(s, ds, out):
     P = s["paired"]
     sv = {n_of(a): a for a in s["per_arm"] if a.startswith("sv_n")}  # the dev-chosen s = alpha v per N
-    RANDOM = tuple(sorted((a for a in s["per_arm"] if is_random(a)), reverse=True))
+    RANDOM = tuple(sorted((a for a in s["per_arm"] if is_random(a) and a != "random_top64_matched_astra"), reverse=True))
     cols = [("c_acc", "control", "accuracy"), ("c_loop", "control", "loop"), ("c_closed", "control", "think_closed"),
             ("c_cap", "control", "cap_hit"), ("s_acc", "sv", "accuracy"), ("s_loop", "sv", "loop")]
 
@@ -122,10 +122,10 @@ def astra_figure(s, ds, out):
 
     order = ["sv", "clas", "ul", "contrast"]
     rows = {4: [], 32: []}
-    arms = [a for a in s["per_arm"] if a not in ("control", NOTHINK, "astra_top64_a6", "clas_n4_b0") + RANDOM]  # clas_n4_b0 = off-rule update 24
+    arms = [a for a in s["per_arm"] if a not in ("control", NOTHINK, "astra_top64_a6", "sv_n4_a4", "random_top64_matched_astra", "clas_n4_b0") + RANDOM]  # clas_n4_b0 = off-rule update 24
     for arm in sorted(arms, key=lambda a: order.index(a.split("_n")[0])):
         rows[n_of(arm)].append(make_row(arm, cols, get))
-    ref = [make_row(a, cols, get) for a in (NOTHINK, "astra_top64_a6") + RANDOM if a in s["per_arm"]]
+    ref = [make_row(a, cols, get) for a in (NOTHINK, "sv_n4_a4") + RANDOM if a in s["per_arm"]]
     c = s["per_arm"]["control"][ds]
     name = {"gsm8k": "GSM8K", "math": "MATH"}[ds]
     metrics = [DeltaMetricSpec("c_acc", "acc", "positive", 0.50), DeltaMetricSpec("c_loop", "loop rate", "negative", 0.80),
@@ -147,7 +147,7 @@ def draw(out, title, subtitles, sections, metrics, groups, footer, min_width=124
     write_delta_grid_svg(
         out_path=out, title=title, subtitles=subtitles, sections=sections, metrics=metrics, metric_groups=groups,
         row_label=lambda r: arm_label(r["arm"]), cell_text=lambda r, m: r["_text"][m.field],
-        cell_title=lambda r, m, t: f"{r['arm']} · {m.label}: {r['_title'][m.field] or 'not applicable'} (points, 95% CI)",
+        cell_title=lambda r, m, t: f"{arm_label(r['arm'])} · {m.label}: {r['_title'][m.field] or 'not applicable'} (points, 95% CI)",
         footer=footer, left=290, top=150, cell_w=96, row_h=34, min_width=min_width)
 
 

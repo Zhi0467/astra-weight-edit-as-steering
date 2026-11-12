@@ -44,7 +44,7 @@ def main():
 
     print("§2 baselines (Astra regime, 1,152 problems): accuracy / loop / cap hit")
     for name, d, x in (("unedited, thinking on", T, "control"), ("unedited, thinking off", NT, "control_nothink"),
-                       ("Astra's top-64 edit", T, "astra_top64_a6")):
+                       ("Astra's edit", T, "sv_n4_a4")):
         r = m(d, x)
         print(f"  {name:24s} {pct(r['accuracy'])} / {pct(r['loop'])} / {pct(r['cap_hit'])}")
 
@@ -104,7 +104,11 @@ def main():
     D = json.loads((A / "diag_samplers_validation_1.json").read_text())
     print("§7 dev sampler diagnostic (validation_1): accuracy under Astra's sampler -> greedy -> no presence penalty")
     for x, r in D.items():
+        if x == "astra_top64_a6":
+            continue  # Later neuron-selected version is reported only in the endnote.
         print(f"  {x:18s} {pct(r['astra']['accuracy'])} -> {pct(r['greedy']['accuracy'])} -> {pct(r['nopp']['accuracy'])}")
+    r = m(T, "astra_top64_a6")
+    print(f"Endnote: later neuron-selected edit: {pct(r['accuracy'])} / {pct(r['loop'])} / {pct(r['cap_hit'])}")
     for f in [A / "astra_check_n4.json"] if (A / "astra_check_n4.json").exists() else sorted(A.glob("runs/*/astra_check_n4.json")):
         C = json.loads(f.read_text())
         print(f"Endnote: |cos(our four-pair v, Astra's u)| per layer ({f.parent.name}):",

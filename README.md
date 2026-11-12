@@ -99,9 +99,9 @@ prompts, for the reason given above.
 
 ## Credits
 
-- The edit we analyse is Astra's, from "LLMs can understand and write neural network weights"
+- The main-text Astra baseline is `sv_n4_a4` ($s=4v$, using Astra’s four pairs). The edit we analyse is Astra's, from "LLMs can understand and write neural network weights"
   ([logs and code](https://github.com/RikiyaT/lm_understand-logs)). We use their four pairs, problem sets, grading and
-  submitted edit (CC BY 4.0 for data, MIT for code).
+  edit (CC BY 4.0 for data, MIT for code).
 - The weight-orthogonalization ⇔ directional-ablation equivalence is from Arditi et al. (2024), "Refusal in language
   models is mediated by a single direction".
 - The learned sensing vector follows CLAS; our "clas" arm is its productive-text-only, no-bias variant at the MLP write.

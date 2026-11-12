@@ -1,394 +1,130 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
-<head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Sensed steering</title>
-  <style>
-    html {
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      overflow-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 12px;
-      }
-      h1 {
-        font-size: 1.8em;
-      }
-    }
-    @media print {
-      html {
-        background-color: white;
-      }
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: #1a1a1a;
-    }
-    a:visited {
-      color: #1a1a1a;
-    }
-    img {
-      max-width: 100%;
-    }
-    svg {
-      height: auto;
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
-      font-size: 85%;
-      margin: 0;
-      hyphens: manual;
-    }
-    pre {
-      margin: 1em 0;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-      overflow-wrap: normal;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      border: none;
-      border-top: 1px solid #1a1a1a;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC ul {
-      padding-left: 1.3em;
-    }
-    #TOC > ul {
-      padding-left: 0;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    /* The extra [class] is a hack that increases specificity enough to
-       override a similar rule in reveal.js */
-    ul.task-list[class]{list-style: none;}
-    ul.task-list li input[type="checkbox"] {
-      font-size: inherit;
-      width: 0.8em;
-      margin: 0 0.8em 0.2em -1.6em;
-      vertical-align: middle;
-    }
-  </style>
-  <style>
-  html{background:#fff}
-  body{font:17px/1.6 -apple-system,Segoe UI,Helvetica,Arial,sans-serif;max-width:860px;margin:2.5em auto;padding:0 1.2em;color:#1f2328;background:#fff;hyphens:none}
-  h1{font-size:1.7em;border-bottom:1px solid #d0d7de;padding-bottom:.3em}h2{font-size:1.3em;margin-top:1.8em;border-bottom:1px solid #eaeef2;padding-bottom:.2em}h3{font-size:1.1em;margin-top:1.4em}
-  math{font-family:'STIX Two Math','Cambria Math','Latin Modern Math',math}math[display=block]{font-size:1.12em;overflow-x:auto;max-width:100%}
-  img{display:block;max-width:100%;height:auto;margin-inline:auto}figure{margin:1.5em 0;text-align:center}figcaption{font-size:.9em;color:#59636e}
-  blockquote{margin:1em 0;padding:0 1em;border-left:4px solid #d0d7de;color:#59636e}
-  table{border-collapse:collapse;width:fit-content;max-width:100%;margin:1em auto;display:block;overflow-x:auto}th,td{border:1px solid #d0d7de;padding:.45em .8em;vertical-align:top}th{background:#f6f8fa}
-  code{background:#eff1f3;padding:.1em .3em;border-radius:4px;font-size:.9em}li{margin:.25em 0}a{color:#0969da}
-  @media (prefers-color-scheme:dark){html,body{background:#0d1117;color:#e6edf3}th{background:#161b22}code{background:#21262d}th,td{border-color:#30363d}h1,h2{border-color:#30363d}a{color:#4493f8}blockquote,figcaption{color:#9198a1}img{background:#fff}}
-  </style>
-</head>
-<body>
-<h1
-id="astras-improvement-of-qwens-math-is-not-native-weight-editing-but-context-dependent-activation-steering-with-clever-use-of-synthetic-data">Astra’s
-improvement of Qwen’s math is not “native weight editing” but
-context-dependent activation steering with clever use of synthetic
-data</h1>
-<p><em>…and what we learned from searching the design space.</em></p>
-<p>In a recently widely circulated blog post <a
-href="https://rikiyat.github.io/blog/weight-space-programming/"><em>Sparks
-of Weight-Space Programming</em></a>, the authors highlight how GPT-6
-Astra “natively” edits another small language model without any
-training: it writes a short program that changes parts of MLP matrices
-to significantly improve the math performance of the model. The authors
-interpret this as Weight-Space Programming: “our neural network weights
-will soon be natively optimized by LLMs that deliberately reason about
-their weights.” The work has received much attention. For example, one
-of the author’s <a
-href="https://x.com/rikiyatakehi/status/2117313742891327994">tweet</a>
-has been viewed nearly 10 million times. This is indeed a remarkable
-algorithmic performance by Astra, however we provide an alternative
-interpretation on how it is achieved. While the authors and many
-commentators interpret this as an”native” weight edit, we show that
-Astra implemented an algorithm similar to activation steering methods
-already commonly known in the literature, using, furthermore, cleverly
-generated synthetic data. Viewed this way, we can also improve the
-method over Astra’s original edit.</p>
-<h2 id="tldr">TL;DR</h2>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Astra’s improvement of Qwen’s math is not “native weight editing” but context-dependent activation steering with clever use of synthetic data</title><style>
+:root{--ink:#26354a;--muted:#667587;--green:#217e71;--line:#dde5ea;--soft:#f5f8fa}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:36px}
+body{margin:0;background:#fff;color:var(--ink);font:18px/1.75 Georgia,"Times New Roman",serif}
+.layout{max-width:1480px;margin:auto;padding:64px 32px 100px;display:grid;grid-template-columns:200px minmax(0,760px) 240px;gap:36px;align-items:start}
+article{grid-column:2;min-width:0;position:relative}
+h1,h2,h3,nav,.margin-note,figcaption,table{font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif}
+h1{font-size:clamp(30px,2.6vw,42px);line-height:1.22;letter-spacing:-.035em;margin:0 0 24px;font-weight:700}
+h2{font-size:27px;line-height:1.3;margin:64px 0 24px;letter-spacing:-.025em}
+h3{font-size:21px;line-height:1.4;margin:40px 0 18px}
+p{margin:0 0 24px}li{margin:8px 0}a{color:var(--green);text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:#144e46}a:focus-visible,button:focus-visible{outline:3px solid #279c88;outline-offset:4px}
+blockquote{margin:28px 0;padding:8px 24px;border-left:3px solid #a6cfc7;background:#f8faf9}
+blockquote p:last-child{margin-bottom:8px}
+code{font: .82em/1.5 ui-monospace,monospace;background:var(--soft);padding:2px 4px;overflow-wrap:anywhere}
+nav{grid-column:1;position:sticky;top:32px;font-size:13px;line-height:1.45;max-height:calc(100vh - 64px);overflow-y:auto;padding:5px 12px 16px 0}
+.nav-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 18px 10px}
+nav a{display:block;text-decoration:none;color:var(--muted);padding:9px 10px;margin:3px 0;border-radius:6px;border-left:2px solid transparent;transition:transform .16s,box-shadow .16s,background .16s}
+nav a:hover,nav a:focus-visible{transform:translateY(-2px);background:white;box-shadow:0 5px 16px #26354a14;color:var(--ink)}
+nav a[aria-current="location"]{color:var(--green);background:#edf6f3;border-left-color:var(--green)}
+nav .nav-h3{padding-left:20px;font-size:12px}
+#nav-toggle{display:none}
+figure{margin:34px 0}figure img{display:block;width:100%;height:auto}
+.figure-link{display:block;cursor:zoom-in}
+figcaption{font-size:13px;line-height:1.65;color:var(--muted);margin-top:14px}
+.table-scroll{overflow-x:auto;margin:24px 0;max-width:100%;border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;font-size:13px;line-height:1.55;width:100%}
+th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;min-width:100px}
+th{background:var(--soft);font-weight:600}tr:last-child td{border-bottom:0}
+.math{overflow-wrap:normal}mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;padding:8px 0;max-width:100%}
+.note-ref{font-family:ui-sans-serif,system-ui,sans-serif;vertical-align:super;font-size:11px;text-decoration:none;margin-left:5px;background:#edf6f3;padding:2px 5px;border-radius:3px}
+.margin-note{font-size:13px;line-height:1.65;color:var(--muted);padding:12px 0 12px 14px;border-left:2px solid #c4d9d4;margin:16px 0 24px;background:white}
+.margin-note strong{font-weight:600;color:var(--ink)}.note-number{font-weight:600;margin-right:7px;text-decoration:none}
+.margin-note:target{background:#edf6f3}.margin-note p{margin:0}
+.wide-notes .margin-note{position:absolute;left:calc(100% + 36px);width:240px;margin:0}
+.skip{position:fixed;top:-100px;left:16px;padding:10px;background:white;z-index:10}.skip:focus{top:10px}
+@media(max-width:1249px){.layout{grid-template-columns:180px minmax(0,760px);max-width:1060px;gap:28px;padding:40px 24px}article{grid-column:2}.margin-note{background:var(--soft);padding:14px 18px}}
+@media(max-width:850px){.layout{display:block;padding:0 20px 64px}nav{position:sticky;top:0;z-index:5;background:#fffffff2;backdrop-filter:blur(12px);max-height:55vh;padding:10px 0;border-bottom:1px solid var(--line);margin:0 -20px 32px;padding-left:20px;padding-right:20px}#nav-toggle{display:block;border:0;background:transparent;color:var(--ink);font:600 14px/1.6 ui-sans-serif,system-ui;cursor:pointer;width:100%;text-align:left}.nav-label{display:none}.js #nav-links{display:none}.js nav.open #nav-links{display:block}article{width:100%}body{font-size:17px}h1{font-size:31px}h2{font-size:25px;scroll-margin-top:70px}h3{scroll-margin-top:70px}.margin-note{font-size:13px}figure{margin-left:-8px;margin-right:-8px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}nav a{transition:none;transform:none!important}}
+@media print{nav,.skip{display:none}.layout{display:block;padding:0}article{width:100%}.wide-notes .margin-note{position:static;width:auto;margin:12px 0}a{color:inherit}h2,h3{break-after:avoid}figure{break-inside:avoid}}
+</style></head>
+<body><a class="skip" href="#article">Skip to article</a><div class="layout">
+<nav aria-label="Article sections"><button id="nav-toggle" aria-expanded="false" aria-controls="nav-links">Sections ▾</button><div id="nav-links"><a class="nav-h2" href="#tl-dr">TL;DR</a><a class="nav-h2" href="#1-from-a-native-weight-edit-to-activation-steering">1. Steering interpretation</a><a class="nav-h2" href="#2-qwen-s-inability-for-math-in-the-original-blog-is-pathological">2. Pathological looping</a><a class="nav-h2" href="#3-training-the-sensing-vector-can-improve-on-astra-s-steering">3. Training the sensing vector</a><a class="nav-h2" href="#4-where-do-steering-vectors-come-from-and-where-to-sense">4. Data and sensing location</a><a class="nav-h2" href="#5-a-non-pathological-setting-shows-loop-reduction-with-similar-accuracy">5. Non-pathological setting</a><a class="nav-h2" href="#6-notes">6. Notes</a></div></nav>
+<article id="article"><h1>Astra’s improvement of Qwen’s math is not “native weight editing” but context-dependent activation steering with clever use of synthetic data</h1>
+<p>In a recently widely circulated blog post <a href="https://rikiyat.github.io/blog/weight-space-programming/"><em>Sparks of Weight-Space Programming</em></a>, the authors highlight how GPT-6 Astra “natively” edits another small language model without any training: it writes a short program that changes parts of MLP matrices to significantly improve the math performance of the model. The authors interpret this as Weight-Space Programming: "our neural network weights will soon be natively optimized by LLMs that deliberately reason about their weights.” The work has received much attention. For example, one of the author’s <a href="https://x.com/rikiyatakehi/status/2117313742891327994">tweet</a> has been viewed nearly 10 million times. This is indeed a remarkable algorithmic performance by Astra, however we provide an alternative interpretation on how it is achieved. While the authors and many commentators interpret this as an "native" weight edit, we show that Astra implemented an algorithm similar to activation steering methods already commonly known in the literature, using, furthermore, cleverly generated synthetic data. Viewed this way, we can also improve the method over Astra’s original edit.</p>
+<h2 id="tl-dr">TL;DR</h2>
 <ul>
-<li><strong><a
-href="https://rikiyat.github.io/blog/weight-space-programming/">Astra’s
-Qwen edit</a> is equivalent to activation steering:</strong> push the
-activation along a fixed direction learned from data, with a strength
-linearly dependent on the current activations.</li>
-<li><strong>Learning the “sensing vector”, which adaptively changes
-steering strength depending on the context, can further reduce
-looping.</strong> In the same setup as the original blog, our learned
-sensing vectors suppress exact repetition much more than Astra’s edit,
-which fixes the sensing direction to be the same as the steering
-direction.</li>
-<li><strong>Astra generated short synthetic trace pairs to build
-steering direction</strong>, we find this to steer better than
-directions built from actual traces generated by Qwen.</li>
+<li><strong><a href="https://rikiyat.github.io/blog/weight-space-programming/">Astra’s Qwen edit</a> is equivalent to activation steering:</strong> push the activation along a fixed direction constructed from data, with a strength linearly dependent on the current activations.</li>
+<li><strong>Training the "sensing vector", which adaptively changes steering strength depending on the context, can further reduce looping.</strong> In the same setup as the original blog, our trained sensing vectors suppress exact repetition much more than Astra’s edit, which fixes the sensing direction to be the same as the steering direction.</li>
+<li><strong>Astra generated short synthetic trace pairs to build steering direction</strong>, we find this to steer better than directions built from actual traces generated by Qwen.</li>
 </ul>
-<h2 id="from-a-native-weight-edit-to-activation-steering">1. From a
-“native weight edit” to activation steering</h2>
+<h2 id="1-from-a-native-weight-edit-to-activation-steering">1. From a “native weight edit" to activation steering</h2>
 <p>In the authors’ words:</p>
 <blockquote>
-<p>All of this is possible without allowing Astra to write training
-loops. It uses its reasoning to figure out what each part of a neural
-network computes, or should compute, and changes the weights
-accordingly. We call this Weight-Space Programming. Throughout the
-history of deep learning, we encoded our simplistic inductive biases
-into tiny symbolic optimizers like Adam or Muon. This is changing: our
-neural network weights will soon be natively optimized by LLMs that
-deliberately reason about their weights.</p>
+<p>All of this is possible without allowing Astra to write training loops. It uses its reasoning to figure out what each part of a neural network computes, or should compute, and changes the weights accordingly. We call this Weight-Space Programming. Throughout the history of deep learning, we encoded our simplistic inductive biases into tiny symbolic optimizers like Adam or Muon. This is changing: our neural network weights will soon be natively optimized by LLMs that deliberately reason about their weights.</p>
 </blockquote>
-<p>For the Qwen3.5-0.8B edit, we show below that it is a special case of
-a known form of context-dependent activation steering, and that in some
-settings this view lets us improve on it.</p>
-<p>There is already a discussion of how to describe this work, including
-critical takes <a
-href="https://honnibal.dev/blog/astra-read-write-misleading">Matthew
-Honnibal’s account of the tools and feedback</a>, <a
-href="https://seangoedecke.com/llms-are-not-superhuman-at-reading-and-writing-neural-network-weights/">Sean
-Goedecke’s commentary</a>, and <a
-href="https://www.lesswrong.com/posts/uvKSq6eWkud997ie7/">crabbix’s
-LessWrong post</a>. We provide a formulation of this algorithm, some
-experiments decoupling sensing from steering, and highlighting Astra’s
-clever use of synthetic data.</p>
-<h3 id="formulation-activation-steering">Formulation: activation
-steering</h3>
-<p>Let an MLP’s hidden activations be
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>,
-its output weight matrix be
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math>,
-and its contribution to the residual stream be
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mi>W</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">x=Wh</annotation></semantics></math>.
-Consider the steered activation vector</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mi>x</mi><mo>−</mo><mi>v</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
-x&#39; = x-v(s^\top x).
-</annotation></semantics></math></p>
+<p>For the Qwen3.5-0.8B edit, we show below that it is a special case of a known form of context-dependent activation steering, and that in some settings this view lets us improve on it.</p>
+<p>There is already a discussion of how to understand “native weight editing” as described in the original blog post.<a aria-label="Read note 1" class="note-ref" href="#margin-note-1" id="note-ref-1">1</a> We provide a formulation of this algorithm, some experiments decoupling sensing from steering, and highlighting Astra’s clever use of synthetic data.</p><aside aria-label="Note 1" class="margin-note" id="margin-note-1" role="note"><a aria-label="Back to note 1 reference" class="note-number" href="#note-ref-1">1</a>Related discussion: <a href="https://honnibal.dev/blog/astra-read-write-misleading">Matthew Honnibal’s account of the tools and feedback</a>, <a href="https://seangoedecke.com/llms-are-not-superhuman-at-reading-and-writing-neural-network-weights/">Sean Goedecke’s commentary</a>, <a href="https://www.lesswrong.com/posts/uvKSq6eWkud997ie7/">crabbix’s LessWrong post</a>.</aside>
+<h3 id="formulation-activation-steering">Formulation: activation steering</h3>
+<p>Take any block of a transformer, let the MLP’s hidden activations right before output/down-projection layer be <span class="math">\(h\)</span>, its output weight matrix be <span class="math">\(W\)</span>, the residual stream <span class="math">\(r\)</span>, and this MLP's contribution to the residual stream be <span class="math">\(x=Wh\)</span>. Steering is the process of adding a vector to <span class="math">\(x\)</span>, <span class="math">\(h\)</span>, or <span class="math">\(r\)</span> to elicit certain behaviors from the model. Consider the steered activation vector</p>
+<p><span class="math">\[
+x' = x-(s^\top x)v.
+\]</span></p>
 <p>There are two vectors here:</p>
 <ul>
-<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>,
-the <strong>steering direction</strong>, says where to push;</li>
-<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>,
-the <strong>sensing vector</strong>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>s</mi><mi>T</mi></msup><mi>x</mi></mrow><annotation encoding="application/x-tex">s^Tx</annotation></semantics></math>
-determines the strength of the push given an input/context.</li>
+<li><span class="math">\(v\)</span>, called the <strong>steering direction</strong>, says where to push;</li>
+<li><span class="math">\(s\)</span>, called the <strong>sensing vector</strong>, the inner product <span class="math">\(s^Tx\)</span> determines the steering strength given an input/context.</li>
 </ul>
-<p>Here the strength depends on the output of the MLP. Because the
-strength is linear, this intervention is the same as a weight edit to
-the MLP output weight matrix:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>W</mi><mo>′</mo></msup><mo>=</mo><mi>W</mi><mo>−</mo><mi>v</mi><msup><mi>s</mi><mi>⊤</mi></msup><mi>W</mi><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>W</mi><mo>′</mo></msup><mi>h</mi><mo>=</mo><mi>W</mi><mi>h</mi><mo>−</mo><mi>v</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>W</mi><mi>h</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mi>x</mi><mo>′</mo></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
-W&#39;=W-vs^\top W,
-\qquad W&#39;h=Wh-v(s^\top Wh) = x&#39;.
-</annotation></semantics></math></p>
-<p>In this framing, <strong>Astra’s weight edits on Qwen are simply
-picking
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s = \alpha v</annotation></semantics></math></strong>.
-In general, one is free to design both
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>;
-in this post we focus on learning
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>,
-which further reduces looping.</p>
-<p>We use <strong>activation steering</strong> as an umbrella label for
-this separation of direction and input-dependent strength. The
-terminology is based on <strong>Contextual Linear Activation Steering
-(CLAS), <a href="https://arxiv.org/html/2604.24693v2">Hsu et al.,
-2026</a></strong>, which explicitly learns a sensing vector.</p>
-<p><strong>Literature Attribution</strong>: The connection to weight
-edits was established in <strong><a
-href="https://arxiv.org/html/2406.11717v3">Arditi et al.,
-2024</a></strong> derive weight orthogonalization and prove its
-equivalence to directional ablation; Other relevant work include
-<strong><a href="https://arxiv.org/abs/2409.05907">Lee et al.,
-2025</a></strong>, <strong><a
-href="https://arxiv.org/html/2404.03592v3">Wu et al., 2024</a></strong>,
-and <strong><a href="https://arxiv.org/abs/2202.05262">Meng et al.,
-2022</a></strong>.</p>
-<h2 id="first-baselines">2. First, baselines</h2>
-<p>We reproduce the experiment in Qwen3.5-0.8B’s thinking mode under the
-blog setting, see <a href="#reproduction-details">reproduction
-details</a> and <a
-href="https://github.com/Zhi0467/qwen-loop-steering-experiments">code</a>.
-Our reproduction matches the blog’s numbers up to noise.</p>
-<p>Throughout this post, a <strong>loop</strong> means a 30-token
-sequence appearing at least 20 times, a trace is said to loop if it
-contains at least one loop, <strong>cap hit</strong> means generation
-reaching the token cap.</p>
-<p>Our evaluation uses 1,152 of the authors’ confirmation problems: 576
-GSM8K training problems and 576 MATH training problems.</p>
-<table>
+<figure><a aria-label="Open full-size figure" class="figure-link" href="figures/mlp_equivalence.svg"><img alt="Equivalent MLP computations: activation steering above and weight editing below" src="figures/mlp_equivalence.svg"/></a><figcaption>The same correction applied to the MLP output (top) or folded into its output matrix (bottom).</figcaption></figure>
+
+<p>Here the strength depends on the output of the MLP. Because the strength is linear, this intervention is the same as a weight edit to the MLP output weight matrix assuming no bias:</p>
+<p><span class="math">\[
+W'=W-vs^\top W,
+\qquad W'h=Wh-v(s^\top Wh) = x'.
+\]</span></p>
+<p>In this framing, <strong>Astra's edit on Qwen picks <span class="math">\(s = \alpha v\)</span></strong>. In general, one is free to design both <span class="math">\(s\)</span> and <span class="math">\(v\)</span>; in this post we focus on training <span class="math">\(s\)</span>, which further reduces looping.</p>
+<p>We call this formulation <strong>activation steering</strong>, not to be confused with another form of steering which does <span class="math">\(x’ = x - \gamma v\)</span>, where <span class="math">\(\gamma\)</span> is a fixed number and context independent. The terminology is based on <strong>Contextual Linear Activation Steering (CLAS), <a href="https://arxiv.org/html/2604.24693v2">Hsu et al., 2026</a></strong>, which explicitly trains a sensing vector.<a aria-label="Read note 2" class="note-ref" href="#margin-note-2" id="note-ref-2">2</a></p><aside aria-label="Note 2" class="margin-note" id="margin-note-2" role="note"><a aria-label="Back to note 2 reference" class="note-number" href="#note-ref-2">2</a><strong>Literature Attribution</strong>: The connection to weight edits was established in <strong><a href="https://arxiv.org/html/2406.11717v3">Arditi et al., 2024</a></strong> derive weight orthogonalization and prove its equivalence to directional ablation; Other relevant work include <strong><a href="https://arxiv.org/abs/2409.05907">Lee et al., 2025</a></strong>, <strong><a href="https://arxiv.org/html/2404.03592v3">Wu et al., 2024</a></strong>, and <strong><a href="https://arxiv.org/abs/2202.05262">Meng et al., 2022</a></strong>.</aside>
+
+<h2 id="2-qwen-s-inability-for-math-in-the-original-blog-is-pathological">2. Qwen's inability for math in the original blog is pathological</h2>
+<p>We reproduce the experiment in Qwen3.5-0.8B’s thinking mode under the blog setting. Here “Astra’s steering” means <span class="math">\(s=4v\)</span>, with <span class="math">\(v\)</span> built from Astra’s four synthetic pairs.<a aria-label="Read note 3" class="note-ref" href="#margin-note-3" id="note-ref-3">3</a></p><aside aria-label="Note 3" class="margin-note" id="margin-note-3" role="note"><a aria-label="Back to note 3 reference" class="note-number" href="#note-ref-3">3</a>For the specific setup, see <a href="#reproduction-details">reproduction details</a>.</aside>
+<p>Throughout this post, a <strong>loop</strong> means a 30-token sequence appearing at least 20 times, a trace is said to loop if it contains at least one loop, <strong>cap hit</strong> means generation reaching a preset token cap.</p>
+<p>Our evaluation uses the same problems as the original blog: 576 GSM8K training problems and 576 MATH training problems.</p>
+<div aria-label="Scrollable data table" class="table-scroll" role="region" tabindex="0"><table>
 <thead>
 <tr>
 <th>Reference</th>
-<th style="text-align: right;">Accuracy</th>
-<th style="text-align: right;">Loop</th>
-<th style="text-align: right;">Cap hit</th>
+<th style="text-align:right">Accuracy</th>
+<th style="text-align:right">Loop</th>
+<th style="text-align:right">Cap hit</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Unedited, thinking on</td>
-<td style="text-align: right;">12.3%</td>
-<td style="text-align: right;">87.0%</td>
-<td style="text-align: right;">88.5%</td>
+<td style="text-align:right">12.3%</td>
+<td style="text-align:right">87.0%</td>
+<td style="text-align:right">88.5%</td>
 </tr>
 <tr>
 <td>Unedited, thinking off</td>
-<td style="text-align: right;">53.3%</td>
-<td style="text-align: right;">4.5%</td>
-<td style="text-align: right;">5.3%</td>
+<td style="text-align:right">53.3%</td>
+<td style="text-align:right">4.5%</td>
+<td style="text-align:right">5.3%</td>
 </tr>
 <tr>
-<td>Astra’s submitted top-64 edit</td>
-<td style="text-align: right;">60.2%</td>
-<td style="text-align: right;">29.6%</td>
-<td style="text-align: right;">18.2%</td>
+<td>Astra’s steering</td>
+<td style="text-align:right">57.7%</td>
+<td style="text-align:right">29.5%</td>
+<td style="text-align:right">23.7%</td>
 </tr>
 </tbody>
-</table>
-<p>We note the edit as mainly fixing a pathological generation behavior,
-rather than installing new mathematical capability.</p>
-<h2 id="learn-the-sensing-vector-can-improve-on-astras-edit">3. Learn
-the sensing vector can improve on Astra’s edit</h2>
-<p>The canonical edit from the original blog sets
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s=\alpha v</annotation></semantics></math>.
-It uses the same direction to recognize the sense the context and to
-push/steer it. We keep
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
-fixed and learn
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>,
-initialized at zeros rather than
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>,
-on a dataset that can consist of non-loop and/or loop traces. To clarify
-terminology, non-loop = productive (as in their blog) = positive, and
-conversely, loop = negative. We compare three loss functions for
-learning
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>:</p>
-<p>Let
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>s</mi></msub><annotation encoding="application/x-tex">p_s</annotation></semantics></math>
-be the steered model and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mn>0</mn></msub><annotation encoding="application/x-tex">p_0</annotation></semantics></math>
-the unedited model. With teacher-forced prefixes, define</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><msub><mi>L</mi><mrow><mi mathvariant="normal">N</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">P</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><mi>s</mi><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mi>−</mi><msub><mi>𝔼</mi><mo>+</mo></msub><mi>log</mi><mo>&#8289;</mo><msub><mi>p</mi><mi>s</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><msub><mi>L</mi><mrow><mi mathvariant="normal">U</mi><mi mathvariant="normal">L</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><mi>s</mi><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mi>−</mi><msub><mi>𝔼</mi><mo>−</mo></msub><mi>log</mi><mo>&#8289;</mo><mo minsize="1.2" maxsize="1.2" stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>s</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>y</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo minsize="1.2" maxsize="1.2" stretchy="false" form="postfix">)</mo><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mi>K</mi><mo stretchy="false" form="prefix">(</mo><mi>s</mi><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><msub><mi>𝔼</mi><mo>+</mo></msub><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>p</mi><mn>0</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>⋅</mi><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mspace width="0.167em"></mspace><mo stretchy="false" form="postfix">∥</mo><mspace width="0.167em"></mspace><msub><mi>p</mi><mi>s</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>⋅</mi><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">
+</table></div>
+<p>We note the steering as mainly fixing a pathological generation behavior, rather than eliciting new mathematical capability.</p>
+<h2 id="3-training-the-sensing-vector-can-improve-on-astra-s-steering">3. Training the sensing vector can improve on Astra’s steering</h2>
+<p>The canonical steering method from the original blog sets <span class="math">\(s=\alpha v\)</span>. It uses the same direction to recognize the sense the context and to push/steer it. We keep <span class="math">\(v\)</span> fixed and train <span class="math">\(s\)</span>, initialized at <span class="math">\(s = 0\)</span> rather than <span class="math">\(v\)</span>, on a dataset that can consist of traces with and without loops. To clarify terminology, non-loop = productive (as in their blog) = positive, and conversely, loop = negative. We compare three loss functions for training <span class="math">\(s\)</span>.</p>
+<p>Let <span class="math">\(p_s\)</span> be the steered model and <span class="math">\(p_0\)</span> the original model. Define next token prediction loss, unlikelihood loss, and KL divergence:</p>
+<p><span class="math">\[
 \begin{aligned}
 L_{\mathrm{NTP}}(s)&amp;=-\mathbb{E}_{+}\log p_s(y_t\mid y_{&lt;t}),\\
 L_{\mathrm{UL}}(s)&amp;=-\mathbb{E}_{-}\log\bigl(1-p_s(y_t\mid y_{&lt;t})\bigr),\\
-K(s)&amp;=\mathbb{E}_{+}D_{\mathrm{KL}}\!\left(p_0(\cdot\mid y_{&lt;t})\,\|\,p_s(\cdot\mid y_{&lt;t})\right).
+L_{KL}(s)&amp;=\mathbb{E}_{+}D_{\mathrm{KL}}\!\left(p_0(\cdot\mid y_{&lt;t})\,\|\,p_s(\cdot\mid y_{&lt;t})\right).
 \end{aligned}
-</annotation></semantics></math></p>
-<p>Here
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝔼</mi><mo>+</mo></msub><annotation encoding="application/x-tex">\mathbb{E}_{+}</annotation></semantics></math>
-averages over productive assistant tokens;
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝔼</mi><mo>−</mo></msub><annotation encoding="application/x-tex">\mathbb{E}_{-}</annotation></semantics></math>
-averages over repetitive-text tokens from the second copy of the
-repeated sentence onward. We average tokens within each trace, then
-average across pairs. Only
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
-is optimized, model weights are frozen. The KL regularization
-coefficient is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>0.1</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\beta\in\{0,0.1\}</annotation></semantics></math>.</p>
-<table>
-<colgroup>
-<col style="width: 14%" />
-<col style="width: 54%" />
-<col style="width: 31%" />
-</colgroup>
+\]</span></p>
+<p>Here <span class="math">\(\mathbb{E}_{+}\)</span> averages over positive tokens in the dataset; <span class="math">\(\mathbb{E}_{-}\)</span> averages over repetitive tokens from the second copy of the repeated chunk onward. We average tokens within each trace, then average across pairs. Only <span class="math">\(s\)</span> is optimized, model weights are frozen. The KL regularization coefficient is <span class="math">\(\beta\in\{0,0.1\}\)</span>.</p>
+<div aria-label="Scrollable data table" class="table-scroll" role="region" tabindex="0"><table>
 <thead>
 <tr>
 <th>Label we use</th>
@@ -400,431 +136,83 @@ coefficient is
 <tr>
 <td><strong>clas</strong></td>
 <td>Increase next-token likelihood on positive traces</td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mrow><mi mathvariant="normal">N</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">P</mi></mrow></msub><mo>+</mo><mi>β</mi><mi>K</mi></mrow><annotation encoding="application/x-tex">L_{\mathrm{NTP}}+\beta K</annotation></semantics></math></td>
+<td><span class="math">\(L_{\mathrm{NTP}}+\beta L_{KL}\)</span></td>
 </tr>
 <tr>
 <td><strong>ul</strong></td>
 <td>Decrease the probability of repeated tokens in negative traces</td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mrow><mi mathvariant="normal">U</mi><mi mathvariant="normal">L</mi></mrow></msub><mo>+</mo><mi>β</mi><mi>K</mi></mrow><annotation encoding="application/x-tex">L_{\mathrm{UL}}+\beta K</annotation></semantics></math></td>
+<td><span class="math">\(L_{\mathrm{UL}}+\beta L_{KL}\)</span></td>
 </tr>
 <tr>
 <td><strong>contrast</strong></td>
-<td>Combine positive next-token likelihood with repetitive-token
-unlikelihood</td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mrow><mi mathvariant="normal">N</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">P</mi></mrow></msub><mo>+</mo><msub><mi>L</mi><mrow><mi mathvariant="normal">U</mi><mi mathvariant="normal">L</mi></mrow></msub><mo>+</mo><mi>β</mi><mi>K</mi></mrow><annotation encoding="application/x-tex">L_{\mathrm{NTP}}+L_{\mathrm{UL}}+\beta K</annotation></semantics></math></td>
+<td>Combine positive next-token likelihood with repetitive-token unlikelihood</td>
+<td><span class="math">\(L_{\mathrm{NTP}}+L_{\mathrm{UL}}+\beta L_{KL}\)</span></td>
 </tr>
 <tr>
-<td><strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s = \alpha v</annotation></semantics></math></strong></td>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
-is sweeped</td>
+<td><strong><span class="math">\(s = \alpha v\)</span></strong></td>
+<td><span class="math">\(\alpha\)</span> is sweeped</td>
 <td>-</td>
 </tr>
 </tbody>
-</table>
-<p>We use either the four original pairs (copied from the original
-blog’s repo) or those four plus 28 additional hand-written pairs. The
-same dataset is used to construct
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
-and train
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>.
-At each edited layer,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
-is the difference between the mean residual stream over the last 36
-tokens of the repetitive text and that of the productive text, averaged
-over pairs and normalized to unit length. For
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s = \alpha v</annotation></semantics></math>
-(Astra’s method) we sweep
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>.
-Sensing vector training uses Adam with early stopping. Development data
-select hyper-parameters and early stop step.</p>
-<p><strong>The goal is to reduce the fraction of traces that loop, while
-accuracy, thinking closure, and cap hits are tracked as side
-effects.</strong></p>
-<h3
-id="much-less-looping-learning-s-with-negative-examples-matters">Much
-less looping; learning s with negative examples matters</h3>
-<p align="center">
-<img src="figures/exp1_astra_gsm8k_delta_grid.svg" alt="GSM8K: paired metric differences for the Astra regime" style="max-width: 100%; height: auto;">
-</p>
-<p><em>Figure 1a. GSM8K, 576 problems. Left: differences from unedited
-thinking-on. Right: differences from scaled-direction sensing at the
-same pair count. Stars mark 95% paired bootstrap intervals excluding
-zero.</em></p>
-<p align="center">
-<img src="figures/exp1_astra_math_delta_grid.svg" alt="MATH: paired metric differences for the Astra regime" style="max-width: 100%; height: auto;">
-</p>
-<p><em>Figure 1b. MATH, 576 problems, with the same
-comparisons.</em></p>
-<p>The looping difference is quite large. The loop flag falls from
-<strong>27.2%</strong> with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s = \alpha v</annotation></semantics></math>
-to <strong>6.5%</strong> with unlikelihood and <strong>6.8%</strong>
-with contrast, using 32 pairs. Training
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
-can do the intended job of fixing this pathological behavior better. At
-4 pairs, the loop flag again falls, from <strong>29.5%</strong> to
-roughly <strong>11%</strong>.</p>
-<p>At 32 pairs,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s = \alpha v</annotation></semantics></math>
-reaches <strong>60.7% accuracy</strong>. Unlikelihood-trained sensing
-reaches <strong>61.6%</strong> and contrast-trained
-<strong>61.5%</strong>; both differences have 95% intervals that contain
-zero, meaning accuracies from these steering methods cannot be
-statistically separated.Positive-trace-only sensing vector training
-(clas arm) is markedly worse in this setting. It does reduce repetition
-relative to the unedited model, but this shows how we train
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
-matters a lot.</p>
-<h2 id="the-design-space-of-activation-steering-what-we-learned">4. The
-design space of activation steering: what we learned</h2>
-<h3 id="short-synthetic-pairs-are-especially-effective">Short synthetic
-pairs are especially effective</h3>
-<p>We compare two ways of constructing the steering vector from
-difference of means. Setup: <strong>Qwen3-1.7B, greedy decoding,
-MLP-output edits at blocks 15–18</strong>, with the test prompts and the
-selection and stopping rules of Section 5. We compare directions from
-model-generated loop/non-loop responses against the 32 short synthetic
-pairs used in Section 5. The natural traces are the unedited model’s own
-responses, 32 looping and 32 non-looping across both benchmarks, and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
-is built from the mean of differences of 36-token windows, just like the
-short synthetic case. We test both
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s=\alpha v</annotation></semantics></math>
-and a learned unlikelihood
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
-(<a href="#reproduction-details">details</a>).</p>
-<figure>
-<img src="figures/qwen3_natural_vs_short.svg"
-alt="Loop-rate and accuracy changes with short synthetic pairs and natural traces as steering data" />
-<figcaption aria-hidden="true">Loop-rate and accuracy changes with short
-synthetic pairs and natural traces as steering data</figcaption>
-</figure>
-<p><strong>Loop rate.</strong> Natural traces suppress loops much less,
-and every short-minus-natural difference has a 95% interval that
-excludes zero.</p>
-<ul>
-<li>Over all 1,000 test prompts, natural
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>v</mi></mrow><annotation encoding="application/x-tex">s = v</annotation></semantics></math>
-lowers the loop rate by 4.2 points [−6.9, −1.5]; short
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>2</mn><mi>v</mi></mrow><annotation encoding="application/x-tex">s = 2v</annotation></semantics></math>
-lowers it by 20.8 [−23.3, −18.3].</li>
-<li>With learned
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>,
-natural traces lower it by 11.0 [−13.8, −8.2]; short pairs by 22.9
-[−25.3, −20.6].</li>
-<li>The gap is largest on LiveCodeBench, even though the natural looping
-examples are mostly code.</li>
-<li>The choice of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
-doesn’t explain it: the strongest natural setting,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>4</mn><mi>v</mi></mrow><annotation encoding="application/x-tex">s = 4v</annotation></semantics></math>,
-still looped on 9.9% of development prompts, against 1.6–3.6% for short
-pairs with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>≥</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\alpha \ge 2</annotation></semantics></math>
-or a learned
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>.</li>
-</ul>
-<p><strong>Accuracy.</strong> The natural-minus-short differences have
-95% intervals that contain zero: 0.0 [−2.3, +2.3] for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s = \alpha v</annotation></semantics></math>
-and +1.4 [−0.7, +3.5] for learned
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>.</p>
-<p>Overall, short synthetic pairs give much stronger loop reduction
-without compromising accuracy. Our tentative explanation: long responses
-differ in content, position and reasoning path as well as looping,
-adding unrelated variation to the activation contrast. Short synthetic
-pairs may isolate repetition more cleanly.</p>
-<h3 id="where-to-sense-matters">Where to sense matters</h3>
-<p>There are three sites worth distinguishing: hidden neurons
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>,
-the MLP output
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mi>W</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">x=Wh</annotation></semantics></math>,
-and the accumulated residual stream
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>.Even
-when two interventions use the same
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>,</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mi>x</mi><mo>−</mo><mi>v</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mspace width="2.0em"></mspace><mtext mathvariant="normal">and</mtext><mspace width="2.0em"></mspace><msup><mi>r</mi><mo>′</mo></msup><mo>=</mo><mi>r</mi><mo>−</mo><mi>v</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>r</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
-x&#39;=x-v(s^\top x)
-\qquad\text{and}\qquad
-r&#39;=r-v(s^\top r)
-</annotation></semantics></math></p>
-<p>sense different quantities. The second sensing sees the accumulated
-stream: the embedding, every earlier attention and MLP output, and the
-corrections made by earlier edits.</p>
-<p>This changes what the same
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
-does. Take
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s=\alpha v</annotation></semantics></math>
-with unit
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>.
-At the output, each edit multiplies the sensed coordinate of its own
-MLP’s output by
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">1-\alpha</annotation></semantics></math>,
-once, and leaves the rest of the stream alone. On the residual stream,
-each edited layer acts on everything already in the stream, so content
-from before the first edited layer is multiplied by
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">1-\alpha</annotation></semantics></math>
-at every edited layer: by
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">(1-\alpha)^2</annotation></semantics></math>
-over two layers. At
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha=1</annotation></semantics></math>
-this is directional ablation of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
-(<a href="https://arxiv.org/html/2406.11717v3">Arditi et al., 2024</a>).
-For
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>&lt;</mo><mi>α</mi><mo>&lt;</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">1&lt;\alpha&lt;2</annotation></semantics></math>
-the coordinate flips sign and shrinks, and for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>&gt;</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\alpha&gt;2</annotation></semantics></math>
-it flips sign and grows.</p>
-<p>We moved these two N=32 edits from the MLP output to the residual
-stream in the Astra setup, keeping
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
-unchanged. We also recalibrated
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
-for the residual stream with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0.2</mn><mo>,</mo><mn>0.5</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>1.5</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\alpha\in\{0.2,0.5,1,1.5\}</annotation></semantics></math>,
-chosen on the development problems like every other setting. Development
-accuracy was 39.8%, 66.0%, 66.0% and 63.7%; of the two tied settings,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha=1</annotation></semantics></math>
-loops less (3.5% against 12.5%) and was chosen. On the 1,152 test
-problems:</p>
-<table>
-<colgroup>
-<col style="width: 42%" />
-<col style="width: 24%" />
-<col style="width: 13%" />
-<col style="width: 8%" />
-<col style="width: 11%" />
-</colgroup>
-<thead>
-<tr>
-<th>Edit</th>
-<th>Where to sense</th>
-<th style="text-align: right;">Accuracy</th>
-<th style="text-align: right;">Loop</th>
-<th style="text-align: right;">Cap hit</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>4</mn><mi>v</mi></mrow><annotation encoding="application/x-tex">s=4v</annotation></semantics></math></td>
-<td>MLP output</td>
-<td style="text-align: right;">60.7%</td>
-<td style="text-align: right;">27.2%</td>
-<td style="text-align: right;">18.3%</td>
-</tr>
-<tr>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>4</mn><mi>v</mi></mrow><annotation encoding="application/x-tex">s=4v</annotation></semantics></math></td>
-<td>Residual stream</td>
-<td style="text-align: right;">2.9%</td>
-<td style="text-align: right;">96.4%</td>
-<td style="text-align: right;">77.6%</td>
-</tr>
-<tr>
-<td><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>v</mi></mrow><annotation encoding="application/x-tex">s=v</annotation></semantics></math>
-(recalibrated)</td>
-<td>Residual stream</td>
-<td style="text-align: right;">62.7%</td>
-<td style="text-align: right;">3.9%</td>
-<td style="text-align: right;">19.9%</td>
-</tr>
-<tr>
-<td>Learned unlikelihood
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math></td>
-<td>MLP output</td>
-<td style="text-align: right;">61.6%</td>
-<td style="text-align: right;">6.5%</td>
-<td style="text-align: right;">22.3%</td>
-</tr>
-<tr>
-<td>Learned unlikelihood
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math></td>
-<td>Residual stream</td>
-<td style="text-align: right;">61.6%</td>
-<td style="text-align: right;">4.6%</td>
-<td style="text-align: right;">22.5%</td>
-</tr>
-</tbody>
-</table>
-<p>The learned sensing vector, trained to sense the MLP output,
-transfers to the residual stream with a similar benefit. The scaled
-direction cannot transfer its learned
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>.
-Recalibrated to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha=1</annotation></semantics></math>,
-it gives a similar benefit to the output sensing edits: about the same
-accuracy, with loop rates as low as the learned sensing vector’s.</p>
-<h3 id="when-to-early-stop-sensing-vector-learning">When to early stop
-sensing vector learning?</h3>
-<p>Training uses four or 32 short synthetic productive/repetitive pairs,
-with the next-token, unlikelihood or combined objective above. Adam
-starts from
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">s=0</annotation></semantics></math>
-and takes up to 24 updates. As in ordinary ML training, we need a
-development criterion to choose when to stop, but what should it
-measure? We can cheaply score fixed development traces by
-<strong>teacher forcing</strong> (feeding the saved tokens), or generate
-fresh rollouts on development prompts and measure accuracy, repetition
-and completion directly at each optimization step. The former is a
-proxy; the latter tests the behavior we actually want despite a much
-more expensive validation.</p>
-<p>We first used teacher-forced loss on six separate synthetic pairs
-supplied by Astra as the dev set. This selected update 24. On
-Qwen3-1.7B, however, the learned unlikelihood and contrast edits at that
-update frequently stopped emitting <code>&lt;/think&gt;</code>. This
-suggests the dev set was not well chosen. We then picked the development
-set to be the unedited model’s saved traces. That did not solve the
-problem: unlikelihood and contrast still favored the last update, while
-productive-text next-token loss favored update zero, since no edit gives
-lowest NTP on base-model-generated traces.</p>
-<p>Actual rollouts exposed the mismatch between proxy loss and behavior.
-We then used a stopping rule requiring preservation of thinking
-closure:</p>
+</table></div>
+<p>We use either the four original pairs (copied from the original blog’s repo) or those four plus 28 additional hand-written pairs. The same dataset is used to construct <span class="math">\(v\)</span> and train <span class="math">\(s\)</span>.</p>
+<p>For example, one of Astra’s four pairs shares this prompt and opening:</p>
 <blockquote>
-<p>Choose the update with the lowest unlikelihood loss on repeated
-tokens in the saved development traces. Require that
-<code>&lt;/think&gt;</code> remains the most likely next token at least
-as often as the unedited model, at the positions where the unedited
-model originally ended its thinking.</p>
+<p><strong>Prompt:</strong> A machine makes 45 necklaces, and another makes 2.4 times as many. Find the total.</p>
+<p><strong>Shared opening:</strong> The second machine makes 45*2.4=108 necklaces. Add the first machine's 45 to obtain 153 necklaces.</p>
 </blockquote>
-<p>On Qwen3 it selects earlier updates: 12–14 for the selected
-unlikelihood arms and 10–12 for contrast. They are what we used for the
-results in the next section.</p>
-<h2
-id="a-non-pathological-setting-shows-loop-reduction-with-similar-accuracy">5.
-A non-pathological setting shows loop reduction with similar
-accuracy</h2>
-<p>We also test Qwen3-1.7B under greedy decoding, editing blocks 15–18,
-on 500 MATH level-5 and 500 LiveCodeBench prompts (<a
-href="#reproduction-details">reproduction details</a>). Unlike the Astra
-setting, thinking here is worth a great deal: turning it off costs 26.4
-accuracy points. Here are some observations: - either
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s = \alpha v</annotation></semantics></math>
-or learned sensing vector can reduce loop more than thinking off (except
-for N = 32 clas). - learned sensing vectors with negative examples
-reduce more loops than
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s = \alpha v</annotation></semantics></math>.
-- learned sensing vectors with negative examples can minimally hurt
-accuracy on non-loop examples. - overall, this modestly shows activation
-steering as a way to reduce loop while retaining accuracy in a
-<strong>non-pathological setting.</strong></p>
-<p>The pairs for learning
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
-and building
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
-are math-style text, yet the edit also helps suppress loops on code,
-loop suppression seems to transfer with these directions. Our
-development-selected settings have not found a learned sensing vector
-accuracy advantage here, but it still tends to reduce looping more than
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s = \alpha v</annotation></semantics></math>
-which is the intended effect.</p>
-<figure>
-<img src="figures/exp1_qwen3_math_delta_grid.svg"
-alt="Qwen3 MATH: paired differences" />
-<figcaption aria-hidden="true">Qwen3 MATH: paired
-differences</figcaption>
-</figure>
-<figure>
-<img src="figures/exp1_qwen3_lcb_delta_grid.svg"
-alt="Qwen3 LiveCodeBench: paired differences" />
-<figcaption aria-hidden="true">Qwen3 LiveCodeBench: paired
-differences</figcaption>
-</figure>
-<h2 id="notes">6. Notes</h2>
-<h4 id="using-short-synthetic-pairs-is-a-clever-choice">Using short
-synthetic pairs is a clever choice</h4>
-<p>Astra’s short contrast pairs and simple
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">s = \alpha v</annotation></semantics></math>
-are productive choices. <strong>Which dataset (synthetic versus long
-on-policy rollouts) to construct v and s, where to sense (output versus
-residual), and what behavior the training objective preserves</strong>
-are all consequential design choices. This also suggests a constructive
-role for agents. An agent can search this design space, such as trying
-out different sensing vector training loss, test where to sense, inspect
-failures, and pick different train/dev sets.</p>
-<h4 id="decoding-settings-matter">Decoding settings matter</h4>
-<p>On 128 development problems, switching to greedy decoding without
-retuning sharply reduced accuracy: Astra’s edit fell from 60.5% to
-15.6%, and learned edits also lost most of their gains. Removing only
-the presence penalty had a smaller effect.
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
-that work under one temperature may need retuning under another.</p>
-<h4 id="another-axis-how-to-construct-the-direction">Another axis: how
-to construct the direction</h4>
-<p>We focused on
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
-in this post, but
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
-is another choice to learn from data. A natural next comparison is
-constructing
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
-with different algorithms: mean differences of residual, logistic
-regression, recursive feature machines and PCA, keeping sensing vector
-fixed.</p>
-<h4
-id="learning-the-sensing-vector-has-dataset-specific-side-effects">Learning
-the sensing vector has dataset-specific side effects</h4>
-<p>Pooled across datasets, the N=32 learned arms hit the cap more often
-than scaled-direction sensing: <strong>22.3–23.0% versus 18.3%</strong>.
-They also close thinking less often. But the pooled average hides where
-this happens:</p>
-<table>
-<colgroup>
-<col style="width: 52%" />
-<col style="width: 24%" />
-<col style="width: 23%" />
-</colgroup>
-<thead>
-<tr>
-<th>N=32 change versus scaled-direction sensing</th>
-<th style="text-align: right;">GSM8K: UL / contrast</th>
-<th style="text-align: right;">MATH: UL / contrast</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Accuracy</td>
-<td style="text-align: right;">+1.8 / +3.2 pp</td>
-<td style="text-align: right;">+0.1 / −1.6 pp</td>
-</tr>
-<tr>
-<td>Exact-loop flag</td>
-<td style="text-align: right;">−11.5 / −11.3 pp</td>
-<td style="text-align: right;">−29.9 / −29.5 pp</td>
-</tr>
-<tr>
-<td>Cap hits</td>
-<td style="text-align: right;">−0.6 / −1.0 pp</td>
-<td style="text-align: right;">+8.6 / +10.4 pp</td>
-</tr>
-<tr>
-<td>Thinking closure</td>
-<td style="text-align: right;">+2.1 / +1.6 pp</td>
-<td style="text-align: right;">−16.9 / −17.2 pp</td>
-</tr>
-</tbody>
-</table>
-<p>On GSM8K, the completion metrics move in the favorable direction
-numerically. On MATH, exact repetition falls dramatically, but more
-answers exhaust the budget and fewer close thinking. Of the capped
-unlikelihood responses, 78% do not loop. Suppressing exact repetition
-has led to the steered model paraphrasing while hitting generation cap
-in some cases. Can we steer multiple behaviors at once?</p>
-<h4 id="reproduction-details">Reproduction details</h4>
-<p>You can find code at this <a
-href="https://github.com/Zhi0467/qwen-loop-steering-experiments">repo</a>.</p>
-<table>
-<colgroup>
-<col style="width: 15%" />
-<col style="width: 39%" />
-<col style="width: 45%" />
-</colgroup>
+<p>The two continuations are:</p>
+<blockquote>
+<p><strong>Positive:</strong> Multiplication gives the second quantity, while addition combines the two machines. A check is 45*3.4=153.</p>
+<p><strong>Loop:</strong> Is 108 the total? No, 45+108=153. Is 108 the total? No, 45+108=153. Is 108 the total? No, 45+108=153.</p>
+</blockquote>
+<p>At each steered layer, <span class="math">\(v\)</span> is the difference between the mean residual stream over the last 36 tokens of the repetitive text and that of the productive text, averaged over pairs and normalized to unit length. For <span class="math">\(s = \alpha v\)</span> (Astra's method) we sweep <span class="math">\(\alpha\)</span>. Sensing vector training uses Adam with early stopping. Development data select hyper-parameters and early stop step.</p>
+<p id="the-goal-is-to-reduce-the-fraction-of-traces-that-loop-while-accuracy-thinking-closure-and-cap-hits-are-tracked-as-side-effects"><strong>The goal is to reduce the fraction of traces that loop, while accuracy, thinking closure, and cap hits are tracked as side effects.</strong></p>
+<h3 id="result-less-looping-with-trained-sensing-vector">Result: less looping with trained sensing vector</h3>
+<figure><a aria-label="Open full-size figure" class="figure-link" href="figures/exp1_astra_gsm8k_delta_grid.svg"><img alt="GSM8K: paired metric differences for the Astra regime" src="figures/exp1_astra_gsm8k_delta_grid.svg" style="max-width: 100%; height: auto;"/></a><figcaption>Figure 1a. Qwen3.5-0.8B on GSM8K, 576 test problems. Cells show percentage-point differences: left, versus unedited thinking-on; right, versus <span class="math">\(s=\alpha v\)</span> at the same pair count <span class="math">\(N\)</span>. Green indicates improvement; red, deterioration. Stars mark 95% paired bootstrap intervals excluding zero. Colors saturate at ±50 points (left) and ±10 (right).</figcaption></figure>
+
+<figure><a aria-label="Open full-size figure" class="figure-link" href="figures/exp1_astra_math_delta_grid.svg"><img alt="MATH: paired metric differences for the Astra regime" src="figures/exp1_astra_math_delta_grid.svg" style="max-width: 100%; height: auto;"/></a><figcaption>Figure 1b. Qwen3.5-0.8B on MATH, 576 test problems. Comparisons, colors and stars follow Figure 1a.</figcaption></figure>
+
+<p>Figures 1a and 1b show each dataset separately. Figure 1c pools GSM8K and MATH, 1,152 test problems in total.</p>
+<figure><a aria-label="Open full-size figure" class="figure-link" href="figures/astra_pooled_summary.svg"><img alt="Pooled loop fraction and accuracy for four-pair and 32-pair steering" src="figures/astra_pooled_summary.svg"/></a><figcaption>Figure 1c. Pooled GSM8K and MATH results, including the original thinking-on model (gray). Lower loop fraction is better; higher accuracy is better. Bars show the observed percentages. Astra’s steering uses four pairs and <span class="math">\(s=4v\)</span>; the 32-pair <span class="math">\(s=\alpha v\)</span> arm also uses <span class="math">\(s=4v\)</span>.</figcaption></figure>
+
+<p>With 32 pairs, training <span class="math">\(s\)</span> reduces the loop fraction from <strong>27.2%</strong> to <strong>6.5–6.8%</strong>. At 4 pairs, it falls from <strong>29.5%</strong> to roughly <strong>11%</strong>. Training <span class="math">\(s\)</span> can do the intended job of fixing this pathological behavior better. Positive-only training (clas) is markedly worse: negative examples matter.</p>
+<h2 id="4-where-do-steering-vectors-come-from-and-where-to-sense">4. Where do steering vectors come from and where to sense?</h2>
+<h3 id="short-synthetic-pairs-are-especially-effective-for-steering-direction">Short synthetic pairs are especially effective for steering direction</h3>
+<p>We compare two ways of constructing the steering vector, one by taking averaged difference of residuals on the synthetic pairs, the other on much longer natural rollout pairs. Setup: <strong>Qwen3-1.7B, greedy decoding, MLP-output steering at blocks 15–18</strong>, with the test prompts and the selection and stopping rules of Section 5. We compare directions from model-generated loop/non-loop responses against the 32 short synthetic pairs used in Section 5. The natural traces are the unedited model's own responses, 32 looping and 32 non-looping across both benchmarks, and <span class="math">\(v\)</span> is built from the mean of differences of 36-token windows, just like the short synthetic case. We test both <span class="math">\(s=\alpha v\)</span> and a trained unlikelihood <span class="math">\(s\)</span>.<a aria-label="Read note 4" class="note-ref" href="#margin-note-4" id="note-ref-4">4</a></p><aside aria-label="Note 4" class="margin-note" id="margin-note-4" role="note"><a aria-label="Back to note 4 reference" class="note-number" href="#note-ref-4">4</a>For the specific setup, see <a href="#reproduction-details">reproduction details</a>.</aside>
+<figure><a aria-label="Open full-size figure" class="figure-link" href="figures/qwen3_natural_vs_short.svg"><img alt="Loop-rate and accuracy changes with short synthetic pairs and natural traces as steering data" src="figures/qwen3_natural_vs_short.svg"/></a><figcaption>Qwen3-1.7B, 500 prompts per dataset. Changes from the original model with 95% intervals. Slate circles: short synthetic pairs; rose diamonds: natural traces.</figcaption></figure>
+
+<p>Overall, short synthetic pairs give much stronger loop reduction without compromising accuracy. Our tentative explanation: long responses differ in content, position and reasoning path as well as looping, adding unrelated variation to the activation contrast. Short synthetic pairs may isolate repetition more cleanly.</p>
+<h3 id="where-to-sense-mlp-output-or-residual-stream">Where to sense: MLP output or residual stream?</h3>
+<p>There are three sites worth distinguishing: MLP hidden activations before output <span class="math">\(h\)</span>, the MLP output <span class="math">\(x=Wh\)</span>, and the residual stream <span class="math">\(r\)</span>.Even when two interventions use the same <span class="math">\(v\)</span> and <span class="math">\(s\)</span>,</p>
+<p><span class="math">\[
+x'=x-v(s^\top x)
+\qquad\text{and}\qquad
+r'=r-v(s^\top r)
+\]</span></p>
+<p>sense different quantities. The second sensing sees the accumulated stream: the embedding, every earlier attention and MLP output, and the corrections made by earlier steering interventions.</p>
+<p>This changes what the same <span class="math">\(s\)</span> does. Take <span class="math">\(s=\alpha v\)</span> with unit <span class="math">\(v\)</span>. At the output, each steering intervention multiplies the sensed coordinate of its own MLP's output by <span class="math">\(1-\alpha\)</span>, once, and leaves the rest of the stream alone. On the residual stream, each steered layer acts on everything already in the stream, so content from before the first steered layer is multiplied by <span class="math">\(1-\alpha\)</span> at every steered layer: by <span class="math">\((1-\alpha)^2\)</span> over two layers. At <span class="math">\(\alpha=1\)</span> this is directional ablation of <span class="math">\(v\)</span>. For <span class="math">\(1&lt;\alpha&lt;2\)</span> the coordinate flips sign and shrinks, and for <span class="math">\(\alpha&gt;2\)</span> it flips sign and grows.<a aria-label="Read note 5" class="note-ref" href="#margin-note-5" id="note-ref-5">5</a></p><aside aria-label="Note 5" class="margin-note" id="margin-note-5" role="note"><a aria-label="Back to note 5 reference" class="note-number" href="#note-ref-5">5</a><strong>Directional ablation.</strong> <a href="https://arxiv.org/html/2406.11717v3">Arditi et al. (2024)</a> establish the connection to weight orthogonalization.</aside>
+<p>We moved these two <span class="math">\(N = 32\)</span> steering methods from the MLP output to the residual stream in the Astra setup, keeping <span class="math">\(v\)</span> and <span class="math">\(s\)</span> unchanged. We also recalibrated <span class="math">\(\alpha\)</span> for the residual stream with <span class="math">\(\alpha\in\{0.2,0.5,1,1.5\}\)</span>, chosen on the development problems like every other setting. Development accuracy was 39.8%, 66.0%, 66.0% and 63.7%; of the two tied settings, <span class="math">\(\alpha=1\)</span> loops less (3.5% against 12.5%) and was chosen. On the 1,152 test problems:</p>
+<figure><a aria-label="Open full-size figure" class="figure-link" href="figures/write_vs_residual.svg"><img alt="Accuracy, loop rate and cap hits for MLP-output and residual sensing" src="figures/write_vs_residual.svg"/></a><figcaption>Pooled GSM8K and MATH results, 1,152 test problems. Blue: <span class="math">\(s=\alpha v\)</span>; green: unlikelihood-trained <span class="math">\(s\)</span>. Residual <span class="math">\(s=v\)</span> uses the recalibrated strength. Bars show observed percentages.</figcaption></figure>
+
+<p>The sensing vector trained on the MLP output transfers to the residual stream with a similar benefit. The <span class="math">\(s=\alpha v\)</span> arm needs <span class="math">\(\alpha\)</span> retuned. Recalibrated to <span class="math">\(\alpha=1\)</span>, it gives a similar benefit to the MLP-output steering methods: about the same accuracy, with loop rates as low as the trained sensing vector's.</p>
+<h2 id="5-a-non-pathological-setting-shows-loop-reduction-with-similar-accuracy">5. A non-pathological setting shows loop reduction with similar accuracy</h2>
+<p>We also test Qwen3-1.7B under greedy decoding, steering at blocks 15–18, on 500 MATH level-5 and 500 LiveCodeBench prompts. Unlike the Astra setting, thinking here is worth a great deal: turning it off costs 26.4 accuracy points. Here are some observations:<a aria-label="Read note 6" class="note-ref" href="#margin-note-6" id="note-ref-6">6</a></p><aside aria-label="Note 6" class="margin-note" id="margin-note-6" role="note"><a aria-label="Back to note 6 reference" class="note-number" href="#note-ref-6">6</a>For the specific setup, see <a href="#reproduction-details">reproduction details</a>.</aside>
+<ul>
+<li>either <span class="math">\(s = \alpha v\)</span> or a trained sensing vector can reduce loop more than thinking off (except for N = 32 clas).</li>
+<li>sensing vectors trained on negative examples reduce more loops than <span class="math">\(s = \alpha v\)</span>.</li>
+<li>sensing vectors trained on negative examples can minimally hurt accuracy on non-loop examples.</li>
+<li>overall, this modestly shows activation steering as a way to reduce loop while retaining accuracy in a <strong>non-pathological setting.</strong></li>
+</ul>
+<p>The pairs for training <span class="math">\(s\)</span> and building <span class="math">\(v\)</span> are math-style text, yet the steering also helps suppress loops on code, loop suppression seems to transfer with these directions. Our development-selected settings have not found a trained sensing vector accuracy advantage here, but it still tends to reduce looping more than <span class="math">\(s = \alpha v\)</span> which is the intended effect.</p>
+<figure><a aria-label="Open full-size figure" class="figure-link" href="figures/exp1_qwen3_math_delta_grid.svg"><img alt="Qwen3 MATH: paired differences" src="figures/exp1_qwen3_math_delta_grid.svg"/></a><figcaption>Figure 2a. Qwen3-1.7B on 500 MATH level-5 prompts, greedy decoding. Cells show percentage-point differences versus unedited thinking-on (left) and <span class="math">\(s=\alpha v\)</span> at the same pair count (right). Green indicates improvement; red, deterioration. Stars mark 95% paired bootstrap intervals excluding zero. Accuracy colors saturate at ±8 points.</figcaption></figure>
+
+<figure><a aria-label="Open full-size figure" class="figure-link" href="figures/exp1_qwen3_lcb_delta_grid.svg"><img alt="Qwen3 LiveCodeBench: paired differences" src="figures/exp1_qwen3_lcb_delta_grid.svg"/></a><figcaption>Figure 2b. Qwen3-1.7B on 500 LiveCodeBench prompts, greedy decoding. Comparisons, colors and stars follow Figure 2a. Both benchmarks use math-style steering pairs.</figcaption></figure>
+
+<h2 id="6-notes">6. Notes</h2>
+<p><a id="reproduction-details"></a></p>
+<p><strong>Reproduction details.</strong> Code can be found <a href="https://github.com/Zhi0467/qwen-loop-steering-experiments">here</a>.</p>
+<div aria-label="Scrollable data table" class="table-scroll" role="region" tabindex="0"><table>
 <thead>
 <tr>
 <th>Item</th>
@@ -835,13 +223,11 @@ href="https://github.com/Zhi0467/qwen-loop-steering-experiments">repo</a>.</p>
 <tbody>
 <tr>
 <td>Model</td>
-<td>Qwen3.5-0.8B, revision
-<code>2fc06364715b967f1860aea9cf38778875588b17</code></td>
-<td>Qwen3-1.7B, revision
-<code>70d244cc86ccca08cf5af4e1e306ecf908b1ad5e</code></td>
+<td>Qwen3.5-0.8B, revision <code>2fc06364715b967f1860aea9cf38778875588b17</code></td>
+<td>Qwen3-1.7B, revision <code>70d244cc86ccca08cf5af4e1e306ecf908b1ad5e</code></td>
 </tr>
 <tr>
-<td>Edited layers, zero-based</td>
+<td>Steered layers, zero-based</td>
 <td>15, 19</td>
 <td>15–18</td>
 </tr>
@@ -878,69 +264,97 @@ href="https://github.com/Zhi0467/qwen-loop-steering-experiments">repo</a>.</p>
 <tr>
 <td>Uncertainty</td>
 <td>Paired problem bootstrap</td>
-<td>Paired prompt bootstrap, stratified by source, dataset and saved
-loop label</td>
+<td>Paired prompt bootstrap, stratified by source, dataset and saved loop label</td>
 </tr>
 </tbody>
-</table>
-<p><strong>Qwen3 test sampling.</strong> From all MATH level-5 splits
-and LiveCodeBench v1–v6, excluding 256 development prompts, we retained
-every prompt that looped in any of four earlier greedy Qwen3-1.7B draws
-(174 MATH, 217 LiveCodeBench) and filled each dataset to 500 by seeded
-uniform sampling of the rest. Pooled metrics are plain means over these
-1,000 prompts.</p>
-<p><strong>Natural traces (§4).</strong> The looping examples are the
-last 36 loop tokens of 32 looping traces from the unedited model’s
-greedy development rollouts (9 MATH, 23 LiveCodeBench; few MATH
-development traces loop). The non-looping examples are the last 36
-thinking tokens before <code>&lt;/think&gt;</code> of 32 traces that
-finish (16 per dataset). Prompts whose traces the stopping rule scores
-are excluded. As with the short pairs,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
-is the per-layer difference of mean activations, and the learned
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
-uses unlikelihood on the loop tokens plus
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>
-times the KL divergence on the non-looping tokens. The 64 prompts behind
-these traces are removed from development, so both data sources are
-selected on the remaining 192 development prompts, over
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>4</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\alpha \in \{1,2,3,4\}</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>0.1</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\beta \in \{0, 0.1\}</annotation></semantics></math>.
-Short pairs choose
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>2</mn><mi>v</mi></mrow><annotation encoding="application/x-tex">s = 2v</annotation></semantics></math>,
-natural traces
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>v</mi></mrow><annotation encoding="application/x-tex">s = v</annotation></semantics></math>,
-and both choose
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\beta = 0</annotation></semantics></math>.
-The natural
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
-has cosine 0.54–0.59 with the short-pair
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>.</p>
-<h4 id="neuron-selection-in-astras-final-edit">neuron selection in
-Astra’s final edit</h4>
-<p>The final Astra edit is not the MLP output sensing above. At each
-edited layer, it selects 64 MLP neurons. Let
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>M</mi><annotation encoding="application/x-tex">M</annotation></semantics></math>
-be their diagonal selection mask and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
-the unit steering direction. The idealized update is</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>W</mi><mo>′</mo></msup><mo>=</mo><mi>W</mi><mo>−</mo><mn>6</mn><mi>u</mi><msup><mi>u</mi><mi>⊤</mi></msup><mi>W</mi><mi>M</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
-W&#39;=W-6uu^\top WM.
-</annotation></semantics></math></p>
-<p>Writing
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>S</mi></msub><mo>=</mo><mi>W</mi><mi>M</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">x_S=WMh</annotation></semantics></math>
-for those neurons’ contribution gives</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mi>x</mi><mo>−</mo><mn>6</mn><mi>u</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>u</mi><mi>⊤</mi></msup><msub><mi>x</mi><mi>S</mi></msub><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
-x&#39;=x-6u(u^\top x_S).
-</annotation></semantics></math></p>
-<p>Equivalently, it senses the hidden neurons directly:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mi>x</mi><mo>−</mo><mi>u</mi><mo stretchy="false" form="prefix">(</mo><msup><mi>q</mi><mi>⊤</mi></msup><mi>h</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>q</mi><mo>=</mo><mn>6</mn><mi>M</mi><msup><mi>W</mi><mi>⊤</mi></msup><mi>u</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
-x&#39;=x-u(q^\top h),\qquad q=6MW^\top u.
-</annotation></semantics></math></p>
-<p>Neuron-space sensing selects and weights neurons. Output-space
-sensing weights directions in their combined output. Both are sensing
-vectors, but selecting neurons is not generally the same as masking
-coordinates of the MLP output.</p>
-</body>
-</html>
+</table></div>
+<p id="qwen3-test-sampling"><strong>Qwen3 test sampling.</strong> From all MATH level-5 splits and LiveCodeBench v1–v6, excluding 256 development prompts, we retained every prompt that looped in any of four earlier greedy Qwen3-1.7B draws (174 MATH, 217 LiveCodeBench) and filled each dataset to 500 by seeded uniform sampling of the rest. Pooled metrics are plain means over these 1,000 prompts.</p>
+<p id="natural-traces-4"><strong>Natural traces (§4).</strong> The looping examples are the last 36 loop tokens of 32 looping traces from the unedited model's greedy development rollouts (9 MATH, 23 LiveCodeBench; few MATH development traces loop). The non-looping examples are the last 36 thinking tokens before <code>&lt;/think&gt;</code> of 32 traces that finish (16 per dataset). Prompts whose traces the stopping rule scores are excluded. As with the short pairs, <span class="math">\(v\)</span> is the per-layer difference of mean activations, and the trained <span class="math">\(s\)</span> uses unlikelihood on the loop tokens plus <span class="math">\(\beta\)</span> times the KL divergence on the non-looping tokens. The 64 prompts behind these traces are removed from development, so both data sources are selected on the remaining 192 development prompts, over <span class="math">\(\alpha \in \{1,2,3,4\}\)</span> and <span class="math">\(\beta \in \{0, 0.1\}\)</span>. Short pairs choose <span class="math">\(s = 2v\)</span>, natural traces <span class="math">\(s = v\)</span>, and both choose <span class="math">\(\beta = 0\)</span>. The natural <span class="math">\(v\)</span> has cosine 0.54–0.59 with the short-pair <span class="math">\(v\)</span>.</p>
+<p id="using-short-synthetic-pairs-is-a-clever-choice"><strong>Using short synthetic pairs is a clever choice.</strong> Astra’s short contrast pairs and simple <span class="math">\(s = \alpha v\)</span> are productive choices. <strong>Which dataset (synthetic versus long on-policy rollouts) to construct v and s, where to sense (output versus residual), and what behavior the training objective preserves</strong> are all consequential design choices. This also suggests a constructive role for agents. An agent can search this design space, such as trying out different sensing vector training loss, test where to sense, inspect failures, and pick different train/dev sets.</p>
+<p id="steering-does-not-transfer-across-temperatures"><strong>Steering does not transfer across temperatures.</strong> On 128 development problems, switching to greedy decoding without retuning sharply reduced accuracy: the 32-pair <span class="math">\(s=4v\)</span> steering fell from 63.7% to 28.1%, and trained sensing vectors also lost most of their gains. Removing only the presence penalty had a smaller effect. <span class="math">\(s\)</span> and <span class="math">\(v\)</span> that work under one temperature may need retuning under another.</p>
+<p id="another-axis-how-to-construct-steering-direction"><strong>Another axis: how to construct steering direction.</strong> We focused on <span class="math">\(s\)</span> in this post, but <span class="math">\(v\)</span> is another vector to construct from data. A natural next comparison is constructing <span class="math">\(v\)</span> with different algorithms: mean differences of residual, logistic regression, recursive feature machines and PCA, keeping sensing vector fixed.</p>
+<p id="training-the-sensing-vector-has-dataset-specific-side-effects"><strong>Training the sensing vector has dataset-specific side effects.</strong> Pooled across datasets, the N=32 trained arms hit the cap more often than <span class="math">\(s=\alpha v\)</span>: <strong>22.3–23.0% versus 18.3%</strong>. They also close thinking less often. But the pooled average hides where this happens:</p>
+<div aria-label="Scrollable data table" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>N=32 change versus <span class="math">\(s=\alpha v\)</span></th>
+<th style="text-align:right">GSM8K: UL / contrast</th>
+<th style="text-align:right">MATH: UL / contrast</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accuracy</td>
+<td style="text-align:right">+1.8 / +3.2 pp</td>
+<td style="text-align:right">+0.1 / −1.6 pp</td>
+</tr>
+<tr>
+<td>Exact-loop flag</td>
+<td style="text-align:right">−11.5 / −11.3 pp</td>
+<td style="text-align:right">−29.9 / −29.5 pp</td>
+</tr>
+<tr>
+<td>Cap hits</td>
+<td style="text-align:right">−0.6 / −1.0 pp</td>
+<td style="text-align:right">+8.6 / +10.4 pp</td>
+</tr>
+<tr>
+<td>Thinking closure</td>
+<td style="text-align:right">+2.1 / +1.6 pp</td>
+<td style="text-align:right">−16.9 / −17.2 pp</td>
+</tr>
+</tbody>
+</table></div>
+<p>On GSM8K, the completion metrics move in the favorable direction numerically. On MATH, exact repetition falls dramatically, but more answers exhaust the budget and fewer close thinking. Of the capped unlikelihood responses, 78% do not loop. Suppressing exact repetition has led to the steered model paraphrasing while hitting generation cap in some cases. Can we steer multiple behaviors at once?</p>
+<p id="neuron-selection-in-astra-s-final-steering"><strong>Neuron selection in Astra’s final steering.</strong> Later in the same run, Astra restricted steering to 64 MLP neurons per layer. This version reaches 60.2% accuracy, 29.6% looping and 18.2% cap hits; our main baseline uses the earlier <span class="math">\(s=4v\)</span> steering (57.7%, 29.5% and 23.7%).</p>
+<p>With diagonal neuron mask <span class="math">\(M\)</span> and unit direction <span class="math">\(u\)</span>, its idealized update is</p>
+<p><span class="math">\[
+W'=W-6uu^\top WM,
+\qquad
+x'=x-u(q^\top h),\quad q=6MW^\top u.
+\]</span></p>
+<p>Thus <span class="math">\(q\)</span> senses selected hidden neurons, rather than their combined MLP output. Selecting neurons is not the same as masking output coordinates.</p>
+<p>Its matched random-direction control reaches 6.8% accuracy and 93.4% looping, separate from the main figures’ <span class="math">\(s=\alpha v\)</span> control.</p>
+<p id="when-to-early-stop-sensing-vector-training"><strong>When to early stop sensing vector training?</strong> Training uses four or 32 short synthetic productive/repetitive pairs, with the next-token, unlikelihood or combined objective above. Adam starts from <span class="math">\(s=0\)</span> and takes up to 24 updates. As in ordinary ML training, we need a validation criterion to choose when to stop, but what should it measure? We can cheaply score fixed traces of a selected development set by <strong>teacher forcing</strong> (feeding the saved tokens), or generate fresh rollouts on development prompts and measure accuracy, repetition and completion directly at each optimization step. The former is a proxy; the latter tests the behavior we actually want despite a much more expensive validation.</p>
+<p>We first used teacher-forced loss on six separate synthetic pairs supplied by Astra as the dev set. This selected update 24. On Qwen3-1.7B, however, the unlikelihood- and contrast-trained steering at that update frequently stopped emitting <code>&lt;/think&gt;</code>. This suggests the dev set was not well chosen. We then picked the development set to be the unedited model’s saved traces. That did not solve the problem: unlikelihood and contrast still favored the last update, while productive-text next-token loss favored update zero, since no steering gives lowest NTP on base-model-generated traces.</p>
+<p>Actual rollouts exposed the mismatch between proxy loss and behavior. We then used a stopping rule requiring preservation of thinking closure:</p>
+<blockquote>
+<p>Choose the update with the lowest unlikelihood loss on repeated tokens in the saved development traces. Require that <code>&lt;/think&gt;</code> remains the most likely next token at least as often as the unedited model, at the positions where the unedited model originally ended its thinking.</p>
+</blockquote>
+<p>On Qwen3 it selects earlier updates: 12–14 for the selected unlikelihood arms and 10–12 for contrast. They are what we used for the results in the next section.</p>
+</article></div><script>
+document.documentElement.classList.add('js');
+const article=document.querySelector('article'), notes=[...document.querySelectorAll('.margin-note')];
+let pending=false;
+function placeNotes(){
+ pending=false;
+ const wide=window.innerWidth>=1250;
+ article.classList.toggle('wide-notes',wide);
+ let bottom=0;
+ for(const note of notes){
+  if(!wide){note.style.top='';continue}
+  const ref=document.getElementById(note.id.replace('margin-note','note-ref'));
+  const wanted=ref.getBoundingClientRect().top-article.getBoundingClientRect().top-8;
+  const top=Math.max(wanted,bottom);
+  note.style.top=top+'px';bottom=top+note.offsetHeight+24;
+ }
+}
+function scheduleNotes(){if(!pending){pending=true;requestAnimationFrame(placeNotes)}}
+window.addEventListener('resize',scheduleNotes);
+window.addEventListener('load',scheduleNotes);
+document.fonts.ready.then(scheduleNotes);
+document.querySelectorAll('img').forEach(img=>img.addEventListener('load',scheduleNotes));
+const resizeObserver=new ResizeObserver(scheduleNotes);resizeObserver.observe(article);notes.forEach(n=>resizeObserver.observe(n));
+const heads=[...document.querySelectorAll('article h2')], navLinks=[...document.querySelectorAll('#nav-links a')];
+function activeSection(){
+ let current=heads[0];for(const h of heads){if(h.getBoundingClientRect().top<=150)current=h;else break}
+ navLinks.forEach(a=>{if(current&&a.hash==='#'+current.id)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')});
+}
+window.addEventListener('scroll',activeSection,{passive:true});activeSection();placeNotes();
+const toggle=document.getElementById('nav-toggle'),nav=document.querySelector('nav');
+toggle.addEventListener('click',()=>{const open=nav.classList.toggle('open');toggle.setAttribute('aria-expanded',String(open))});
+navLinks.forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');toggle.setAttribute('aria-expanded','false')}));
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},startup:{ready(){MathJax.startup.defaultReady();MathJax.startup.promise.then(scheduleNotes)}}};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+</body></html>
