@@ -24,18 +24,18 @@ There is already a discussion of how to describe this work, including critical t
 
 ### Formulation: activation steering
 
-Let an MLP’s hidden activations be \(h\), its output weight matrix be \(W\), and its contribution to the residual stream be \(x=Wh\). Consider the steered activation vector
+Take any block of a transformer, let the MLP’s hidden activations be \(h\), its output weight matrix be \(W\), the residual stream \(r\), and this MLP's contribution to the residual stream be \(x=Wh\). Steering is the process of adding a vector to \(x\), \(h\), or \(r\) to elicit certain behaviors from the model. Consider the steered activation vector
 
 $$
-x' = x-v(s^\top x).
+x' = x-(s^\top x)v.
 $$
 
 There are two vectors here:
 
-- \(v\), the **steering direction**, says where to push;
-- \(s\), the **sensing vector**, \(s^Tx\) determines the strength of the push given an input/context.
+- \(v\), called the **steering direction**, says where to push;
+- \(s\), called the **sensing vector**, the inner product \(s^Tx\) determines the steering strength given an input/context.
 
-Here the strength depends on the output of the MLP. Because the strength is linear, this intervention is the same as a weight edit to the MLP output weight matrix:
+Here the strength depends on the output of the MLP. Because the strength is linear, this intervention is the same as a weight edit to the MLP output weight matrix assuming no bias:
 
 $$
 W'=W-vs^\top W,
@@ -44,19 +44,19 @@ $$
 
 In this framing, **Astra's weight edits on Qwen are simply picking $s = \alpha v$**. In general, one is free to design both $s$ and $v$; in this post we focus on learning $s$, which further reduces looping.
 
-We use **activation steering** as an umbrella label for this separation of direction and input-dependent strength. The terminology is based on **Contextual Linear Activation Steering (CLAS), [Hsu et al., 2026](https://arxiv.org/html/2604.24693v2)**, which explicitly learns a sensing vector. 
+We call this formulation **activation steering**, not to be confused with another form of steering which does \(x’ = x - \gamma v\), where \(\gamma\) is a fixed number and context independent. The terminology is based on **Contextual Linear Activation Steering (CLAS), [Hsu et al., 2026](https://arxiv.org/html/2604.24693v2)**, which explicitly learns a sensing vector. 
 
 **Literature Attribution**: The connection to weight edits was established in **[Arditi et al., 2024](https://arxiv.org/html/2406.11717v3)** derive weight orthogonalization and prove its equivalence to directional ablation; Other relevant work include **[Lee et al., 2025](https://arxiv.org/abs/2409.05907)**, **[Wu et al., 2024](https://arxiv.org/html/2404.03592v3)**, and **[Meng et al., 2022](https://arxiv.org/abs/2202.05262)**.
 
 
 
-## 2. First, baselines
+## 2. Inability for math in the original blog is pathological 
 
 We reproduce the experiment in Qwen3.5-0.8B’s thinking mode under the blog setting, see [reproduction details](#reproduction-details) and [code](https://github.com/Zhi0467/qwen-loop-steering-experiments). Our reproduction matches the blog’s numbers up to noise.
 
-Throughout this post, a **loop** means a 30-token sequence appearing at least 20 times, a trace is said to loop if it contains at least one loop, **cap hit** means generation reaching the token cap.
+Throughout this post, a **loop** means a 30-token sequence appearing at least 20 times, a trace is said to loop if it contains at least one loop, **cap hit** means generation reaching a preset token cap.
 
-Our evaluation uses 1,152 of the authors’ confirmation problems: 576 GSM8K training problems and 576 MATH training problems.
+Our evaluation uses the same problems as the original blog: 576 GSM8K training problems and 576 MATH training problems.
 
 | Reference                     | Accuracy | Loop  | Cap hit |
 | ----------------------------- | -------: | ----: | ------: |
@@ -64,13 +64,13 @@ Our evaluation uses 1,152 of the authors’ confirmation problems: 576 GSM8K tra
 | Unedited, thinking off        | 53.3%    | 4.5%  | 5.3%    |
 | Astra’s submitted top-64 edit | 60.2%    | 29.6% | 18.2%   |
 
- We note the edit as mainly fixing a pathological generation behavior, rather than installing new mathematical capability. 
+ We note the edit as mainly fixing a pathological generation behavior, rather than eliciting new mathematical capability. 
 
 
 
 ## 3. Learn the sensing vector can improve on Astra’s edit
 
-The canonical edit from the original blog sets \(s=\alpha v\). It uses the same direction to recognize the sense the context and to push/steer it. We keep \(v\) fixed and learn \(s\), initialized at zeros rather than \(v\), on a dataset that can consist of non-loop and/or loop traces. To clarify terminology, non-loop = productive (as in their blog) = positive, and conversely, loop = negative. We compare three loss functions for learning \(s\):
+The canonical edit from the original blog sets \(s=\alpha v\). It uses the same direction to recognize the sense the context and to push/steer it. We keep \(v\) fixed and train \(s\), initialized at \(s = 0\) rather than \(v\), on a dataset that can consist of traces with and without loops. To clarify terminology, non-loop = productive (as in their blog) = positive, and conversely, loop = negative. We compare three loss functions for training \(s\):
 
 Let \(p_s\) be the steered model and \(p_0\) the unedited model. With teacher-forced prefixes, define
 
