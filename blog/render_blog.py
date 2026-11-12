@@ -33,7 +33,9 @@ for h in soup.select('h2,h3'):
         short_labels=['TL;DR', '1. Steering interpretation', '2. Pathological looping',
                       '3. Training the sensing vector', '4. Data and sensing location',
                       '5. Non-pathological setting', '6. Notes']
-        nav.append((h.name,slug,short_labels[len(nav)] if len(nav)<len(short_labels) else label))
+        short=short_labels[len(nav)] if len(nav)<len(short_labels) else label
+        h["data-nav-label"]=short  # lets other hosts (the personal site) reuse the short menu names
+        nav.append((h.name,slug,short))
 # Anchors for bold run-in notes.
 for p in soup.find_all('p',recursive=False):
     strong=p.find('strong',recursive=False)

@@ -629,7 +629,7 @@ z
      <use xlink:href="#STIXGeneral-Italic-72" transform="translate(0 0.267188)"/>
      <use xlink:href="#STIXGeneral-Regular-2b" transform="translate(53.33999 0.267188)"/>
      <use xlink:href="#STIXGeneral-Italic-78" transform="translate(136.279971 0.267188)"/>
-     <use xlink:href="#STIXGeneral-Regular-2032" transform="translate(186.85309 35.542188) scale(0.7)"/>
+     <use xlink:href="#STIXGeneral-Regular-2032" transform="translate(186.85309 0.267188)"/>
     </g>
    </g>
    <g id="patch_10">
@@ -1338,7 +1338,7 @@ z
     <!-- $x^{\prime}$ -->
     <g style="fill: #279c88" transform="translate(620.770909 176.4288) scale(0.17 -0.17)">
      <use xlink:href="#STIXGeneral-Italic-78" transform="translate(0 0.267188)"/>
-     <use xlink:href="#STIXGeneral-Regular-2032" transform="translate(50.573119 35.542188) scale(0.7)"/>
+     <use xlink:href="#STIXGeneral-Regular-2032" transform="translate(50.573119 0.267188)"/>
     </g>
    </g>
    <g id="patch_18">
@@ -1573,7 +1573,7 @@ z
      <use xlink:href="#STIXGeneral-Italic-72" transform="translate(0 0.267188)"/>
      <use xlink:href="#STIXGeneral-Regular-2b" transform="translate(53.33999 0.267188)"/>
      <use xlink:href="#STIXGeneral-Italic-78" transform="translate(136.279971 0.267188)"/>
-     <use xlink:href="#STIXGeneral-Regular-2032" transform="translate(186.85309 35.542188) scale(0.7)"/>
+     <use xlink:href="#STIXGeneral-Regular-2032" transform="translate(186.85309 0.267188)"/>
     </g>
    </g>
    <g id="patch_26">
@@ -1657,7 +1657,7 @@ z
     <!-- $W^{\prime}$ -->
     <g style="fill: #279c88" transform="translate(349.29 514.7712) scale(0.18 -0.18)">
      <use xlink:href="#STIXGeneral-Italic-57" transform="translate(0 0.267188)"/>
-     <use xlink:href="#STIXGeneral-Regular-2032" transform="translate(93.925769 35.542188) scale(0.7)"/>
+     <use xlink:href="#STIXGeneral-Regular-2032" transform="translate(93.925769 0.267188)"/>
     </g>
    </g>
    <g id="patch_29">
@@ -1674,10 +1674,10 @@ z
     <!-- $x^{\prime}=W^{\prime}h$ -->
     <g style="fill: #279c88" transform="translate(478.595455 533.52) scale(0.17 -0.17)">
      <use xlink:href="#STIXGeneral-Italic-78" transform="translate(0 0.267188)"/>
-     <use xlink:href="#STIXGeneral-Regular-2032" transform="translate(50.573119 35.542188) scale(0.7)"/>
+     <use xlink:href="#STIXGeneral-Regular-2032" transform="translate(50.573119 0.267188)"/>
      <use xlink:href="#STIXGeneral-Regular-3d" transform="translate(89.652486 0.267188)"/>
      <use xlink:href="#STIXGeneral-Italic-57" transform="translate(172.592467 0.267188)"/>
-     <use xlink:href="#STIXGeneral-Regular-2032" transform="translate(266.518236 35.542188) scale(0.7)"/>
+     <use xlink:href="#STIXGeneral-Regular-2032" transform="translate(266.518236 0.267188)"/>
      <use xlink:href="#STIXGeneral-Italic-68" transform="translate(291.157607 0.267188)"/>
     </g>
    </g>
@@ -1685,7 +1685,7 @@ z
     <!-- $W^{\prime}=W$ -->
     <g style="fill: #26354a" transform="translate(312 628.46492) scale(0.16 -0.16)">
      <use xlink:href="#STIXGeneral-Italic-57" transform="translate(0 0.267188)"/>
-     <use xlink:href="#STIXGeneral-Regular-2032" transform="translate(93.925769 35.542188) scale(0.7)"/>
+     <use xlink:href="#STIXGeneral-Regular-2032" transform="translate(93.925769 0.267188)"/>
      <use xlink:href="#STIXGeneral-Regular-3d" transform="translate(133.005136 0.267188)"/>
      <use xlink:href="#STIXGeneral-Italic-57" transform="translate(215.945117 0.267188)"/>
     </g>
