@@ -58,7 +58,7 @@ We call this formulation **activation steering**, not to be confused with anothe
 
 ## 2. Qwen's inability for math in the original blog is pathological 
 
-The headline claim is that Astra edits Qwen3.5-0.8B to make it better at math. What the edit actually does is stop the model from looping when thinking mode is turned off. This has the side effect of raising Qwen’s math scores, but it does not improve its underlying ability to do math. Admittedly, the original blog post mentions this but underemphasizes it.
+The headline claim is that Astra edits Qwen3.5-0.8B to make it better at math. What the edit actually does is stop the model from looping when thinking mode is turned on. This has the side effect of raising Qwen’s math scores, but it does not improve its underlying ability to do math. Admittedly, the original blog post mentions this but underemphasizes it.
 
 > TODO: @bhdsc will slightly edit this section later. The conclusion of this section will not change.
 
