@@ -10,9 +10,13 @@ In a widely circulated blog post [*Sparks of Weight-Space Programming*](https://
   
 ## (TODO) briefly overview the setting, what Astra did, and what happened as a result
 
-... It turns out, what Astra did can be seen as activation steering.
+> TODO: State the takeaway of this section first, then provide the evidence.
+>
+> Conclusion: It turns out, what Astra did can be seen as activation steering.
 
 ## 1. From a “native weight edit" to activation steering
+
+> TODO: State the takeaway of this section first, then provide the evidence. (What we find, then what we do.)
 
 In the authors’ words:
 
@@ -52,9 +56,11 @@ We call this formulation **activation steering**, not to be confused with anothe
 
 **Literature Attribution**: The connection between activation and weight edits was established in **[Arditi et al., 2024](https://arxiv.org/html/2406.11717v3)** (weight orthogonalization being equivalent to directional ablation under certain conditions). Other relevant work include **[Meng et al., 2022](https://arxiv.org/abs/2202.05262)**, **[Zou et al., 2023](https://arxiv.org/abs/2310.01405)**, and **[Wu et al., 2024](https://arxiv.org/html/2404.03592v3)**.
 
-
-
 ## 2. Qwen's inability for math in the original blog is pathological 
+
+The headline claim is that Astra edits Qwen3.5-0.8B to make it better at math. What the edit actually does is stop the model from looping when thinking mode is turned off. This has the side effect of raising Qwen’s math scores, but it does not improve its underlying ability to do math. Admittedly, the original blog post mentions this but underemphasizes it.
+
+> TODO: @bhdsc will slightly edit this section later. The conclusion of this section will not change.
 
 We reproduce the experiment in Qwen3.5-0.8B’s thinking mode under the blog setting, see [reproduction details](#reproduction-details) and [code](https://github.com/Zhi0467/qwen-loop-steering-experiments). Here “Astra’s steering” means $s=4v$, with $v$ built from Astra’s four synthetic pairs.
 
@@ -66,15 +72,17 @@ Our evaluation uses the same problems as the original blog: 576 GSM8K training p
 | ----------------------------- | -------: | ----: | ------: |
 | Unedited, thinking on         | 12.3%    | 87.0% | 88.5%   |
 | Unedited, thinking off        | 53.3%    | 4.5%  | 5.3%    |
-| Astra’s steering                  | 57.7%    | 29.5% | 23.7%   |
+| Astra’s steering              | 57.7%    | 29.5% | 23.7%   |
 
  We note the steering as mainly fixing a pathological generation behavior, rather than eliciting new mathematical capability. 
 
-
-
 ## 3. Training the sensing vector can improve on Astra’s steering
 
+> TODO: State the takeaway of this section first, then provide the evidence. (What we find, then what we do.)
+
 The canonical steering method from the original blog sets \(s=\alpha v\). It uses the same direction to recognize the sense the context and to push/steer it. We keep \(v\) fixed and train \(s\), initialized at \(s = 0\) rather than \(v\), on a dataset that can consist of traces with and without loops. To clarify terminology, non-loop = productive (as in their blog) = positive, and conversely, loop = negative. We compare three loss functions for training \(s\).
+
+> TODO: Above is not clear, just say we improve on whatever Astra did based on modifying s with three approaches below.
 
 Let \(p_s\) be the steered model and \(p_0\) the original model. Define next token prediction loss, unlikelihood loss, and KL divergence:
 
@@ -151,6 +159,8 @@ Overall, short synthetic pairs give much stronger loop reduction without comprom
 
 ### Where to sense: MLP output or residual stream?
 
+> TODO: Question: What was the takeaway of this section? What is the narrative?
+
 There are three sites worth distinguishing: MLP hidden activations before output \(h\), the MLP output \(x=Wh\), and the residual stream \(r\).Even when two interventions use the same \(v\) and \(s\),
 
 $$
@@ -174,6 +184,8 @@ The sensing vector trained on the MLP output transfers to the residual stream wi
 
 ## 5. A non-pathological setting shows loop reduction with similar accuracy
 
+> TODO: Question: What was the takeaway of this section? What is the narrative?
+
 We also test Qwen3-1.7B under greedy decoding, steering at blocks 15–18, on 500 MATH level-5 and 500 LiveCodeBench prompts ([reproduction details](#reproduction-details)). Unlike the Astra setting, thinking here is worth a great deal: turning it off costs 26.4 accuracy points. Here are some observations:
 - either \(s = \alpha v\) or a trained sensing vector can reduce loop more than thinking off (except for N = 32 clas).
 - sensing vectors trained on negative examples reduce more loops than \(s = \alpha v\).
@@ -189,6 +201,8 @@ The pairs for training $s$ and building $v$ are math-style text, yet the steerin
 ![Qwen3 LiveCodeBench: paired differences](figures/exp1_qwen3_lcb_delta_grid.svg)
 
 *Figure 2b. Qwen3-1.7B on 500 LiveCodeBench prompts, greedy decoding. Comparisons, colors and stars follow Figure 2a. Both benchmarks use math-style steering pairs.*
+
+## (TODO) add a brief conclusion. Then notes afterwards (The current notes is hard to follow. Maybe just link to a GitHub and say reproduction is available here, highlight the main things in notes section only, and keep details in the repo.)
 
 ## 6. Notes 
 
