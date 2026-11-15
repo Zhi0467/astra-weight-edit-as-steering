@@ -1,0 +1,150 @@
+{
+ "split": "validation_1",
+ "per_arm": {
+  "astra_top64_a6": {
+   "n": 128,
+   "accuracy": 0.60546875,
+   "cap_hit": 0.1875,
+   "loop": 0.3046875,
+   "think_closed": 0.890625,
+   "tokens": 16860.12890625
+  },
+  "clas_n32": {
+   "n": 128,
+   "accuracy": 0.53515625,
+   "cap_hit": 0.4453125,
+   "loop": 0.4375,
+   "think_closed": 0.55859375,
+   "tokens": 20085.71484375
+  },
+  "clas_n4": {
+   "n": 128,
+   "accuracy": 0.46484375,
+   "cap_hit": 0.5078125,
+   "loop": 0.5078125,
+   "think_closed": 0.50390625,
+   "tokens": 21051.9765625
+  },
+  "contrast_n32": {
+   "n": 128,
+   "accuracy": 0.64453125,
+   "cap_hit": 0.203125,
+   "loop": 0.046875,
+   "think_closed": 0.83203125,
+   "tokens": 15528.52734375
+  },
+  "contrast_n4": {
+   "n": 128,
+   "accuracy": 0.60546875,
+   "cap_hit": 0.25,
+   "loop": 0.0859375,
+   "think_closed": 0.76953125,
+   "tokens": 16717.81640625
+  },
+  "control": {
+   "n": 128,
+   "accuracy": 0.13671875,
+   "cap_hit": 0.890625,
+   "loop": 0.8671875,
+   "think_closed": 0.109375,
+   "tokens": 29729.94140625
+  },
+  "sv_n32_a1": {
+   "n": 128,
+   "accuracy": 0.26171875,
+   "cap_hit": 0.73828125,
+   "loop": 0.7578125,
+   "think_closed": 0.26953125,
+   "tokens": 26317.80859375
+  },
+  "sv_n32_a2": {
+   "n": 128,
+   "accuracy": 0.4921875,
+   "cap_hit": 0.4375,
+   "loop": 0.5078125,
+   "think_closed": 0.640625,
+   "tokens": 20225.1328125
+  },
+  "sv_n32_a3": {
+   "n": 128,
+   "accuracy": 0.625,
+   "cap_hit": 0.25390625,
+   "loop": 0.359375,
+   "think_closed": 0.8671875,
+   "tokens": 17124.27734375
+  },
+  "sv_n32_a4": {
+   "n": 128,
+   "accuracy": 0.63671875,
+   "cap_hit": 0.21484375,
+   "loop": 0.25390625,
+   "think_closed": 0.84375,
+   "tokens": 16236.02734375
+  },
+  "sv_n4_a1": {
+   "n": 128,
+   "accuracy": 0.2890625,
+   "cap_hit": 0.7109375,
+   "loop": 0.7109375,
+   "think_closed": 0.3046875,
+   "tokens": 25246.23046875
+  },
+  "sv_n4_a2": {
+   "n": 128,
+   "accuracy": 0.515625,
+   "cap_hit": 0.42578125,
+   "loop": 0.46484375,
+   "think_closed": 0.6328125,
+   "tokens": 19412.96484375
+  },
+  "sv_n4_a3": {
+   "n": 128,
+   "accuracy": 0.59765625,
+   "cap_hit": 0.3046875,
+   "loop": 0.34765625,
+   "think_closed": 0.82421875,
+   "tokens": 18202.953125
+  },
+  "sv_n4_a4": {
+   "n": 128,
+   "accuracy": 0.6015625,
+   "cap_hit": 0.24609375,
+   "loop": 0.23046875,
+   "think_closed": 0.828125,
+   "tokens": 17041.92578125
+  },
+  "ul_n32": {
+   "n": 128,
+   "accuracy": 0.6640625,
+   "cap_hit": 0.20703125,
+   "loop": 0.05859375,
+   "think_closed": 0.81640625,
+   "tokens": 15292.8125
+  },
+  "ul_n4": {
+   "n": 128,
+   "accuracy": 0.59765625,
+   "cap_hit": 0.234375,
+   "loop": 0.1015625,
+   "think_closed": 0.796875,
+   "tokens": 16964.4453125
+  }
+ },
+ "chosen_per_family_and_n": {
+  "sv_n4": "sv_n4_a4",
+  "clas_n4": "clas_n4",
+  "ul_n4": "ul_n4",
+  "contrast_n4": "contrast_n4",
+  "sv_n32": "sv_n32_a4",
+  "clas_n32": "clas_n32",
+  "ul_n32": "ul_n32",
+  "contrast_n32": "contrast_n32"
+ },
+ "best_per_n": {
+  "4": "contrast_n4",
+  "32": "ul_n32"
+ },
+ "chosen_n": 32,
+ "excluded": [],
+ "rule": "highest pooled accuracy, then lower loop rate; N=32 only if its best arm beats N=4's best on accuracy"
+}

@@ -1,0 +1,60 @@
+{
+ "stop_update": {
+  "clasd_n4_b0": 16,
+  "clasd_n4_b0.1": 16,
+  "clasd_n32_b0": 8,
+  "clasd_n32_b0.1": 8
+ },
+ "families": {
+  "clasd_n4": {
+   "candidates": [
+    {
+     "arm": "clasd_n4_b0_s16",
+     "acc": 0.47265625,
+     "loop": 0.0234375,
+     "math": 0.5546875,
+     "lcb": 0.390625
+    },
+    {
+     "arm": "clasd_n4_b0.1_s16",
+     "acc": 0.484375,
+     "loop": 0.0234375,
+     "math": 0.5703125,
+     "lcb": 0.3984375
+    }
+   ],
+   "chosen": "clasd_n4_b0.1_s16"
+  },
+  "clasd_n32": {
+   "candidates": [
+    {
+     "arm": "clasd_n32_b0_s8",
+     "acc": 0.48046875,
+     "loop": 0.078125,
+     "math": 0.609375,
+     "lcb": 0.3515625
+    },
+    {
+     "arm": "clasd_n32_b0.1_s8",
+     "acc": 0.47265625,
+     "loop": 0.09375,
+     "math": 0.5625,
+     "lcb": 0.3828125
+    }
+   ],
+   "chosen": "clasd_n32_b0_s8"
+  }
+ },
+ "control": null,
+ "N": 4,
+ "best_acc_by_N": {
+  "4": 0.484375,
+  "32": 0.48046875
+ },
+ "missing": [],
+ "test_arms": [
+  "control",
+  "clasd_n4_b0.1_s16",
+  "clasd_n32_b0_s8"
+ ]
+}

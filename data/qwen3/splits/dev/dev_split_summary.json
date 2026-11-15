@@ -1,0 +1,14 @@
+{
+ "math_level5": {
+  "source_prompts": 2304,
+  "looping": 152,
+  "picked_loop": 64,
+  "picked_nonloop": 64
+ },
+ "livecodebench": {
+  "source_prompts": 880,
+  "looping": 210,
+  "picked_loop": 64,
+  "picked_nonloop": 64
+ }
+}

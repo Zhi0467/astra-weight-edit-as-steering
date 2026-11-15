@@ -1,0 +1,252 @@
+[
+  {
+    "path": "results/astra_regime/scored/run1/validation_3/control/results.jsonl",
+    "sha256": "0c385f256c49a556b175358f70906152cfe19f0aab609aa8ea87d62fa1b91dee",
+    "rows": 128
+  },
+  {
+    "path": "results/astra_regime/scored/run1/validation_3/sv_n32_a4/results.jsonl",
+    "sha256": "edb43a84adecde5408a425c34e8a71c21c5bde0b0b7408d9fb7b5b2c1929ccab",
+    "rows": 128
+  },
+  {
+    "path": "results/astra_regime/scored/run1/validation_3/ul_n32_b0.1/results.jsonl",
+    "sha256": "590609354721cf2178f7df7b31addd8a3624e26916c3ea9305c62f84da8a74a4",
+    "rows": 128
+  },
+  {
+    "path": "results/astra_regime/scored/run1/validation_4/control/results.jsonl",
+    "sha256": "533b665b6342123f6418ae729f8f699e3c7c289a2f18f3dbeb4fdad9c1436ca8",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1/validation_4/sv_n32_a4/results.jsonl",
+    "sha256": "f53c6a475f5711ebab5cf1eb6b592328f541ab06d34ba3bb65b485a52386ce83",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1/validation_4/ul_n32_b0.1/results.jsonl",
+    "sha256": "14bd0a49644cbaa1ef4dc2629a1908c3040eb6699f5a5f667ea829359fe3dd17",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1/final_1/control/results.jsonl",
+    "sha256": "9e0fd34d5416ae25f07639209c87cfcdeb0370d2e7ca4ae3d5b37b21ec07065b",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1/final_1/sv_n32_a4/results.jsonl",
+    "sha256": "ee3f32a177903555f1b650fd1cf43b5f28779fb080519d54dc7b168b61a99f54",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1/final_1/ul_n32_b0.1/results.jsonl",
+    "sha256": "2803fb8182ed2012ca8b3f147fd4b38ee7ad2fcdb8238662b59f6c4ff32874c5",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1/final_2/control/results.jsonl",
+    "sha256": "b0ef7b89bb5047138e2fbbd0d82343b8689993ccc37f7f124fc518acde06b06f",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1/final_2/sv_n32_a4/results.jsonl",
+    "sha256": "349d48950ad3c4822d8634980149d6d7c39c5ca69bcf51841f9ece0addd89b0a",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1/final_2/ul_n32_b0.1/results.jsonl",
+    "sha256": "2dd6c5ee8dd5cb779ac2bef908a30386035092728e99bf3f5c35266d20939998",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1/final_3/control/results.jsonl",
+    "sha256": "beb56aab7caca1382c79f652a5b8ad625cae3a095cb4104f65644731af207187",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1/final_3/sv_n32_a4/results.jsonl",
+    "sha256": "0b71a32fd9501b4097a30009aa08969084d295193bbace7ab616ef1e9223b6de",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1/final_3/ul_n32_b0.1/results.jsonl",
+    "sha256": "d3abcee054c50ce35155035512150bcc576f32a46e74ada086a6354c2f37201d",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1_extra/validation_3/sv_n4_a4/results.jsonl",
+    "sha256": "4271b3072b182d572d7ff43dec682e5e5f8d827eaab531a6601e43be094b5969",
+    "rows": 128
+  },
+  {
+    "path": "results/astra_regime/scored/run1_extra/validation_4/sv_n4_a4/results.jsonl",
+    "sha256": "030caa0a716dc344243714d2ed88dc62cee44c69e1128ccdb36b1e9122b0ea71",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1_extra/final_1/sv_n4_a4/results.jsonl",
+    "sha256": "7bcd936c7fe98f1ce83ebe752a7bcd0d464ce9d6d690b2e65080f7d21747aebb",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1_extra/final_2/sv_n4_a4/results.jsonl",
+    "sha256": "d52e32c94c9149371d306568282b8d96b5df8330346e5c05b514fbead4fb1b1f",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run1_extra/final_3/sv_n4_a4/results.jsonl",
+    "sha256": "c110c0b0928d97019423329354c4d5c2bc865f5c35c02eb29f522fc4e77a1fa0",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/validation_3/control/results.jsonl",
+    "sha256": "2fd6f497b9b619d943a8673585a35fa7f84f302980c3fc2fdfa3a16be4cc8458",
+    "rows": 128
+  },
+  {
+    "path": "results/astra_regime/scored/run2/validation_3/sv_n4_a4/results.jsonl",
+    "sha256": "4271b3072b182d572d7ff43dec682e5e5f8d827eaab531a6601e43be094b5969",
+    "rows": 128
+  },
+  {
+    "path": "results/astra_regime/scored/run2/validation_3/sv_n32_a4/results.jsonl",
+    "sha256": "01d24b5f483195f26d615801757b1034d79b7989b00cc77f4e06d1fbd5faec30",
+    "rows": 128
+  },
+  {
+    "path": "results/astra_regime/scored/run2/validation_3/ul_n32_b0/results.jsonl",
+    "sha256": "f178c645778d20a3ee3d1f721c01d68e53519e9a5eff14da5f903a8164477f28",
+    "rows": 128
+  },
+  {
+    "path": "results/astra_regime/scored/run2/validation_4/control/results.jsonl",
+    "sha256": "1a97e51324cb17eaa9ca47852531fe52c4ad6f042c4dc2f6e42a5de3f8e0c4f8",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/validation_4/sv_n4_a4/results.jsonl",
+    "sha256": "030caa0a716dc344243714d2ed88dc62cee44c69e1128ccdb36b1e9122b0ea71",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/validation_4/sv_n32_a4/results.jsonl",
+    "sha256": "efeeeabd26eb999eccf32c35280ba7701c66d7d998da04f30ea291175ecf02b5",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/validation_4/ul_n32_b0/results.jsonl",
+    "sha256": "0d4320816a09738967f814b1b788e5b3a0d69af9c41cfbed7cfa3a86d63f07a6",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/final_1/control/results.jsonl",
+    "sha256": "21fec79efbaa363d0105e2cf923d7aec43d41e6cefc45923b74ae96609e6be31",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/final_1/sv_n4_a4/results.jsonl",
+    "sha256": "7bcd936c7fe98f1ce83ebe752a7bcd0d464ce9d6d690b2e65080f7d21747aebb",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/final_1/sv_n32_a4/results.jsonl",
+    "sha256": "47c57b3c3da863e11cd0c37dccefe3979197327a5c0ca8c012bf19d92c0b3ead",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/final_1/ul_n32_b0/results.jsonl",
+    "sha256": "2d241fe21bddfe09e5d5bfc69006386d558009c066cbc4a239059396e75c8201",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/final_2/control/results.jsonl",
+    "sha256": "7fdce38ac8d0774cd13e6f58b66df89ac788a3801a6b2eea730f89d9decf1d5e",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/final_2/sv_n4_a4/results.jsonl",
+    "sha256": "d52e32c94c9149371d306568282b8d96b5df8330346e5c05b514fbead4fb1b1f",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/final_2/sv_n32_a4/results.jsonl",
+    "sha256": "2643da9b6d02bacaee80fa2094130dd6d96e31d7420c140cc0b7b6d4cc7a7b74",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/final_2/ul_n32_b0/results.jsonl",
+    "sha256": "4cb75868210bb5b626fac7f08ad0f139bf7f67d58e8d876af90501ee8eb2b05c",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/final_3/control/results.jsonl",
+    "sha256": "46a20e6d7f326eb356ccfa4715ce05433c2de7e796a3fc40a4dd84ee0756c60b",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/final_3/sv_n4_a4/results.jsonl",
+    "sha256": "c110c0b0928d97019423329354c4d5c2bc865f5c35c02eb29f522fc4e77a1fa0",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/final_3/sv_n32_a4/results.jsonl",
+    "sha256": "f9445ecbdc20870ba0b5318499a516e6f7e8f25ddd828090280741ebcc9774c0",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/run2/final_3/ul_n32_b0/results.jsonl",
+    "sha256": "377597dccb08b0d429280ca4a28c7ee219f8d7c79e0b27d716852642ae6b5b06",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/corrective/validation_3/clasd_n4_b0.1/results.jsonl",
+    "sha256": "3c73a4aee8002e3cee8d24ff06ffd9864a764b8e9d5dd1d86ccc2f82fc5a0a20",
+    "rows": 128
+  },
+  {
+    "path": "results/astra_regime/scored/corrective/validation_3/clasd_n32_b0.1/results.jsonl",
+    "sha256": "3e3d3d1c3b37089589334aa1c0625908ae1deed7ecb87e104f0e46ddbafdb42d",
+    "rows": 128
+  },
+  {
+    "path": "results/astra_regime/scored/corrective/validation_4/clasd_n4_b0.1/results.jsonl",
+    "sha256": "664966bcf6b7d283042f3159ec7b29084bcea2305dc5cf7432aa8315dab3f648",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/corrective/validation_4/clasd_n32_b0.1/results.jsonl",
+    "sha256": "6a6249fbf4e9878323d3ab2d9b808a8c222ba28291050dbed452ca8741913f1d",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/corrective/final_1/clasd_n4_b0.1/results.jsonl",
+    "sha256": "6dd8b0c0156984a8592cec735c21905f68e4fdac1b7fd3f5c1ab8ba57b8e38a1",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/corrective/final_1/clasd_n32_b0.1/results.jsonl",
+    "sha256": "bc50e4b5ca6a0fa986a3f3e009567ddb87d9ac263d0d66ba572bd879e4cc8ede",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/corrective/final_2/clasd_n4_b0.1/results.jsonl",
+    "sha256": "73cfb11d7f63dd9d7f45b011aaa56350dc456babeba89ccb7192e96a8e2e289a",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/corrective/final_2/clasd_n32_b0.1/results.jsonl",
+    "sha256": "27e2098f0e7ae635dc537c4d3dc72f7436d59451b70f3fec63bdfaac25eea8be",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/corrective/final_3/clasd_n4_b0.1/results.jsonl",
+    "sha256": "f1155beedaafea5dab2067fbe1dbc7b9f19c34d702bdf3e7c528503aa5d01e7b",
+    "rows": 256
+  },
+  {
+    "path": "results/astra_regime/scored/corrective/final_3/clasd_n32_b0.1/results.jsonl",
+    "sha256": "00a645fa8648475b2c1ae5366a143efd5577d9f19ce718c451648615d0df7eba",
+    "rows": 256
+  }
+]

@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="402" viewBox="0 0 1180 402" role="img">
+<style>
+      text { font-family: "DejaVu Sans", sans-serif; fill: #111827; }
+      .label { font-size: 12px; fill: #374151; }
+      .small { font-size: 12px; fill: #4b5563; }
+    </style>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="240" y="12" width="900" height="20" fill="#f3f4f6" rx="4"/>
+<text x="690.0" y="26" class="label" font-weight="700" text-anchor="middle">Δ vs original model (thinking on)</text>
+<text x="315.0" y="42" class="small" style="font-size:10px" font-weight="700" text-anchor="middle">Accuracy (all) ↑</text>
+<text x="465.0" y="42" class="small" style="font-size:10px" font-weight="700" text-anchor="middle">Accuracy (looping) ↑</text>
+<text x="615.0" y="42" class="small" style="font-size:10px" font-weight="700" text-anchor="middle">Accuracy (non-looping) ↑</text>
+<text x="765.0" y="42" class="small" style="font-size:10px" font-weight="700" text-anchor="middle">Loop rate ↓</text>
+<text x="915.0" y="42" class="small" style="font-size:10px" font-weight="700" text-anchor="middle">Thinking closed ↑</text>
+<text x="1065.0" y="42" class="small" style="font-size:10px" font-weight="700" text-anchor="middle">Tokens</text>
+<rect x="28" y="58" width="1124" height="24" fill="#eef2f7" rx="4"/>
+<text x="42" y="75" class="label" font-weight="700">Reference</text>
+<text x="226" y="107" class="small" text-anchor="end">Original model, thinking off</text>
+<rect x="242" y="88" width="146" height="30" rx="6" ry="6" fill="#c5727b" stroke="white" stroke-width="1"><title>Original model, thinking off (Accuracy (all) ↑): -23.0 [-26.8, -19.3]</title></rect>
+<text x="315.0" y="107" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−23.0*</text>
+<rect x="392" y="88" width="146" height="30" rx="6" ry="6" fill="#c5727b" stroke="white" stroke-width="1"><title>Original model, thinking off (Accuracy (looping) ↑): -12.0 [-16.6, -7.8]</title></rect>
+<text x="465.0" y="107" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−12.0*</text>
+<rect x="542" y="88" width="146" height="30" rx="6" ry="6" fill="#c5727b" stroke="white" stroke-width="1"><title>Original model, thinking off (Accuracy (non-looping) ↑): -31.4 [-37.1, -25.8]</title></rect>
+<text x="615.0" y="107" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−31.4*</text>
+<rect x="692" y="88" width="146" height="30" rx="6" ry="6" fill="#90c9c0" stroke="white" stroke-width="1"><title>Original model, thinking off (Loop rate ↓): -25.7 [-30.0, -21.4]</title></rect>
+<text x="765.0" y="107" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−25.7*</text>
+<rect x="842" y="88" width="146" height="30" rx="6" ry="6" fill="#edeef0" stroke="white" stroke-width="1"><title>Original model, thinking off (Thinking closed ↑): not applicable</title></rect>
+<text x="915.0" y="107" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">—</text>
+<rect x="992" y="88" width="146" height="30" rx="6" ry="6" fill="#5cb4a5" stroke="white" stroke-width="1"><title>Original model, thinking off (Tokens): -14.9k [-16.3k, -13.5k]</title></rect>
+<text x="1065.0" y="107" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−14.9k*</text>
+<rect x="28" y="122" width="1124" height="24" fill="#eef2f7" rx="4"/>
+<text x="42" y="139" class="label" font-weight="700">4 pairs</text>
+<text x="226" y="171" class="small" text-anchor="end">Astra’s steering (s = v)</text>
+<rect x="242" y="152" width="146" height="30" rx="6" ry="6" fill="#ecebed" stroke="white" stroke-width="1"><title>Astra’s steering (s = v) (Accuracy (all) ↑): -0.2 [-3.4, +2.8]</title></rect>
+<text x="315.0" y="171" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−0.2</text>
+<rect x="392" y="152" width="146" height="30" rx="6" ry="6" fill="#dce7e7" stroke="white" stroke-width="1"><title>Astra’s steering (s = v) (Accuracy (looping) ↑): +0.9 [-3.2, +5.1]</title></rect>
+<text x="465.0" y="171" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+0.9</text>
+<rect x="542" y="152" width="146" height="30" rx="6" ry="6" fill="#e8dee0" stroke="white" stroke-width="1"><title>Astra’s steering (s = v) (Accuracy (non-looping) ↑): -1.1 [-5.7, +3.2]</title></rect>
+<text x="615.0" y="171" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−1.1</text>
+<rect x="692" y="152" width="146" height="30" rx="6" ry="6" fill="#90c9c0" stroke="white" stroke-width="1"><title>Astra’s steering (s = v) (Loop rate ↓): -25.6 [-29.6, -21.4]</title></rect>
+<text x="765.0" y="171" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−25.6*</text>
+<rect x="842" y="152" width="146" height="30" rx="6" ry="6" fill="#5cb4a5" stroke="white" stroke-width="1"><title>Astra’s steering (s = v) (Thinking closed ↑): +24.4 [+20.4, +28.2]</title></rect>
+<text x="915.0" y="171" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+24.4*</text>
+<rect x="992" y="152" width="146" height="30" rx="6" ry="6" fill="#79c0b4" stroke="white" stroke-width="1"><title>Astra’s steering (s = v) (Tokens): -6.4k [-7.3k, -5.4k]</title></rect>
+<text x="1065.0" y="171" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−6.4k*</text>
+<text x="226" y="205" class="small" text-anchor="end">Unlikelihood</text>
+<rect x="242" y="186" width="146" height="30" rx="6" ry="6" fill="#ececef" stroke="white" stroke-width="1"><title>Unlikelihood (Accuracy (all) ↑): -0.1 [-3.0, +2.7]</title></rect>
+<text x="315.0" y="205" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−0.1</text>
+<rect x="392" y="186" width="146" height="30" rx="6" ry="6" fill="#eceaed" stroke="white" stroke-width="1"><title>Unlikelihood (Accuracy (looping) ↑): -0.2 [-4.4, +3.9]</title></rect>
+<text x="465.0" y="205" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−0.2</text>
+<rect x="542" y="186" width="146" height="30" rx="6" ry="6" fill="#edeef0" stroke="white" stroke-width="1"><title>Unlikelihood (Accuracy (non-looping) ↑): +0.0 [-3.7, +3.9]</title></rect>
+<text x="615.0" y="205" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+0.0</text>
+<rect x="692" y="186" width="146" height="30" rx="6" ry="6" fill="#72bdb0" stroke="white" stroke-width="1"><title>Unlikelihood (Loop rate ↓): -33.9 [-37.7, -30.2]</title></rect>
+<text x="765.0" y="205" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−33.9*</text>
+<rect x="842" y="186" width="146" height="30" rx="6" ry="6" fill="#5cb4a5" stroke="white" stroke-width="1"><title>Unlikelihood (Thinking closed ↑): +27.4 [+23.7, +31.1]</title></rect>
+<text x="915.0" y="205" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+27.4*</text>
+<rect x="992" y="186" width="146" height="30" rx="6" ry="6" fill="#5cb4a5" stroke="white" stroke-width="1"><title>Unlikelihood (Tokens): -9.6k [-10.5k, -8.7k]</title></rect>
+<text x="1065.0" y="205" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−9.6k*</text>
+<text x="226" y="239" class="small" text-anchor="end">Corrective NTP</text>
+<rect x="242" y="220" width="146" height="30" rx="6" ry="6" fill="#e9edee" stroke="white" stroke-width="1"><title>Corrective NTP (Accuracy (all) ↑): +0.2 [-3.0, +3.4]</title></rect>
+<text x="315.0" y="239" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+0.2</text>
+<rect x="392" y="220" width="146" height="30" rx="6" ry="6" fill="#cce1df" stroke="white" stroke-width="1"><title>Corrective NTP (Accuracy (looping) ↑): +1.8 [-2.3, +6.0]</title></rect>
+<text x="465.0" y="239" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+1.8</text>
+<rect x="542" y="220" width="146" height="30" rx="6" ry="6" fill="#e8dee0" stroke="white" stroke-width="1"><title>Corrective NTP (Accuracy (non-looping) ↑): -1.1 [-6.0, +3.5]</title></rect>
+<text x="615.0" y="239" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−1.1</text>
+<rect x="692" y="220" width="146" height="30" rx="6" ry="6" fill="#75beb2" stroke="white" stroke-width="1"><title>Corrective NTP (Loop rate ↓): -33.2 [-37.0, -29.2]</title></rect>
+<text x="765.0" y="239" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−33.2*</text>
+<rect x="842" y="220" width="146" height="30" rx="6" ry="6" fill="#5cb4a5" stroke="white" stroke-width="1"><title>Corrective NTP (Thinking closed ↑): +27.4 [+23.8, +31.2]</title></rect>
+<text x="915.0" y="239" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+27.4*</text>
+<rect x="992" y="220" width="146" height="30" rx="6" ry="6" fill="#5cb4a5" stroke="white" stroke-width="1"><title>Corrective NTP (Tokens): -9.6k [-10.6k, -8.7k]</title></rect>
+<text x="1065.0" y="239" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−9.6k*</text>
+<rect x="28" y="254" width="1124" height="24" fill="#eef2f7" rx="4"/>
+<text x="42" y="271" class="label" font-weight="700">32 pairs</text>
+<text x="226" y="303" class="small" text-anchor="end">Astra’s steering (s = 2v)</text>
+<rect x="242" y="284" width="146" height="30" rx="6" ry="6" fill="#cce1df" stroke="white" stroke-width="1"><title>Astra’s steering (s = 2v) (Accuracy (all) ↑): +1.8 [-1.2, +4.8]</title></rect>
+<text x="315.0" y="303" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+1.8</text>
+<rect x="392" y="284" width="146" height="30" rx="6" ry="6" fill="#cce1df" stroke="white" stroke-width="1"><title>Astra’s steering (s = 2v) (Accuracy (looping) ↑): +1.8 [-2.8, +6.5]</title></rect>
+<text x="465.0" y="303" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+1.8</text>
+<rect x="542" y="284" width="146" height="30" rx="6" ry="6" fill="#cde1df" stroke="white" stroke-width="1"><title>Astra’s steering (s = 2v) (Accuracy (non-looping) ↑): +1.8 [-2.1, +5.7]</title></rect>
+<text x="615.0" y="303" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+1.8</text>
+<rect x="692" y="284" width="146" height="30" rx="6" ry="6" fill="#7cc1b6" stroke="white" stroke-width="1"><title>Astra’s steering (s = 2v) (Loop rate ↓): -31.2 [-35.2, -27.2]</title></rect>
+<text x="765.0" y="303" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−31.2*</text>
+<rect x="842" y="284" width="146" height="30" rx="6" ry="6" fill="#5cb4a5" stroke="white" stroke-width="1"><title>Astra’s steering (s = 2v) (Thinking closed ↑): +26.6 [+22.8, +30.4]</title></rect>
+<text x="915.0" y="303" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+26.6*</text>
+<rect x="992" y="284" width="146" height="30" rx="6" ry="6" fill="#64b7a9" stroke="white" stroke-width="1"><title>Astra’s steering (s = 2v) (Tokens): -7.5k [-8.5k, -6.6k]</title></rect>
+<text x="1065.0" y="303" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−7.5k*</text>
+<text x="226" y="337" class="small" text-anchor="end">Unlikelihood</text>
+<rect x="242" y="318" width="146" height="30" rx="6" ry="6" fill="#d2e3e2" stroke="white" stroke-width="1"><title>Unlikelihood (Accuracy (all) ↑): +1.5 [-1.4, +4.3]</title></rect>
+<text x="315.0" y="337" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+1.5</text>
+<rect x="392" y="318" width="146" height="30" rx="6" ry="6" fill="#bfdcd8" stroke="white" stroke-width="1"><title>Unlikelihood (Accuracy (looping) ↑): +2.5 [-1.6, +6.7]</title></rect>
+<text x="465.0" y="337" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+2.5</text>
+<rect x="542" y="318" width="146" height="30" rx="6" ry="6" fill="#e0e9e9" stroke="white" stroke-width="1"><title>Unlikelihood (Accuracy (non-looping) ↑): +0.7 [-3.0, +4.6]</title></rect>
+<text x="615.0" y="337" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+0.7</text>
+<rect x="692" y="318" width="146" height="30" rx="6" ry="6" fill="#72bdb0" stroke="white" stroke-width="1"><title>Unlikelihood (Loop rate ↓): -33.9 [-37.6, -30.2]</title></rect>
+<text x="765.0" y="337" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−33.9*</text>
+<rect x="842" y="318" width="146" height="30" rx="6" ry="6" fill="#5cb4a5" stroke="white" stroke-width="1"><title>Unlikelihood (Thinking closed ↑): +28.4 [+24.8, +32.0]</title></rect>
+<text x="915.0" y="337" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+28.4*</text>
+<rect x="992" y="318" width="146" height="30" rx="6" ry="6" fill="#5cb4a5" stroke="white" stroke-width="1"><title>Unlikelihood (Tokens): -8.8k [-9.7k, -7.9k]</title></rect>
+<text x="1065.0" y="337" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−8.8k*</text>
+<text x="226" y="371" class="small" text-anchor="end">Corrective NTP</text>
+<rect x="242" y="352" width="146" height="30" rx="6" ry="6" fill="#c5dedb" stroke="white" stroke-width="1"><title>Corrective NTP (Accuracy (all) ↑): +2.2 [-1.0, +5.2]</title></rect>
+<text x="315.0" y="371" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+2.2</text>
+<rect x="392" y="352" width="146" height="30" rx="6" ry="6" fill="#dce7e7" stroke="white" stroke-width="1"><title>Corrective NTP (Accuracy (looping) ↑): +0.9 [-3.2, +5.1]</title></rect>
+<text x="465.0" y="371" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+0.9</text>
+<rect x="542" y="352" width="146" height="30" rx="6" ry="6" fill="#b3d7d2" stroke="white" stroke-width="1"><title>Corrective NTP (Accuracy (non-looping) ↑): +3.2 [-1.1, +7.4]</title></rect>
+<text x="615.0" y="371" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+3.2</text>
+<rect x="692" y="352" width="146" height="30" rx="6" ry="6" fill="#91c9c0" stroke="white" stroke-width="1"><title>Corrective NTP (Loop rate ↓): -25.4 [-29.6, -21.2]</title></rect>
+<text x="765.0" y="371" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−25.4*</text>
+<rect x="842" y="352" width="146" height="30" rx="6" ry="6" fill="#5cb4a5" stroke="white" stroke-width="1"><title>Corrective NTP (Thinking closed ↑): +25.0 [+21.2, +28.8]</title></rect>
+<text x="915.0" y="371" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">+25.0*</text>
+<rect x="992" y="352" width="146" height="30" rx="6" ry="6" fill="#70bcb0" stroke="white" stroke-width="1"><title>Corrective NTP (Tokens): -6.9k [-7.8k, -5.9k]</title></rect>
+<text x="1065.0" y="371" font-size="13" font-weight="650" text-anchor="middle" style="fill:#000000">−6.9k*</text>
+</svg>

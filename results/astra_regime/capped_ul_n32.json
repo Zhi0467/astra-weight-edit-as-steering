@@ -1,0 +1,5 @@
+{
+ "responses": 2304,
+ "capped": 513,
+ "capped_not_loop": 399
+}

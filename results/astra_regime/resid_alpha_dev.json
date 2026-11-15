@@ -1,0 +1,39 @@
+{
+ "split": "validation_1",
+ "rule": "highest accuracy, then lower loop rate",
+ "per_arm": {
+  "resid_sv_n32_a0.2": {
+   "n": 128,
+   "accuracy": 0.3984375,
+   "cap_hit": 0.5625,
+   "loop": 0.5546875,
+   "think_closed": 0.46484375,
+   "tokens": 22551.53125
+  },
+  "resid_sv_n32_a0.5": {
+   "n": 128,
+   "accuracy": 0.66015625,
+   "cap_hit": 0.2265625,
+   "loop": 0.125,
+   "think_closed": 0.8046875,
+   "tokens": 16497.4140625
+  },
+  "resid_sv_n32_a1": {
+   "n": 128,
+   "accuracy": 0.66015625,
+   "cap_hit": 0.1796875,
+   "loop": 0.03515625,
+   "think_closed": 0.8125,
+   "tokens": 13920.76953125
+  },
+  "resid_sv_n32_a1.5": {
+   "n": 128,
+   "accuracy": 0.63671875,
+   "cap_hit": 0.17578125,
+   "loop": 0.03125,
+   "think_closed": 0.84375,
+   "tokens": 12597.83203125
+  }
+ },
+ "chosen": "resid_sv_n32_a1"
+}

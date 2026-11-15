@@ -1,0 +1,28 @@
+{
+ "math_level5": {
+  "train_source": {
+   "pool": 2176,
+   "loop": 88,
+   "nonloop": 212
+  },
+  "heldout_source": {
+   "pool": 1324,
+   "loop": 86,
+   "nonloop": 114
+  },
+  "total": 500
+ },
+ "livecodebench": {
+  "train_source": {
+   "pool": 752,
+   "loop": 146,
+   "nonloop": 243
+  },
+  "heldout_source": {
+   "pool": 175,
+   "loop": 71,
+   "nonloop": 40
+  },
+  "total": 500
+ }
+}

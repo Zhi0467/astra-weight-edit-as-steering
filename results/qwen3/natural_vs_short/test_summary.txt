@@ -1,0 +1,66 @@
+arms: {"short": [{"sv": "sv_n32_a2", "ul": "ul_n32_b0_s14"}, {"sv": "sv_n32_a2", "ul": "ul_n32_b0_s12"}], "natural": {"sv": "sv_n32_a1", "ul": "ul_n32_b0_s10"}, "control_runs": 2}
+
+== all (n 1000) ==  accuracy / loop / closed thinking, %
+  control       56.1 /  25.1 /  81.2
+  short_sv      57.8 /   4.3 /  98.5
+  short_ul      54.8 /   2.1 /  99.0
+  natural_sv    57.8 /  20.9 /  84.8
+  natural_ul    56.1 /  14.1 /  93.5
+  natural_sv - control     acc  +1.7 [ -0.7,  +4.1]  loop  -4.2 [ -6.9,  -1.5]
+  natural_ul - control     acc  +0.0 [ -2.4,  +2.4]  loop -11.0 [-13.8,  -8.2]
+  short_sv - control       acc  +1.7 [ -0.5,  +3.9]  loop -20.8 [-23.3, -18.3]
+  short_ul - control       acc  -1.4 [ -3.5,  +0.7]  loop -22.9 [-25.3, -20.6]
+  natural_sv - short_sv    acc  +0.0 [ -2.3,  +2.3]  loop +16.6 [+14.3, +19.0]
+  natural_ul - short_ul    acc  +1.4 [ -0.7,  +3.5]  loop +11.9 [+10.0, +14.0]
+
+== loop (n 391) ==  accuracy / loop / closed thinking, %
+  control       28.9 /  48.1 /  64.5
+  short_sv      33.8 /   9.7 /  96.7
+  short_ul      28.9 /   3.5 /  98.7
+  natural_sv    30.9 /  42.2 /  69.6
+  natural_ul    29.9 /  28.9 /  87.5
+  natural_sv - control     acc  +2.0 [ -2.0,  +6.1]  loop  -5.9 [-11.5,  -0.3]
+  natural_ul - control     acc  +1.0 [ -2.8,  +4.9]  loop -19.2 [-24.8, -13.6]
+  short_sv - control       acc  +4.9 [ +1.0,  +8.7]  loop -38.4 [-43.5, -33.2]
+  short_ul - control       acc  +0.0 [ -3.5,  +3.5]  loop -44.6 [-49.4, -39.8]
+  natural_sv - short_sv    acc  -2.8 [ -6.7,  +1.0]  loop +32.5 [+27.4, +37.6]
+  natural_ul - short_ul    acc  +1.0 [ -2.6,  +4.5]  loop +25.4 [+21.1, +29.8]
+
+== nonloop (n 609) ==  accuracy / loop / closed thinking, %
+  control       73.6 /  10.3 /  92.0
+  short_sv      73.2 /   0.8 /  99.7
+  short_ul      71.3 /   1.3 /  99.1
+  natural_sv    75.0 /   7.2 /  94.6
+  natural_ul    72.9 /   4.6 /  97.4
+  natural_sv - control     acc  +1.5 [ -1.5,  +4.4]  loop  -3.1 [ -5.7,  -0.5]
+  natural_ul - control     acc  -0.7 [ -3.8,  +2.5]  loop  -5.7 [ -8.5,  -3.1]
+  short_sv - control       acc  -0.3 [ -3.0,  +2.5]  loop  -9.5 [-12.2,  -7.1]
+  short_ul - control       acc  -2.2 [ -4.8,  +0.3]  loop  -9.0 [-11.4,  -6.7]
+  natural_sv - short_sv    acc  +1.8 [ -1.0,  +4.6]  loop  +6.4 [ +4.4,  +8.5]
+  natural_ul - short_ul    acc  +1.6 [ -1.0,  +4.1]  loop  +3.3 [ +1.6,  +5.0]
+
+== math (n 500) ==  accuracy / loop / closed thinking, %
+  control       71.0 /  13.8 /  91.4
+  short_sv      72.6 /   3.4 /  99.4
+  short_ul      67.7 /   2.6 /  98.6
+  natural_sv    73.2 /  12.2 /  93.2
+  natural_ul    73.4 /   5.4 /  98.2
+  natural_sv - control     acc  +2.2 [ -1.4,  +5.6]  loop  -1.6 [ -4.8,  +1.8]
+  natural_ul - control     acc  +2.4 [ -1.0,  +5.8]  loop  -8.4 [-11.4,  -5.4]
+  short_sv - control       acc  +1.6 [ -1.8,  +5.0]  loop -10.4 [-13.4,  -7.6]
+  short_ul - control       acc  -3.3 [ -6.5,  -0.2]  loop -11.2 [-14.1,  -8.3]
+  natural_sv - short_sv    acc  +0.6 [ -2.8,  +4.0]  loop  +8.8 [ +6.2, +11.6]
+  natural_ul - short_ul    acc  +5.7 [ +2.7,  +8.6]  loop  +2.8 [ +0.7,  +5.0]
+
+== lcb (n 500) ==  accuracy / loop / closed thinking, %
+  control       41.2 /  36.4 /  71.0
+  short_sv      43.0 /   5.2 /  97.6
+  short_ul      41.8 /   1.7 /  99.3
+  natural_sv    42.4 /  29.6 /  76.4
+  natural_ul    38.8 /  22.8 /  88.8
+  natural_sv - control     acc  +1.2 [ -2.0,  +4.4]  loop  -6.8 [-11.0,  -2.6]
+  natural_ul - control     acc  -2.4 [ -5.8,  +1.0]  loop -13.6 [-18.2,  -9.0]
+  short_sv - control       acc  +1.8 [ -1.2,  +4.8]  loop -31.2 [-35.2, -27.2]
+  short_ul - control       acc  +0.6 [ -2.2,  +3.4]  loop -34.7 [-38.4, -31.0]
+  natural_sv - short_sv    acc  -0.6 [ -3.6,  +2.4]  loop +24.4 [+20.6, +28.2]
+  natural_ul - short_ul    acc  -3.0 [ -5.8,  -0.3]  loop +21.1 [+17.7, +24.5]

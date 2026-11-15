@@ -1,0 +1,67 @@
+{
+ "runs": 2,
+ "arms": {
+  "control": [
+   "control",
+   "control"
+  ],
+  "sv_n4_a1": [
+   "sv_n4_a1",
+   "sv_n4_a1"
+  ],
+  "clas_n4": [
+   "clas_n4_b0.1_s8",
+   "clas_n4_b0_s8"
+  ],
+  "ul_n4": [
+   "ul_n4_b0.1_s14",
+   "ul_n4_b0_s12"
+  ],
+  "contrast_n4": [
+   "contrast_n4_b0.1_s12",
+   "contrast_n4_b0.1_s10"
+  ],
+  "sv_n32_a2": [
+   "sv_n32_a2",
+   "sv_n32_a2"
+  ],
+  "clas_n32": [
+   "clas_n32_b0_s14",
+   "clas_n32_b0.1_s12"
+  ],
+  "ul_n32": [
+   "ul_n32_b0_s14",
+   "ul_n32_b0.1_s12"
+  ],
+  "contrast_n32": [
+   "contrast_n32_b0.1_s12",
+   "contrast_n32_b0.1_s10"
+  ]
+ },
+ "stop_update": {
+  "clas_n4": [
+   8,
+   8
+  ],
+  "ul_n4": [
+   14,
+   12
+  ],
+  "contrast_n4": [
+   12,
+   10
+  ],
+  "clas_n32": [
+   14,
+   12
+  ],
+  "ul_n32": [
+   14,
+   12
+  ],
+  "contrast_n32": [
+   12,
+   10
+  ]
+ }
+}
