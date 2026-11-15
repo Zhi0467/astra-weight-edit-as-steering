@@ -1,4 +1,6 @@
-# Astra’s improvement of Qwen’s math is not “native weight editing” but context-dependent activation steering with clever use of synthetic data
+# A closer look at *Sparks of Weight-Space Programming*
+
+<p class="subtitle">GPT-6 Astra’s improvement of Qwen’s math is not “native weight editing” but activation steering with clever use of synthetic data</p>
 
 <div class="byline">
 <div class="authors">

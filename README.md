@@ -1,6 +1,6 @@
 # Context-dependent activation steering
 
-Code, data and results for the [blog post](blog/main.md).
+Code, data and results for the [blog post](https://zhi0467.github.io/posts/2026/post6/).
 See [supplementary methods](blog/supplementary-methods.md) for the experimental
 protocol, data construction and additional comparisons.
 

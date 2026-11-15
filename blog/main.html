@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Astra’s improvement of Qwen’s math is not “native weight editing” but context-dependent activation steering with clever use of synthetic data</title><style>
+<title>A closer look at Sparks of Weight-Space Programming: GPT-6 Astra’s improvement of Qwen’s math is not “native weight editing” but activation steering with clever use of synthetic data</title><style>
 :root{--ink:#26354a;--muted:#667587;--green:#217e71;--line:#dde5ea;--soft:#f5f8fa}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:36px}
 body{margin:0;background:#fff;color:var(--ink);font:18px/1.75 Georgia,"Times New Roman",serif}
@@ -8,6 +8,7 @@ body{margin:0;background:#fff;color:var(--ink);font:18px/1.75 Georgia,"Times New
 article{grid-column:2;min-width:0;position:relative}
 h1,h2,h3,nav,.margin-note,figcaption,table{font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif}
 h1{font-size:clamp(30px,2.6vw,42px);line-height:1.22;letter-spacing:-.035em;margin:0 0 24px;font-weight:700}
+.subtitle{font:400 clamp(19px,1.5vw,23px)/1.45 Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;color:var(--muted);margin:-12px 0 24px}
 .byline{font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.5;color:var(--muted);margin:-4px 0 36px 0}
 .authors{display:flex;flex-wrap:wrap;gap:10px 32px;margin-bottom:8px}
 .authors .name{display:inline-block;color:var(--ink);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px;transition:color .15s,text-decoration-color .15s}
@@ -50,7 +51,8 @@ th{background:var(--soft);font-weight:600}tr:last-child td{border-bottom:0}
 </style></head>
 <body><a class="skip" href="#article">Skip to article</a><div class="layout">
 <nav aria-label="Article sections"><button id="nav-toggle" aria-expanded="false" aria-controls="nav-links">Sections ▾</button><div id="nav-links"><a class="nav-h2" href="#tl-dr">TL;DR</a><a class="nav-h2" href="#1-from-native-weight-editing-to-activation-steering">1. Steering interpretation</a><a class="nav-h2" href="#2-qwen-s-poor-math-performance-in-the-original-setup-is-pathological">2. Pathological looping</a><a class="nav-h2" href="#3-training-the-sensing-vector-can-improve-on-astra-s-steering">3. Training the sensing vector</a><a class="nav-h2" href="#4-a-non-pathological-setting-shows-loop-reduction-with-similar-accuracy">4. Non-pathological setting</a><a class="nav-h2" href="#5-where-do-steering-vectors-come-from-and-where-to-sense">5. Data and sensing location</a><a class="nav-h2" href="#6-conclusion">6. Conclusion</a><a class="nav-h2" href="#7-notes">7. Notes</a></div></nav>
-<article id="article"><h1>Astra’s improvement of Qwen’s math is not “native weight editing” but context-dependent activation steering with clever use of synthetic data</h1>
+<article id="article"><h1>A closer look at <em>Sparks of Weight-Space Programming</em></h1>
+<p class="subtitle">GPT-6 Astra’s improvement of Qwen’s math is not “native weight editing” but activation steering with clever use of synthetic data</p>
 <div class="byline">
 <div class="authors">
 <a class="name" href="https://zhi0467.github.io">Zhi Wang</a>

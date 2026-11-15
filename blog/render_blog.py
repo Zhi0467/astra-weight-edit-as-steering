@@ -92,6 +92,8 @@ for table in soup.find_all('table'):
     wrapper=soup.new_tag('div');wrapper['class']='table-scroll';wrapper['tabindex']='0';wrapper['role']='region';wrapper['aria-label']='Scrollable data table'
     table.wrap(wrapper)
 title=soup.h1.get_text()
+subtitle=soup.find('p',class_='subtitle')
+if subtitle:title+=': '+subtitle.get_text()
 links=''.join(f'<a class="nav-{tag}" href="#{slug}">{html.escape(label)}</a>' for tag,slug,label in nav)
 css=r"""
 :root{--ink:#26354a;--muted:#667587;--green:#217e71;--line:#dde5ea;--soft:#f5f8fa}
@@ -101,6 +103,7 @@ body{margin:0;background:#fff;color:var(--ink);font:18px/1.75 Georgia,"Times New
 article{grid-column:2;min-width:0;position:relative}
 h1,h2,h3,nav,.margin-note,figcaption,table{font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif}
 h1{font-size:clamp(30px,2.6vw,42px);line-height:1.22;letter-spacing:-.035em;margin:0 0 24px;font-weight:700}
+.subtitle{font:400 clamp(19px,1.5vw,23px)/1.45 Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;color:var(--muted);margin:-12px 0 24px}
 .byline{font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.5;color:var(--muted);margin:-4px 0 36px 0}
 .authors{display:flex;flex-wrap:wrap;gap:10px 32px;margin-bottom:8px}
 .authors .name{display:inline-block;color:var(--ink);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px;transition:color .15s,text-decoration-color .15s}
