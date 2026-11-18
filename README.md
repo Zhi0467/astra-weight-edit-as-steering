@@ -1,6 +1,6 @@
 # Context-dependent activation steering
 
-Code, data and results for the [blog post](https://zhi0467.github.io/posts/2026/post6/).
+Code, data and results for the [blog](https://zhi0467.github.io/posts/2026/post6/)/[Lesswrong post](https://www.lesswrong.com/posts/PD8Hmzro4N3piJSMP/a-closer-look-at-sparks-of-weight-space-programming).
 See [supplementary methods](blog/supplementary-methods.md) for the experimental
 protocol, data construction and additional comparisons.
 
